@@ -40,6 +40,7 @@ public class Event {
         //TODO: figure out this part with how we want to implement the timer: check all the time?
         //ask abhik
         //timer.schedule(task, );
+        //NEED TO MAKE THIS AFFECT THE BOOLEAN WITHIN GROUP
     }
 
 }
