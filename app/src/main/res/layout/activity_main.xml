@@ -10,7 +10,6 @@
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/location"
-        android:onClick="toEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_shadow"
@@ -25,7 +24,6 @@
 
     <ImageButton
         android:id="@+id/drink"
-        android:onClick="toDrinkCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_shadow"

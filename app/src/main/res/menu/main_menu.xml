@@ -4,12 +4,15 @@
     >
 
     <item
-        android:id="@+id/profile"
+        android:id="@+id/miProfile"
         android:icon="@drawable/ic_person"
         android:title="Item"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:onClick="launchProfile"/>
     <item
+        android:id="@+id/miResources"
         android:icon="@drawable/ic_book"
         android:title="Item"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:onClick="launchResources"/>
 </menu>

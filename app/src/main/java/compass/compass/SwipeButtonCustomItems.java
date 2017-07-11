@@ -4,14 +4,16 @@ package compass.compass;
  * Created by amusipatla on 7/11/17.
  */
 
+//custom things you can change about the swipe widget!
+
 public abstract class SwipeButtonCustomItems {
 
     public int gradientColor1 = 0xFF006064;
     public int gradientColor2 = 0xFF0097A7;
     public int gradientColor2Width = 50;
     public int gradientColor3 = 0xFF00BCD4;
-    public int postConfirmationColor = 0x00BCD4;
-    public double actionConfirmDistanceFraction = 0.7;
+    public int postConfirmationColor = 0xFF00BCD4;
+    public double actionConfirmDistanceFraction = 0.8;
     public String buttonPressText = ">>   SWIPE TO CONFIRM   >> ";
 
     public String actionConfirmText = null;

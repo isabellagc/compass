@@ -126,6 +126,7 @@ public class SwipeButton extends AppCompatButton {
                 } else {
                     Log.d("CONFIRMATION", "Action confirmed");
                     this.setText(actionConfirmText);
+                    swipeButtonCustomItems.onSwipeConfirm();
                 }
 
                 break;
