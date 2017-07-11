@@ -83,7 +83,7 @@ public class SwipeButton extends AppCompatButton {
                     int gradientColor2 = swipeButtonCustomItems.getGradientColor2();
                     int gradientColor2Width = swipeButtonCustomItems.getGradientColor2Width();
                     int gradientColor3 = swipeButtonCustomItems.getGradientColor3();
-                    double actionConfirmDistanceFraction = 0.6;
+                    double actionConfirmDistanceFraction = swipeButtonCustomItems.getActionConfirmDistanceFraction();
 
                     Shader shader = new LinearGradient(x2, 0, x2 - gradientColor2Width, 0,
                             new int[]{gradientColor3, gradientColor2, gradientColor1},
@@ -93,7 +93,7 @@ public class SwipeButton extends AppCompatButton {
                     this.setBackgroundDrawable(mDrawable);
 
                     if (!swipeTextShown) {
-                        this.setText(R.string.swipeText);
+                        this.setText(swipeButtonCustomItems.getButtonPressText());
                         swipeTextShown = true;
                     }
 
