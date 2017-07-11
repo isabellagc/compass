@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DrinkCounter" />
+        <activity android:name=".MapMessaging" />
+        <activity android:name=".NeedHelp"></activity>
     </application>
 
 </manifest>
