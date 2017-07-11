@@ -1,18 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context="compass.compass.MainActivity">
 
-    <TextView
+
+    <ImageButton
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@drawable/button_shadow"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="15dp"
+        app:srcCompat="@drawable/ic_location_pin"
+        android:layout_above="@+id/drink"
+        android:layout_marginBottom="45dp"
+        android:layout_centerHorizontal="true" />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/drink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shadow"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        app:srcCompat="@drawable/ic_drink"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/location"
+        android:layout_alignStart="@+id/location"
+        android:layout_alignRight="@+id/location"
+        android:layout_alignEnd="@+id/location" />
+
+    <ImageButton
+        android:id="@+id/needHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shadow"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        app:srcCompat="@drawable/ic_need_help"
+        android:layout_alignLeft="@+id/drink"
+        android:layout_alignStart="@+id/drink"
+        android:layout_below="@+id/drink"
+        android:layout_marginTop="45dp"
+        android:layout_alignRight="@+id/drink"
+        android:layout_alignEnd="@+id/drink" />
+
+</RelativeLayout>
