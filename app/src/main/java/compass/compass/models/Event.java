@@ -1,5 +1,7 @@
 package compass.compass.models;
 
+import android.util.Log;
+
 import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,14 +31,15 @@ public class Event {
         //boolean corresponds to isDaemon, which i think is true (runs in background...?)
         //todo: ask about this to Abhik
 
-        timerTask task = new TimerTask() {
+        timerTask = new TimerTask() {
             @Override
             public void run() {
-
+                Log.i("Event", "inside timer task");
             }
         };
-
-        timer.sch
+        //TODO: figure out this part with how we want to implement the timer: check all the time?
+        //ask abhik
+        //timer.schedule(task, );
     }
 
 }
