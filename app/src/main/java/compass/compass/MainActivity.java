@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+
 public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     //Launch the location activity
     public void launchLocation(){
         location.setOnClickListener(new View.OnClickListener() {
