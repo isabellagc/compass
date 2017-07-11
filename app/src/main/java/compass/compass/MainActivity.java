@@ -1,15 +1,28 @@
 package compass.compass;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
+    public ImageButton location;
+    public ImageButton drink;
+    public ImageButton needhelp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        location = (ImageButton) findViewById(R.id.location);
+        drink = (ImageButton) findViewById(R.id.drink);
+        needhelp = (ImageButton) findViewById(R.id.needHelp);
+        launchLocation();
+        lauchDrinkActivity();
+        launchNeedHelp();
     }
 
     @Override
@@ -17,4 +30,35 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+    //Launch the location activity
+    public void launchLocation(){
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LocationActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+    //Launch the drink activity
+    public void lauchDrinkActivity (){
+        drink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, DrinkActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+    //launch the needhelp button
+    public void launchNeedHelp (){
+        needhelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, NeedHelpActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
 }
