@@ -19,6 +19,8 @@
         <activity android:name=".LocationActivity"/>
         <activity android:name=".DrinkActivity"/>
         <activity android:name="NeedHelpActivity"/>
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".ResourcesActivity"/>
     </application>
 
 </manifest>
