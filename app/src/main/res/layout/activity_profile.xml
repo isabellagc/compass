@@ -22,7 +22,6 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_border"
             android:scaleType="centerCrop"
-            android:src="@android:color/background_dark"
             app:srcCompat="@drawable/ic_person" />
 
 
