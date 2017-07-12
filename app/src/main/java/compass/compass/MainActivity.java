@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import compass.compass.fragments.NeedHelpSwipe;
+import compass.compass.models.User;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     //DataBaseManager myDb;
     public DataBaseHelper myDbHelper;
     public SQLiteDatabase myDb;
+    public ArrayList<User> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,48 +36,38 @@ public class MainActivity extends AppCompatActivity {
         needhelp = (ImageButton) findViewById(R.id.needHelp);
 
 
-
+        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
+        //that comes with the APK of each app.
         myDbHelper = new DataBaseHelper(this);
-        //myDb = new DataBaseManager(this);
+        //initialize
+        initializeDB();
+        //now contacts has all the users
+        //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
+        //once then take the line out and run again to delete your version of the database and store the new one.
+        contacts = myDbHelper.makeUsersOutOfDB("Users");
 
-        try {
-
-            myDbHelper.createDatabase();
-
-        } catch (IOException ioe) {
-
-            throw new Error("Unable to create database");
-
-        }
-
-        try {
-
-            myDbHelper.openDatabase();
-            //myDb = myDbHelper.myDataBase;
-
-        }catch(SQLException sqle){
-
-            throw sqle;
-
-        }
-
-
-        doAThingWithDB();
 
         launchLocation();
         lauchDrinkActivity();
         launchNeedHelp();
     }
 
-    private void doAThingWithDB(){
-//        boolean isOpen = myDb.isOpen();
-//        boolean isReadOnly = myDb.isReadOnly();
-        //String text = myDbHelper.getYourData();
-        ArrayList<String> allNames = myDbHelper.getValues("Users");
+    private void initializeDB(){
+        //try to create the database
+        try {
+            myDbHelper.createDatabase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
 
+        //open the database
+        try {
+            myDbHelper.openDatabase();
+            //myDb = myDbHelper.myDataBase;
+        }catch(SQLException sqle){
+            throw sqle;
+        }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

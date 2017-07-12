@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import compass.compass.models.User;
+
 /**
  * Created by icamargo on 7/11/17.
  */
@@ -129,15 +131,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //pass in table name ie Users
     //this will load all the names into the arraylist of strings, now we just need to go through the row of the
     //table since the id is the names and walk across, making a user out of each row before we move on to next row
-    public ArrayList<String> getValues(String table) {
-        ArrayList<String> values = new ArrayList<String>();
+    public ArrayList<User> makeUsersOutOfDB(String table) {
+        ArrayList<User> values = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT Name FROM " + table, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + table, null);
 
         if(cursor.moveToFirst()) {
             do {
-                values.add(cursor.getString(cursor.getColumnIndex("Name")));
+                String currentName = cursor.getString(cursor.getColumnIndex("Name"));
+                String currentGender = cursor.getString(cursor.getColumnIndex("Gender"));
+                String currentEmail = cursor.getString(cursor.getColumnIndex("Email"));
+                User currentUser = new User(currentName, currentEmail, currentGender);
+                values.add(currentUser);
             }while(cursor.moveToNext());
         }
 
