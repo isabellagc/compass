@@ -29,6 +29,11 @@ dependencies {
     compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.1'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
+    compile 'jp.wasabeef:glide-transformations:2.0.2'
+    // If you want to use the GPU Filters
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    //glide library
+    compile 'com.github.bumptech.glide:glide:3.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
