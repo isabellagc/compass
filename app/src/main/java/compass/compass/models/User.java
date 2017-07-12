@@ -9,6 +9,7 @@ public class User {
     public String name;
     public String email;
     public String gender;
+    public Event currentEvent;
     //data class for geographic location: latitude, lognitude, timestamp, and other info
     //public Location location;
 
@@ -27,7 +28,10 @@ public class User {
         name = nameInfo;
         email = emailInfo;
         gender = genderInfo;
+        currentEvent = null;
     }
 
-
+    public void setCurrentEvent(Event currentEvent) {
+        this.currentEvent = currentEvent;
+    }
 }
