@@ -1,6 +1,8 @@
 package compass.compass;
 
 import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import compass.compass.fragments.NeedHelpSwipe;
 
 
@@ -16,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
-    DataBaseManager myDb;
+    //DataBaseManager myDb;
+    public DataBaseHelper myDbHelper;
+    public SQLiteDatabase myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +32,50 @@ public class MainActivity extends AppCompatActivity {
         location = (ImageButton) findViewById(R.id.location);
         drink = (ImageButton) findViewById(R.id.drink);
         needhelp = (ImageButton) findViewById(R.id.needHelp);
-        myDb = new DataBaseManager(this);
+
+
+
+        myDbHelper = new DataBaseHelper(this);
+        //myDb = new DataBaseManager(this);
+
+        try {
+
+            myDbHelper.createDatabase();
+
+        } catch (IOException ioe) {
+
+            throw new Error("Unable to create database");
+
+        }
+
+        try {
+
+            myDbHelper.openDatabase();
+            //myDb = myDbHelper.myDataBase;
+
+        }catch(SQLException sqle){
+
+            throw sqle;
+
+        }
+
+
+        doAThingWithDB();
+
         launchLocation();
         lauchDrinkActivity();
         launchNeedHelp();
     }
+
+    private void doAThingWithDB(){
+//        boolean isOpen = myDb.isOpen();
+//        boolean isReadOnly = myDb.isReadOnly();
+        //String text = myDbHelper.getYourData();
+        ArrayList<String> allNames = myDbHelper.getValues("Users");
+
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

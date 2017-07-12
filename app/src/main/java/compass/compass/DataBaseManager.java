@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class DataBaseManager extends SQLiteOpenHelper {
+    public SQLiteDatabase db;
     public static final String DATA_BASE_NAME = "our_users.db";
     public static final String TABLE_NAME = "users_table";
     public static final String COL_1 = "First_name";
@@ -17,7 +18,7 @@ public class DataBaseManager extends SQLiteOpenHelper {
 
     public DataBaseManager(Context context) {
         super(context, DATA_BASE_NAME, null, 1);
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
     }
 
     @Override
