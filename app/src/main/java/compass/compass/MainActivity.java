@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
+    DataBaseManager myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         location = (ImageButton) findViewById(R.id.location);
         drink = (ImageButton) findViewById(R.id.drink);
         needhelp = (ImageButton) findViewById(R.id.needHelp);
+        myDb = new DataBaseManager(this);
         launchLocation();
         lauchDrinkActivity();
         launchNeedHelp();
