@@ -8,9 +8,9 @@ package compass.compass;
 
 public abstract class SwipeButtonCustomItems {
 
-    public int gradientColor1 = 0xFF006064;
-    public int gradientColor2 = 0xFF0097A7;
-    public int gradientColor2Width = 50;
+    public int gradientColor1 = 0xFF0097A7;
+    public int gradientColor2 = 0xFF00ACC1;
+    public int gradientColor2Width = 70;
     public int gradientColor3 = 0xFF00BCD4;
     public int postConfirmationColor = 0xFF00BCD4;
     public double actionConfirmDistanceFraction = 0.8;

@@ -4,16 +4,13 @@
     android:layout_height="match_parent"
     tools:context="compass.compass.fragments.NeedHelpSwipe">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <compass.compass.SwipeButton
         android:id="@+id/swipeHelp"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="50dp"
-        android:text="@string/swipeText"
         android:background="@color/c500"
-        android:textColor="#000000"
-        />
-
+        android:text="@string/swipeText"
+        android:textAlignment="center"
+        android:textColor="#000000" />
 
 </FrameLayout>
