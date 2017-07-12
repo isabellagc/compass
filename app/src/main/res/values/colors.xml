@@ -18,5 +18,6 @@
     <color name="cA200">#18FFFF</color>
     <color name="cA400">#00E5FF</color>
     <color name="cA700">#00B8D4</color>
+    <color name="Black">#000000</color>
 
 </resources>
