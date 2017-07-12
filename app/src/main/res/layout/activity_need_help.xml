@@ -7,12 +7,87 @@
     tools:context="compass.compass.NeedHelpActivity">
 
     <SeekBar
-        android:id="@+id/seekBar5"
+        android:id="@+id/level"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="15dp"
         android:max="5"
         android:progress="0"
+        android:layout_below="@+id/tvLevel"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/level"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/level"
+        android:layout_marginTop="13dp"
+        android:textSize="20sp"
+        android:text="Level" />
+
+    <ImageButton
+        android:id="@+id/ibAlc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        app:srcCompat="@drawable/ic_drink"
+        android:layout_below="@+id/level"
+        android:layout_toRightOf="@+id/tvLevel"
+        android:layout_toEndOf="@+id/tvLevel" />
+
+    <ImageButton
+        android:id="@+id/ibSA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ibAlc"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp"
+        android:layout_toEndOf="@+id/ibAlc"
+        android:layout_toRightOf="@+id/ibAlc"
+        app:srcCompat="@drawable/ic_need_help" />
+
+    <ImageButton
+        android:id="@+id/ibOther"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ibSA"
+        android:layout_alignStart="@+id/ibSA"
+        android:layout_alignTop="@+id/ibHome"
+        app:srcCompat="@drawable/ic_add" />
+
+    <ImageButton
+        android:id="@+id/ibHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        app:srcCompat="@drawable/ic_home"
+        android:layout_below="@+id/ibAlc"
+        android:layout_alignLeft="@+id/ibAlc"
+        android:layout_alignStart="@+id/ibAlc" />
+
+    <TextView
+        android:id="@+id/tvCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/level"
+        android:layout_alignStart="@+id/level"
+        android:layout_below="@+id/ibHome"
+        android:layout_marginTop="46dp"
+        android:textSize="20sp"
+        android:text="Call 911?" />
+
+    <compass.compass.SwipeButton
+        android:id="@+id/callPolice"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:background="@color/c500"
+        android:text="@string/swipeText"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:layout_below="@+id/tvCall"
+        android:layout_alignLeft="@+id/tvCall"
+        android:layout_alignStart="@+id/tvCall" />
 </RelativeLayout>
