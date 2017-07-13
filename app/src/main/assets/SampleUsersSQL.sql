@@ -23,4 +23,5 @@ INSERT INTO `Users` VALUES ('Emily','emily@gmail.com','F','Texas Party');
 INSERT INTO `Users` VALUES ('Ambria','ambria@gmail.com','F ','Texas Party');
 INSERT INTO `Users` VALUES ('Daniel','daniel@gmail.com','M','Menlo Park');
 INSERT INTO `Users` VALUES ('Mark','zuck@gmail.com','M','Facebook Party');
+INSERT INTO `Users` VALUES ('Test','test@gmail.com','M','Test Party');
 COMMIT;

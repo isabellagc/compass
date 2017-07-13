@@ -10,6 +10,9 @@ public class User {
     public String email;
     public String gender;
     public Event currentEvent;
+    //this is just a boolean for now (one event) but when multiple events will have to be included in a
+    //hash map of sorts (change the adapter)
+    public boolean added;
     //data class for geographic location: latitude, lognitude, timestamp, and other info
     //public Location location;
 
@@ -28,6 +31,7 @@ public class User {
         name = nameInfo;
         email = emailInfo;
         gender = genderInfo;
+        added = false;
         currentEvent = null;
     }
 
