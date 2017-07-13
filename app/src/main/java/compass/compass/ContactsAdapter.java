@@ -25,7 +25,12 @@ public class ContactsAdapter extends
     //store context for easy access
     private Context mContext;
 
-    //provide direct reference to each of the views within our data item (item_contacT)
+    public ContactsAdapter(Context context, ArrayList<User> contacts) {
+        mContext = context;
+        mContacts = contacts;
+    }
+
+    //provide direct reference to each of the views within our data item (item_contact)
     public class ViewHolder extends  RecyclerView.ViewHolder{
         public TextView tvContactName;
         public CheckBox cbAddContact;
@@ -37,6 +42,15 @@ public class ContactsAdapter extends
             tvContactName = (TextView) itemView.findViewById(R.id.tvContactName);
             cbAddContact = (CheckBox) itemView.findViewById(R.id.cbAddContact);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+
+            cbAddContact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    User currentUser = mContacts.get(position);
+                    currentUser.added = cbAddContact.isChecked();
+                }
+            });
         }
     }
 

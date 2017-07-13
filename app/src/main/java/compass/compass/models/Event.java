@@ -19,6 +19,9 @@ public class Event {
     public TimerTask timerTask;
 
 
+    public Event(){
+        //default constructor
+    }
     public Event(String myname, Group invitees, Time starting, Time ending){
         name = myname;
         group = invitees;
@@ -26,6 +29,38 @@ public class Event {
         endTime = ending;
 
         setTimer();
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
 
     public void setTimer(){

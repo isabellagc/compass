@@ -7,7 +7,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import compass.compass.NeedHelpActivity;
 import compass.compass.R;
@@ -51,8 +50,8 @@ public class NeedHelpSwipe extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         swipeButton = (SwipeButton) view.findViewById(R.id.swipeHelp);
         swipeButton.requestFocus();
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//        getDialog().getWindow().setSoftInputMode(
+//                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         SwipeButtonCustomItems swipeButtonSettings = new SwipeButtonCustomItems() {
             @Override

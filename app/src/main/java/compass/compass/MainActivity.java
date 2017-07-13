@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     //DataBaseManager myDb;
     public DataBaseHelper myDbHelper;
     public SQLiteDatabase myDb;
-    public ArrayList<User> contacts;
+    public static ArrayList<User> contacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         myDbHelper = new DataBaseHelper(this);
         //initialize
         initializeDB();
+
+
         //now contacts has all the users
         //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
         //once then take the line out and run again to delete your version of the database and store the new one.
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         launchLocation();
         lauchDrinkActivity();
         launchNeedHelp();
+    }
+
+    public static ArrayList<User> getContacts() {
+        return contacts;
     }
 
     private void initializeDB(){
