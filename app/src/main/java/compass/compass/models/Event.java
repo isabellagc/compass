@@ -12,13 +12,15 @@ import java.util.TimerTask;
 
 public class Event {
     public Group group;
+    public String name;
     public Time startTime;
     public Time endTime;
     public Timer timer;
     public TimerTask timerTask;
 
 
-    public Event(Group invitees, Time starting, Time ending){
+    public Event(String myname, Group invitees, Time starting, Time ending){
+        name = myname;
         group = invitees;
         startTime = starting;
         endTime = ending;

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="compass.compass.NewEvent">
+
+
+    <TextView
+        android:id="@+id/tvNewEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="New Event"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp" />
+
+    <EditText
+        android:id="@+id/etNameBox"
+        style="@android:style/Widget.Material.EditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:hint="Enter Name"
+        app:layout_constraintLeft_toRightOf="@+id/tvEventName"
+        app:layout_constraintTop_toBottomOf="@+id/tvNewEvent"
+        app:layout_constraintBottom_toBottomOf="@+id/tvEventName"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:id="@+id/tvEventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Event Name:"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNewEvent"
+        android:layout_marginStart="16dp" />
+
+    <EditText
+        android:id="@+id/etStartTime"
+        style="@android:style/Widget.Material.EditText"
+        android:layout_width="102dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Time "
+        android:inputType="textImeMultiLine|time"
+        app:layout_constraintBottom_toBottomOf="@+id/tvStartTime"
+        app:layout_constraintLeft_toRightOf="@+id/tvStartTime"
+        app:layout_constraintTop_toBottomOf="@+id/etNameBox"
+        app:layout_constraintVertical_bias="0.39"
+        android:layout_marginStart="25dp" />
+
+    <TextView
+        android:id="@+id/tvStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="14dp"
+        android:text="Start Time:"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNameBox"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tvEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="End Time:"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etStartTime"
+        android:layout_marginStart="16dp" />
+
+    <EditText
+        android:id="@+id/evEndTime"
+        android:layout_width="104dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Time"
+        app:layout_constraintLeft_toRightOf="@+id/tvEndTime"
+        app:layout_constraintTop_toBottomOf="@+id/etStartTime"
+        android:layout_marginStart="32dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/evEndTime"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="8dp" />
+
+</android.support.constraint.ConstraintLayout>
+

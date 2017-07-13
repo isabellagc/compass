@@ -22,6 +22,7 @@
         <activity android:name="NeedHelpActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".ResourcesActivity"/>
+        <activity android:name=".NewEvent"/>
     </application>
 
 </manifest>
