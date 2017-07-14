@@ -9,6 +9,7 @@ public class User {
     public String name;
     public String email;
     public String gender;
+    //this is stored as a string  our firebase database
     public Event currentEvent;
     //this is just a boolean for now (one event) but when multiple events will have to be included in a
     //hash map of sorts (change the adapter)
@@ -16,6 +17,11 @@ public class User {
     //data class for geographic location: latitude, lognitude, timestamp, and other info
     //public Location location;
 
+
+    //added the default constructor for Firebase interactions...
+    public User(){
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
 
     //****INFORMATION TO UNCOMMENT AS WE ADD EXTRA FEATURES *****//
 //    public ArrayList<Event> eventList;
@@ -32,6 +38,7 @@ public class User {
         email = emailInfo;
         gender = genderInfo;
         added = false;
+        //TODO: instead of updating this to null and added to false when you make a new user go through the database for the events and use that info
         currentEvent = null;
     }
 
