@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -56,8 +58,29 @@ public class MainActivity extends AppCompatActivity {
             contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
+        final String[] s = {"not working"};
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        Query q = mDatabase.child("Users").equalTo("isabella");
+
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    s[0] = postSnapshot.toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("aggggg", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+
+
 //        mDatabase.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,19 +100,6 @@ public class MainActivity extends AppCompatActivity {
 //                Log.i("Firebase", "firebase array thing didnt work");
 //            }
 //        });
-
-        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String s = (String) dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        //writeNewUser("Isabella2", "Isabella2@gmail.com", "F" );
 
 
     }
