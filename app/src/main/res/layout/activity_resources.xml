@@ -7,8 +7,7 @@
         android:id="@+id/flMap"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:background="@mipmap/harvard_5"
-        android:backgroundTint="@color/c50"></FrameLayout>
+        android:background="@mipmap/harvard_5"></FrameLayout>
 
     <ImageView
         android:id="@+id/imageView"
