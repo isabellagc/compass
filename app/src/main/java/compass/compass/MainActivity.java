@@ -2,10 +2,10 @@ package compass.compass;
 
 import android.content.Intent;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton needhelp;
 
     public DataBaseHelper myDbHelper;
-    public SQLiteDatabase myDb;
+//    public SQLiteDatabase myDb;
     public static ArrayList<User> contacts;
 
     public DatabaseReference mDatabase;
@@ -46,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
         //*** TODO: DELETE THIS AND OTHER LOCAL DATABSE THINGS AND HOOKUP TO NEW FIREBASE DB WHEN SETUP
             //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
             //that comes with the APK of each app.
-            myDbHelper = new DataBaseHelper(this);
-            //initialize
-            initializeDB();
-
-            //now contacts has all the users
-            //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
-            //once then take the line out and run again to delete your version of the database and store the new one.
-            contacts = myDbHelper.makeUsersOutOfDB("Users");
+//            myDbHelper = new DataBaseHelper(this);
+//            //initialize
+//            initializeDB();
+//
+//            //now contacts has all the users
+//            //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
+//            //once then take the line out and run again to delete your version of the database and store the new one.
+//            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
 
@@ -78,19 +79,26 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        Log.d("HALP", "got here");
+
+
+
         mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String s = (String) dataSnapshot.getValue();
+                Map s = (Map) dataSnapshot.getValue();
+                String email = (String) s.get("email");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-        //writeNewUser("Isabella2", "Isabella2@gmail.com", "F" );
 
+
+
+        //writeNewUser("Isabella2", "Isabella2@gmail.com", "F" );
+        Log.d("HALP", "got here");
 
     }
 
