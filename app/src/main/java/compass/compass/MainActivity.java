@@ -11,6 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,33 +28,86 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
-    //DataBaseManager myDb;
+
     public DataBaseHelper myDbHelper;
     public SQLiteDatabase myDb;
     public static ArrayList<User> contacts;
+
+    public DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setHomeScreenButtons();
+        setOnClickListeners();
+
+        //*** TODO: DELETE THIS AND OTHER LOCAL DATABSE THINGS AND HOOKUP TO NEW FIREBASE DB WHEN SETUP
+            //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
+            //that comes with the APK of each app.
+            myDbHelper = new DataBaseHelper(this);
+            //initialize
+            initializeDB();
+
+            //now contacts has all the users
+            //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
+            //once then take the line out and run again to delete your version of the database and store the new one.
+            contacts = myDbHelper.makeUsersOutOfDB("Users");
+
+        //***start of firebase db!!****//
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                //GenericTypeIndicator<List<String>> t = new GenericTypeIndicator ?<List<String>>() {};
+//                List messages = dataSnapshot.getValue(true);
+//                if( messages == null ) {
+//                    System.out.println("No users");
+//                }
+//                else {
+//                    Log.i("Firebase", "user found i think");
+//                    System.out.println("The first user is: " + messages.get(0) );
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.i("Firebase", "firebase array thing didnt work");
+//            }
+//        });
+
+        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String s = (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //writeNewUser("Isabella2", "Isabella2@gmail.com", "F" );
+
+
+    }
+
+    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
+//    private void writeNewUser(String name, String email, String gender) {
+//        User user = new User(name, email, gender);
+//        mDatabase.child("Users").setValue(user);
+//    }
+
+
+    private void setHomeScreenButtons(){
         location = (ImageButton) findViewById(R.id.location);
         drink = (ImageButton) findViewById(R.id.drink);
         needhelp = (ImageButton) findViewById(R.id.needHelp);
+    }
 
-
-        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
-        //that comes with the APK of each app.
-        myDbHelper = new DataBaseHelper(this);
-        //initialize
-        initializeDB();
-
-
-        //now contacts has all the users
-        //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
-        //once then take the line out and run again to delete your version of the database and store the new one.
-        contacts = myDbHelper.makeUsersOutOfDB("Users");
-
-
+    private void setOnClickListeners(){
         launchLocation();
         lauchDrinkActivity();
         launchNeedHelp();
@@ -123,4 +182,6 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
+
+
 }

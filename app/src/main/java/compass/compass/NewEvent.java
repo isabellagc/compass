@@ -1,5 +1,6 @@
 package compass.compass;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,7 @@ public class NewEvent extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 createEvent();
+                moveToEventView();
             }
         });
 
@@ -86,10 +88,13 @@ public class NewEvent extends AppCompatActivity{
         Group group = new Group(usersAdded, true);
         newEvent.setGroup(group);
         //TODO: FIGURE OUT START AND END TIMES
-        //newEvent.setStartTime(etStartTime.getText());
+        //newEvent.setStartTime(etStartTime.getText())
         return newEvent;
     }
 
-
+    private void moveToEventView() {
+        Intent i = new Intent(NewEvent.this, LocationActivity.class);
+        startActivity(i);
+    }
 
 }
