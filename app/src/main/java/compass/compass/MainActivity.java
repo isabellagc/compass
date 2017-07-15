@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOnClickListeners(){
         launchLocation();
-        lauchDrinkActivity();
+        launchDrinkActivity();
         launchNeedHelp();
     }
 
@@ -153,13 +153,13 @@ public class MainActivity extends AppCompatActivity {
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, LocationActivity.class);
+                Intent i = new Intent(MainActivity.this, EventActivity.class);
                 startActivity(i);
             }
         });
     }
     //Launch the drink activity
-    public void lauchDrinkActivity (){
+    public void launchDrinkActivity (){
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
