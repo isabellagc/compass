@@ -15,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -30,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
+    public User currentProfile;
+
+    public static final int OPEN_LOGIN_ACTIVITY = 11111;
 
     public DataBaseHelper myDbHelper;
 //    public SQLiteDatabase myDb;
@@ -58,71 +60,13 @@ public class MainActivity extends AppCompatActivity {
 //            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
-        final String[] s = {"not working"};
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Query q = mDatabase.child("Users").equalTo("isabella");
+        //make users out of all items in the Users child in the database
+        makeAllUsers();
 
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    s[0] = postSnapshot.toString();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("aggggg", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });
-
-
-
-//        mDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                //GenericTypeIndicator<List<String>> t = new GenericTypeIndicator ?<List<String>>() {};
-//                List messages = dataSnapshot.getValue(true);
-//                if( messages == null ) {
-//                    System.out.println("No users");
-//                }
-//                else {
-//                    Log.i("Firebase", "user found i think");
-//                    System.out.println("The first user is: " + messages.get(0) );
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.i("Firebase", "firebase array thing didnt work");
-//            }
-//        });
-
-        Log.d("HALP", "got here");
-
-
-
-        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map s = (Map) dataSnapshot.getValue();
-                String email = (String) s.get("email");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-
-
-
-        //writeNewUser("Isabella2", "Isabella2@gmail.com", "F" );
-        Log.d("HALP", "got here");
-
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
     //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
@@ -131,6 +75,50 @@ public class MainActivity extends AppCompatActivity {
 //        mDatabase.child("Users").setValue(user);
 //    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == OPEN_LOGIN_ACTIVITY){
+            String user = data.getStringExtra("userToCheck");
+            mDatabase.child("Users").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map s = (Map) dataSnapshot.getValue();
+                    if(s != null){
+                        currentProfile = new User();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+    }
+
+    private void makeAllUsers(){
+        DatabaseReference reference = mDatabase.child("Users");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    Map s = (Map) userSnapshot.getValue();
+                    Log.i("Make all users", "made it ");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setCurrentUser(Map <String, Object> s){
+
+    }
 
     private void setHomeScreenButtons(){
         location = (ImageButton) findViewById(R.id.location);
