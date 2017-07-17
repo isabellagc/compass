@@ -59,7 +59,7 @@ public class NewEvent extends AppCompatActivity{
         //get recyclerview from layout
         rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
         //initialize contacts
-        contacts = MainActivity.getContacts();
+        //contacts = MainActivity.getContacts();
         //create adapter passing in sample contact data
         adapter = new ContactsAdapter(this, contacts);
         //attatch adapter ot recyclerview to populate items
