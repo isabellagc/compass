@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity{
     public DataBaseHelper myDbHelper;
 
 
-//    public SQLiteDatabase myDb;
+    //    public SQLiteDatabase myDb;
     public ArrayList<User> contacts;
 
     public DatabaseReference mDatabase;
@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity{
         setOnClickListeners();
 
         //*** TODO: DELETE THIS AND OTHER LOCAL DATABSE THINGS AND HOOKUP TO NEW FIREBASE DB WHEN SETUP
-            //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
-            //that comes with the APK of each app.
+        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
+        //that comes with the APK of each app.
 //            myDbHelper = new DataBaseHelper(this);
 //            //initialize
 //            initializeDB();
