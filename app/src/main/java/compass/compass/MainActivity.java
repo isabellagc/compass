@@ -2,7 +2,11 @@ package compass.compass;
 
 import android.content.Intent;
 import android.database.SQLException;
+
+import android.os.Build;
+
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,7 +29,9 @@ import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 
 
-public class MainActivity extends AppCompatActivity {
+
+@RequiresApi(api = Build.VERSION_CODES.N_MR1)
+public class MainActivity extends AppCompatActivity{
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
@@ -34,10 +40,15 @@ public class MainActivity extends AppCompatActivity {
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
 
     public DataBaseHelper myDbHelper;
+
+    public static ArrayList<User> contacts;
+
+
 //    public SQLiteDatabase myDb;
     public static ArrayList<User> contacts;
 
     public DatabaseReference mDatabase;
+
 
 
     @Override
@@ -74,6 +85,15 @@ public class MainActivity extends AppCompatActivity {
 //        User user = new User(name, email, gender);
 //        mDatabase.child("Users").setValue(user);
 //    }
+
+
+
+
+        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
+        //that comes with the APK of each app.
+       // myDbHelper = new DataBaseHelper(this);
+        //initialize
+      //  initializeDB();
 
 
     @Override
@@ -130,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         launchLocation();
         launchDrinkActivity();
         launchNeedHelp();
+
     }
 
     public static ArrayList<User> getContacts() {
@@ -161,11 +182,13 @@ public class MainActivity extends AppCompatActivity {
 
     //Launch the location activity
     public void launchLocation(){
+
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, EventActivity.class);
                 startActivity(i);
+
             }
         });
     }
@@ -175,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, DrinkActivity.class);
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//                //        registerToken(token);
+//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
+//                Log.d("Token Bruce", token);
                 startActivity(i);
             }
         });
@@ -201,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
+
 
 
 }

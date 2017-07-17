@@ -11,6 +11,8 @@ public class User {
     public String gender;
     //this is stored as a string  our firebase database
     public Event currentEvent;
+//    public int height;
+//    public int weight;
     //this is just a boolean for now (one event) but when multiple events will have to be included in a
     //hash map of sorts (change the adapter)
     public boolean added;
@@ -40,6 +42,8 @@ public class User {
         added = false;
         //TODO: instead of updating this to null and added to false when you make a new user go through the database for the events and use that info
         currentEvent = null;
+//        height = heightInfo;
+//        weight = weightInfo;
     }
 
     public void setCurrentEvent(Event currentEvent) {
