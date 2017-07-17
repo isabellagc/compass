@@ -2,9 +2,7 @@ package compass.compass;
 
 import android.content.Intent;
 import android.database.SQLException;
-
 import android.os.Build;
-
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +39,6 @@ public class MainActivity extends AppCompatActivity{
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
 
     public DataBaseHelper myDbHelper;
-
-    public static ArrayList<User> contacts;
 
 
 //    public SQLiteDatabase myDb;
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
 //            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
-
+        FirebaseApp.initializeApp(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
         makeAllUsers();
