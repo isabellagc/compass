@@ -92,6 +92,10 @@ public class ContactsAdapter extends
     //USE THIS WHEN ITERATING OVER LIST TO SEE WHO TO ADD TO THE GROUP
     @Override
     public int getItemCount() {
+        if (mContacts == null){
+            return 0;
+        }
+
         return mContacts.size();
     }
 }

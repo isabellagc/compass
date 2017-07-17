@@ -2,7 +2,7 @@ package compass.compass.models;
 
 import android.util.Log;
 
-import java.sql.Time;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,20 +13,21 @@ import java.util.TimerTask;
 public class Event {
     public Group group;
     public String name;
-    public Time startTime;
-    public Time endTime;
+    public Date startTime;
+    public Date endTime;
     public Timer timer;
     public TimerTask timerTask;
+    public Long id;
 
 
     public Event(){
         //default constructor
     }
-    public Event(String myname, Group invitees, Time starting, Time ending){
+    public Event(String myname, Group invitees, Long starting, Long ending){
         name = myname;
         group = invitees;
-        startTime = starting;
-        endTime = ending;
+        startTime = new Date(starting);
+        endTime = new Date(ending);
 
         setTimer();
     }
@@ -47,20 +48,20 @@ public class Event {
         this.name = name;
     }
 
-    public Time getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setStartTime(Long startTime) {
+        this.startTime = new Date(startTime);
     }
 
-    public Time getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
+    public void setEndTime(Long endTime) {
+        this.endTime = new Date(endTime);
     }
 
     public void setTimer(){

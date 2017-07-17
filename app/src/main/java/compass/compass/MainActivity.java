@@ -1,7 +1,15 @@
 package compass.compass;
 
 import android.content.Intent;
+<<<<<<< HEAD
+=======
+import android.database.SQLException;
+
+import android.os.Build;
+
+>>>>>>> ef196e576041cbe6673b3574fb64cd97885c83d6
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +35,9 @@ import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 
 
-public class MainActivity extends AppCompatActivity {
+
+@RequiresApi(api = Build.VERSION_CODES.N_MR1)
+public class MainActivity extends AppCompatActivity{
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
@@ -36,10 +46,15 @@ public class MainActivity extends AppCompatActivity {
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
 
     public DataBaseHelper myDbHelper;
+
+    public static ArrayList<User> contacts;
+
+
 //    public SQLiteDatabase myDb;
     public ArrayList<User> contacts;
 
     public DatabaseReference mDatabase;
+
 
 
     @Override
@@ -70,11 +85,11 @@ public class MainActivity extends AppCompatActivity {
         getUsers();
         writeNewUser("isabella", "isabellatest@gmail.com", "female");
 
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
+//        Intent i = new Intent(this, LoginActivity.class);
+//        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
-    //RONG DONT RUN THIS IT DELETES ALL OUR USERS
+    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
     private void writeNewUser(String name, String email, String gender) {
         User user = new User(name, email, gender);
         mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -107,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                     user.name = name;
                     contacts.add(user);
                 }
-
 
                 //mDatabase.child("Users").removeEventListener(this);
             }
@@ -225,8 +239,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOnClickListeners(){
         launchLocation();
-        lauchDrinkActivity();
+        launchDrinkActivity();
         launchNeedHelp();
+
     }
 
 //    // public static ArrayList<User> getContacts() {
@@ -258,20 +273,26 @@ public class MainActivity extends AppCompatActivity {
 
     //Launch the location activity
     public void launchLocation(){
+
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, LocationActivity.class);
+                Intent i = new Intent(MainActivity.this, EventActivity.class);
                 startActivity(i);
+
             }
         });
     }
     //Launch the drink activity
-    public void lauchDrinkActivity (){
+    public void launchDrinkActivity (){
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, DrinkActivity.class);
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//                //        registerToken(token);
+//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
+//                Log.d("Token Bruce", token);
                 startActivity(i);
             }
         });
@@ -298,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
+
 
 
 }
