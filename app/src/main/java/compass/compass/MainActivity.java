@@ -3,6 +3,7 @@ package compass.compass;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
@@ -13,15 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+
 import com.google.firebase.FirebaseApp;
+
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
+import org.w3c.dom.Comment;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import compass.compass.fragments.NeedHelpSwipe;
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 //    public SQLiteDatabase myDb;
-    public static ArrayList<User> contacts;
+    public ArrayList<User> contacts;
 
     public DatabaseReference mDatabase;
 
@@ -68,30 +74,62 @@ public class MainActivity extends AppCompatActivity{
 //            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
-        FirebaseApp.initializeApp(this);
+
+        contacts = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
-        makeAllUsers();
+//        makeAllUsers();
+        //makeAllUsers2();
+        getUsers();
+        writeNewUser("isabella", "isabellatest@gmail.com", "female");
 
 //        Intent i = new Intent(this, LoginActivity.class);
 //        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
     //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
-//    private void writeNewUser(String name, String email, String gender) {
-//        User user = new User(name, email, gender);
-//        mDatabase.child("Users").setValue(user);
-//    }
+    private void writeNewUser(String name, String email, String gender) {
+        User user = new User(name, email, gender);
+        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
+    private void getUsers(){
+        //specify a listener that is triggered when info is available
+        mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                //Toast.makeText(this=)
+                contacts.clear();
+                while(items.hasNext()){
+                    DataSnapshot item = items.next();
+                    String name;
+                    name = item.child("name").getValue().toString();
+                    User user = new User();
+                    user.name = name;
+                    contacts.add(user);
+                }
 
+                //mDatabase.child("Users").removeEventListener(this);
+            }
 
-        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
-        //that comes with the APK of each app.
-       // myDbHelper = new DataBaseHelper(this);
-        //initialize
-      //  initializeDB();
-
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("MainEventListener", "OnCancelled");
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -103,7 +141,6 @@ public class MainActivity extends AppCompatActivity{
                     Map s = (Map) dataSnapshot.getValue();
                     if(s != null){
                         currentProfile = new User();
-
                     }
 
                 }
@@ -133,9 +170,64 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    private void setCurrentUser(Map <String, Object> s){
 
+    private void makeAllUsers2(){
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d("database main activity", "onChildAdded:" + dataSnapshot.getKey());
+
+                // A new comment has been added, add it to the displayed list
+                Comment comment = dataSnapshot.getValue(Comment.class);
+
+                // ...
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d("database main activity", "onChildChanged:" + dataSnapshot.getKey());
+
+                // A comment has changed, use the key to determine if we are displaying this
+                // comment and if so displayed the changed comment.
+                Comment newComment = dataSnapshot.getValue(Comment.class);
+                String commentKey = dataSnapshot.getKey();
+
+                // ...
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("database main activity", "onChildRemoved:" + dataSnapshot.getKey());
+
+                // A comment has changed, use the key to determine if we are displaying this
+                // comment and if so remove it.
+                String commentKey = dataSnapshot.getKey();
+
+                // ...
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d("database main activity", "onChildMoved:" + dataSnapshot.getKey());
+
+                // A comment has changed position, use the key to determine if we are
+                // displaying this comment and if so move it.
+                Comment movedComment = dataSnapshot.getValue(Comment.class);
+                String commentKey = dataSnapshot.getKey();
+
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("database main activity", "postComments:onCancelled", databaseError.toException());
+
+            }
+        };
+        mDatabase.child("Users").addChildEventListener(childEventListener);
     }
+
+
 
     private void setHomeScreenButtons(){
         location = (ImageButton) findViewById(R.id.location);
@@ -150,26 +242,26 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    public static ArrayList<User> getContacts() {
-        return contacts;
-    }
+//    // public static ArrayList<User> getContacts() {
+//        return contacts;
+//    }
 
-    private void initializeDB(){
-        //try to create the database
-        try {
-            myDbHelper.createDatabase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-
-        //open the database
-        try {
-            myDbHelper.openDatabase();
-            //myDb = myDbHelper.myDataBase;
-        }catch(SQLException sqle){
-            throw sqle;
-        }
-    }
+//    private void initializeDB(){
+//        //try to create the database
+//        try {
+//            myDbHelper.createDatabase();
+//        } catch (IOException ioe) {
+//            throw new Error("Unable to create database");
+//        }
+//
+//        //open the database
+//        try {
+//            myDbHelper.openDatabase();
+//            //myDb = myDbHelper.myDataBase;
+//        }catch(SQLException sqle){
+//            throw sqle;
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
