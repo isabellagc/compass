@@ -126,8 +126,6 @@ public class MainActivity extends AppCompatActivity{
                 Log.d("wow", "here");
             }
         });
-
-
     }
 
     @Override
