@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity{
 
     public DataBaseHelper myDbHelper;
 
-    public static ArrayList<User> contacts;
 
 
 //    public SQLiteDatabase myDb;
