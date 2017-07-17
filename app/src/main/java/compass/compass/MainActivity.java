@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         //make users out of all items in the Users child in the database
         makeAllUsers();
 
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
+//        Intent i = new Intent(this, LoginActivity.class);
+//        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
     //WRONG DONT RUN THIS IT DELETES ALL OUR USERS

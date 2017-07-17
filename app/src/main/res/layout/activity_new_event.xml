@@ -75,7 +75,7 @@
         android:layout_marginStart="16dp" />
 
     <TextView
-        android:id="@+id/tvEndTime"
+        android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -95,7 +95,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Time"
-        app:layout_constraintLeft_toRightOf="@+id/tvEndTime"
+        app:layout_constraintLeft_toRightOf="@+id/tvEnd"
         app:layout_constraintTop_toBottomOf="@+id/etStartTime"
         android:layout_marginStart="32dp" />
 

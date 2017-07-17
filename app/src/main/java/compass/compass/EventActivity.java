@@ -24,9 +24,11 @@ public class EventActivity extends AppCompatActivity {
 
         rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
         eventList = new ArrayList<>();
-        eventAdapter = new EventsAdapter();
+
+        eventAdapter = new EventsAdapter(this);
 
         rvEvents.setAdapter(eventAdapter);
+        rvEvents.invalidate();
     }
 
     @Override
