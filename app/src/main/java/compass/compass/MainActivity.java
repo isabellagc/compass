@@ -19,10 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Comment;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import compass.compass.fragments.NeedHelpSwipe;
@@ -73,30 +70,27 @@ public class MainActivity extends AppCompatActivity{
         contacts = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
-//        makeAllUsers();
-        //makeAllUsers2();
         loadUsers();
-        writeNewUser("isabella", "isabellatest@gmail.com", "female");
 
-//        Intent i = new Intent(this, LoginActivity.class);
-//        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
-    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
-    private void writeNewUser(String name, String email, String gender) {
-        User user = new User(name, email, gender);
-        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
+//    private void writeNewUser(String name, String email, String gender) {
+//        User user = new User(name, email, gender);
+//        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                dataSnapshot.getValue();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
 
@@ -104,42 +98,12 @@ public class MainActivity extends AppCompatActivity{
         mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
-                //Toast.makeText(this=)
-                contacts.clear();
-                while(items.hasNext()){
-                    DataSnapshot item = items.next();
-                    String name;
-                    name = item.child("name").getValue().toString();
-                    User user = new User();
-                    user.name = name;
-                    contacts.add(user);
-                    Log.i("contacts", "added");
-                }
-
-//                Map userMap = dataSnapshot.getValue();
-//                //contacts.add(eventKey);
-//                if(eventKey != null) {
-//                    mDatabase.child("Events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            Map temp = (Map) dataSnapshot.getValue();
-//                            Event event = new Event();
-//                            event.setEndTime((Long) temp.get("End"));
-//                            event.setStartTime((Long) temp.get("Start"));
-//                            event.id = (Long) Long.valueOf(eventKey);
-//                            event.setName((String) temp.get("EventName"));
-//
-//                            mEvents.add(event);
-//                            notifyDataSetChanged();
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
+                Map userData = (Map) dataSnapshot.getValue();
+                User user = new User();
+                user.name = (String) userData.get("name");
+                user.email = (String) userData.get("email");
+                user.gender = (String) userData.get("gender");
+                contacts.add(user);
             }
 
             @Override
@@ -166,34 +130,6 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-
-    private void getUsers(){
-        //specify a listener that is triggered when info is available
-        mDatabase.child("Users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
-                //Toast.makeText(this=)
-                contacts.clear();
-                while(items.hasNext()){
-                    DataSnapshot item = items.next();
-                    String name;
-                    name = item.child("name").getValue().toString();
-                    User user = new User();
-                    user.name = name;
-                    contacts.add(user);
-                }
-
-                //mDatabase.child("Users").removeEventListener(this);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.i("MainEventListener", "OnCancelled");
-            }
-        });
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == OPEN_LOGIN_ACTIVITY){
@@ -214,82 +150,6 @@ public class MainActivity extends AppCompatActivity{
             });
         }
     }
-
-    private void makeAllUsers(){
-        DatabaseReference reference = mDatabase.child("Users");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                    Map s = (Map) userSnapshot.getValue();
-                    Log.i("Make all users", "made it ");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-    private void makeAllUsers2(){
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d("database main activity", "onChildAdded:" + dataSnapshot.getKey());
-
-                // A new comment has been added, add it to the displayed list
-                Comment comment = dataSnapshot.getValue(Comment.class);
-
-                // ...
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d("database main activity", "onChildChanged:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                Comment newComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d("database main activity", "onChildRemoved:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d("database main activity", "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                Comment movedComment = dataSnapshot.getValue(Comment.class);
-                String commentKey = dataSnapshot.getKey();
-
-                // ...
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("database main activity", "postComments:onCancelled", databaseError.toException());
-
-            }
-        };
-        mDatabase.child("Users").addChildEventListener(childEventListener);
-    }
-
 
 
     private void setHomeScreenButtons(){

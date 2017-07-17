@@ -17,9 +17,6 @@ public class LoginActivity extends AppCompatActivity{
     private EditText etName;
     private Button btLogin;
 
-
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
