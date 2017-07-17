@@ -1,9 +1,7 @@
 package compass.compass;
 
 import android.content.Intent;
-import android.database.SQLException;
 import android.os.Build;
-
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
@@ -13,9 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-
-
-import com.google.firebase.FirebaseApp;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -80,7 +75,7 @@ public class MainActivity extends AppCompatActivity{
         //make users out of all items in the Users child in the database
 //        makeAllUsers();
         //makeAllUsers2();
-        getUsers();
+        loadUsers();
         writeNewUser("isabella", "isabellatest@gmail.com", "female");
 
 //        Intent i = new Intent(this, LoginActivity.class);
@@ -101,6 +96,74 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+
+
+    private void loadUsers(){
+        mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Iterator<DataSnapshot> items = dataSnapshot.getChildren().iterator();
+                //Toast.makeText(this=)
+                contacts.clear();
+                while(items.hasNext()){
+                    DataSnapshot item = items.next();
+                    String name;
+                    name = item.child("name").getValue().toString();
+                    User user = new User();
+                    user.name = name;
+                    contacts.add(user);
+                    Log.i("contacts", "added");
+                }
+
+//                Map userMap = dataSnapshot.getValue();
+//                //contacts.add(eventKey);
+//                if(eventKey != null) {
+//                    mDatabase.child("Events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Map temp = (Map) dataSnapshot.getValue();
+//                            Event event = new Event();
+//                            event.setEndTime((Long) temp.get("End"));
+//                            event.setStartTime((Long) temp.get("Start"));
+//                            event.id = (Long) Long.valueOf(eventKey);
+//                            event.setName((String) temp.get("EventName"));
+//
+//                            mEvents.add(event);
+//                            notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d("wow", "here");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("wow", "here");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("wow", "here");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("wow", "here");
+            }
+        });
+
+
     }
 
 
