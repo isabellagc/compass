@@ -31,6 +31,7 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ResourcesActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".models.TestActivity"/>
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
