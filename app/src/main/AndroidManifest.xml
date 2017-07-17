@@ -3,6 +3,7 @@
     package="compass.compass">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
@@ -19,29 +20,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocationActivity"/>
-        <activity android:name=".DrinkActivity"/>
-        <activity android:name="NeedHelpActivity">
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".DrinkActivity" />
+        <activity android:name=".NeedHelpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
 
         </activity>
-        <activity android:name=".ProfileActivity"/>
-        <activity android:name=".ResourcesActivity"/>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ResourcesActivity" />
 
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_ic_notification" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".NewEvent"/>
+        <activity android:name=".NewEvent" />
+        <activity android:name=".EventActivity"></activity>
     </application>
 
 </manifest>
