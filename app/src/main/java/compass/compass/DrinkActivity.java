@@ -52,7 +52,7 @@ public class DrinkActivity extends AppCompatActivity{
         tvLiquor = (TextView) findViewById(R.id.tvLiquor);
         tvShot = (TextView) findViewById(R.id.tvShot);
         waveView = (WaveView) findViewById(R.id.wave_view);
-        ivPerson = (ImageView) findViewById(R.id.ivPerson);
+        //ivPerson = (ImageView) findViewById(R.id.ivPerson);
         if(currentProfile.gender.equals("f")){
             ivPerson.setImageResource(R.drawable.ic_female);
         }
