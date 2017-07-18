@@ -48,6 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 newMessage.setText((String) message.get("text"));
                 newMessage.setSender((String) message.get("sender"));
                 mMessages.add(newMessage);
+                scrollView();
                 notifyDataSetChanged();
             }
 
@@ -73,6 +74,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
 
+    }
+
+    private void scrollView(){
+        RecyclerView rvChat = (RecyclerView) ((LocationActivity) this.mContext).findViewById(R.id.rvChat);
+        rvChat.smoothScrollToPosition(mMessages.size());
     }
 
     @Override

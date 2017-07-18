@@ -66,18 +66,6 @@ public class LocationActivity extends AppCompatActivity{
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 layoutManager.smoothScrollToPosition(rvChat, null, mAdapter.getItemCount());
-//                int friendlyMessageCount = mAdapter.getItemCount();
-//                int lastVisiblePosition =
-//                        layoutManager.findLastCompletelyVisibleItemPosition();
-//                Log.i("recycleViewDataObserver", "Hit here");
-//                // If the recycler view is initially being loaded or the
-//                // user is at the bottom of the list, scroll to the bottom
-//                // of the list to show the newly added message.
-//                if (lastVisiblePosition == -1 ||
-//                        (positionStart >= (friendlyMessageCount - 1) &&
-//                                lastVisiblePosition == (positionStart - 1))) {
-//                    rvChat.scrollToPosition(positionStart);
-//                }
             }
         });
 
@@ -106,6 +94,7 @@ public class LocationActivity extends AppCompatActivity{
                     @Override
                     public void run() {
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                        etMessage.setHint("Write message");
                     }
                 });
             }
