@@ -1,11 +1,13 @@
 package compass.compass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -80,6 +82,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                final String eventKey = dataSnapshot.getKey();
+                int index = keys.indexOf(eventKey);
+                keys.remove(index);
+                mEvents.remove(index);
+                notifyDataSetChanged();
                 Log.d("wow", "here");
             }
 
@@ -122,6 +129,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public TextView tvEventName;
         public TextView tvStart;
         public TextView tvEnd;
+        public RelativeLayout rlEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +137,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventName = (TextView) itemView.findViewById(R.id.tvEventName);
             tvStart = (TextView) itemView.findViewById(R.id.tvStart);
             tvEnd = (TextView) itemView.findViewById(R.id.tvEnd);
+            rlEvent = (RelativeLayout) itemView.findViewById(R.id.rlEvent);
+
+            rlEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    Long eventId = mEvents.get(pos).id;
+                    Intent i = new Intent(mContext, LocationActivity.class);
+                    i.putExtra("eventId", eventId);
+                    mContext.startActivity(i);
+                }
+            });
+
 
         }
     }

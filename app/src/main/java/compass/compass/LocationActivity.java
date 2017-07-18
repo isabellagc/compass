@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Date;
 
 import compass.compass.models.ChatMessage;
 
@@ -27,32 +30,35 @@ public class LocationActivity extends AppCompatActivity{
     Button btSend;
 
     RecyclerView rvChat;
-    ArrayList<ChatMessage> mMessages;
     ChatAdapter mAdapter;
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
+    Long eventId;
+    public DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        eventId = getIntent().getExtras().getLong("eventId");
+
         etMessage = (EditText) findViewById(R.id.etMessage);
         btSend = (Button) findViewById(R.id.btSend);
 
         rvChat = (RecyclerView) findViewById(R.id.rvChat);
-        mMessages = new ArrayList<>();
         mFirstLoad = true;
 
         //TODO: change "name" to currentUser.name
-        mAdapter = new ChatAdapter(LocationActivity.this, "name", mMessages);
+        mAdapter = new ChatAdapter(LocationActivity.this, "amulya", eventId);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LocationActivity.this);
         rvChat.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
 
         // When send button is clicked, create message object on Parse
         btSend.setOnClickListener(new View.OnClickListener() {
@@ -66,15 +72,18 @@ public class LocationActivity extends AppCompatActivity{
                 Toast.makeText(LocationActivity.this, data, Toast.LENGTH_SHORT).show();
 
                 ChatMessage message = new ChatMessage();
-                message.setMessageText(data);
+                message.setText(data);
 
                 //TODO: change "name" to currentUser.name
-                message.setMessageUser("name");
+                message.setSender("amulya");
+                message.setTime((new Date().getTime()));
 
-                etMessage.setText(null);
+                mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
+                mAdapter.notifyDataSetChanged();
+
+                etMessage.setText("Write a message...");
             }
         });
-
     }
 
     @Override

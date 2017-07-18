@@ -2,18 +2,22 @@ package compass.compass;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 import compass.compass.models.ChatMessage;
 
@@ -22,14 +26,55 @@ import compass.compass.models.ChatMessage;
  */
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
-    private List<ChatMessage> mMessages;
+    private ArrayList<ChatMessage> mMessages;
+    private DatabaseReference mDatabase;
     private Context mContext;
     private String mUserId;
 
-    public ChatAdapter(Context context, String userId, List<ChatMessage> messages) {
-        mMessages = messages;
+    public ChatAdapter(Context context, String userId, Long eventId) {
         this.mUserId = userId;
         mContext = context;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mMessages = new ArrayList<>();
+
+        getMessages(eventId.toString());
+    }
+
+    public void getMessages(String eventId) {
+        mDatabase.child("messages").child(eventId).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map message = (Map) dataSnapshot.getValue();
+                ChatMessage newMessage = new ChatMessage();
+                newMessage.setTime((Long) message.get("time"));
+                newMessage.setText((String) message.get("text"));
+                newMessage.setSender((String) message.get("sender"));
+                mMessages.add(newMessage);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -45,21 +90,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
-        final boolean isMe = message.getMessageUser() != null && message.getMessageUser().equals(mUserId);
+//        final boolean isMe = message.getSender() != null && message.getSender().equals(mUserId);
+//
+//        if (isMe) {
+//            holder.imageMe.setVisibility(View.VISIBLE);
+//            holder.imageOther.setVisibility(View.GONE);
+//            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+//        } else {
+//            holder.imageOther.setVisibility(View.VISIBLE);
+//            holder.imageMe.setVisibility(View.GONE);
+//            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+//        }
 
-        if (isMe) {
-            holder.imageMe.setVisibility(View.VISIBLE);
-            holder.imageOther.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-        } else {
-            holder.imageOther.setVisibility(View.VISIBLE);
-            holder.imageMe.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-        }
-
-        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-        Glide.with(mContext).load(getProfileUrl(message.getMessageUser())).into(profileView);
-        holder.body.setText(message.getMessageText());
+//        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
+//        Glide.with(mContext).load(getProfileUrl(message.getSender())).into(profileView);
+        holder.body.setText(message.getText());
+        holder.tvUserName.setText(message.getSender());
     }
 
     // Create a gravatar image based on the hash value obtained from userId
@@ -84,6 +130,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageOther;
         ImageView imageMe;
+        TextView tvUserName;
         TextView body;
 
         public ViewHolder(View itemView) {
@@ -91,6 +138,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
             imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvChatText);
+            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
         }
     }
 }
