@@ -121,6 +121,7 @@
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:tint="@android:color/transparent"
             app:srcCompat="@drawable/ic_001_people" />
 
 
