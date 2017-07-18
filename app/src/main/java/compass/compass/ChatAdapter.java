@@ -30,11 +30,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private DatabaseReference mDatabase;
     private Context mContext;
 
-
     public ChatAdapter(Context context, Long eventId) {
         mContext = context;
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         mMessages = new ArrayList<>();
 
         getMessages(eventId.toString());
@@ -50,12 +48,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 newMessage.setText((String) message.get("text"));
                 newMessage.setSender((String) message.get("sender"));
                 mMessages.add(newMessage);
+                scrollView();
                 notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                //TODO: IF WE WANT SOEMTHING TO HAPPEN FOR CHANGED MESSAGES HAVE TO ADD SOMETHING HERE
+//                Toast.makeText(mContext, "message changed", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -74,6 +74,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
 
+    }
+
+    private void scrollView(){
+        RecyclerView rvChat = (RecyclerView) ((LocationActivity) this.mContext).findViewById(R.id.rvChat);
+        rvChat.smoothScrollToPosition(mMessages.size());
     }
 
     @Override

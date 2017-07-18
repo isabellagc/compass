@@ -30,7 +30,6 @@ public class LocationActivity extends AppCompatActivity{
 
     EditText etMessage;
     Button btSend;
-
     RecyclerView rvChat;
     ChatAdapter mAdapter;
     // Keep track of initial load to scroll to the bottom of the ListView
@@ -38,6 +37,7 @@ public class LocationActivity extends AppCompatActivity{
     static final int POLL_INTERVAL = 1000; // milliseconds
     Long eventId;
     public DatabaseReference mDatabase;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,8 +58,18 @@ public class LocationActivity extends AppCompatActivity{
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LocationActivity.this);
-        rvChat.setLayoutManager(linearLayoutManager);
+        layoutManager = new LinearLayoutManager(LocationActivity.this);
+        layoutManager.setStackFromEnd(true);
+        rvChat.setLayoutManager(layoutManager);
+
+        mAdapter.registerAdapterDataObserver( new RecyclerView.AdapterDataObserver(){
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                layoutManager.smoothScrollToPosition(rvChat, null, mAdapter.getItemCount());
+            }
+        });
+
+
 
         // When send button is clicked, create message object on Parse
         btSend.setOnClickListener(new View.OnClickListener() {
@@ -74,14 +84,18 @@ public class LocationActivity extends AppCompatActivity{
 
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
-
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
+                etMessage.getText().clear();
 
                 mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
-
-                etMessage.setText("Write a message...");
+                rvChat.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                    }
+                });
             }
         });
     }

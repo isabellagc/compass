@@ -19,6 +19,8 @@ import compass.compass.models.Event;
 import compass.compass.models.Group;
 import compass.compass.models.User;
 
+import static compass.compass.MainActivity.allContacts;
+
 /**
  * Created by icamargo on 7/12/17.
  */
@@ -61,7 +63,7 @@ public class NewEvent extends AppCompatActivity{
         //initialize contacts
         //contacts = MainActivity.getContacts();
         //create adapter passing in sample contact data
-        adapter = new ContactsAdapter(this, contacts);
+        adapter = new ContactsAdapter(this, allContacts);
         //attatch adapter ot recyclerview to populate items
         rvContacts.setAdapter(adapter);
         //set layout manager to position the items

@@ -111,18 +111,18 @@
             android:id="@+id/wave_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFC200"
+            android:background="@drawable/ic_001_people"
             wave:above_wave_color="#FFC200"
             wave:blow_wave_color="@android:color/white"
             wave:progress="0"
             wave:wave_height="little"
             wave:wave_hz="normal"
             wave:wave_length="middle"/>
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_001_people"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/imageView4"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--app:srcCompat="@drawable/ic_001_people"/>-->
 
 
 
