@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.john.waveview.WaveView;
+
 /**
  * Created by brucegatete on 7/11/17.
  */
@@ -33,6 +35,8 @@ public class DrinkActivity extends AppCompatActivity{
     public long time_end;
     public long time_elapsed;
     public double alcohol_level;
+    private WaveView waveView;
+    public int progress = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,7 @@ public class DrinkActivity extends AppCompatActivity{
         btLiquor = (ImageButton) findViewById(R.id.btLiquor);
         tvLiquor = (TextView) findViewById(R.id.tvLiquor);
         tvShot = (TextView) findViewById(R.id.tvShot);
+        waveView = (WaveView) findViewById(R.id.wave_view);
         increaseDrinkNumber();
         increaseShotCount();
         increaseLiquorCount();
@@ -55,6 +60,8 @@ public class DrinkActivity extends AppCompatActivity{
                 //increment the number of drinks
                 Drink_no += 1;
                 tvDrinkNumber.setText(String.valueOf(Drink_no));
+                progress += 5;
+                waveView.setProgress(progress);
                 if (time_start == 0) {
                     time_start = System.currentTimeMillis();
                 }else{
@@ -64,7 +71,7 @@ public class DrinkActivity extends AppCompatActivity{
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio);
                 BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000 * 3600));
                 if(BAC >= 0.08){
-                    Toast.makeText(DrinkActivity.this, String.valueOf(BAC), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DrinkActivity.this, "Please stop", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -76,6 +83,8 @@ public class DrinkActivity extends AppCompatActivity{
                 //increment the number of shots
                 Liquor_no += 1;
                 tvLiquor.setText(String.valueOf(Liquor_no));
+                progress += 5;
+                waveView.setProgress(progress);
                 if (time_start == 0) {
                     time_start = System.currentTimeMillis();
                 }else{
@@ -85,7 +94,7 @@ public class DrinkActivity extends AppCompatActivity{
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio * 1.5);
                 BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
                 if(BAC >= 0.08){
-                    Toast.makeText(DrinkActivity.this,  String.valueOf(BAC), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DrinkActivity.this,  "Please stop", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -98,6 +107,8 @@ public class DrinkActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Shot_no += 1;
                 tvShot.setText(String.valueOf(Shot_no));
+                progress += 5;
+                waveView.setProgress(progress);
                 if (time_start == 0) {
                     time_start = System.currentTimeMillis();
                 }else{
@@ -107,7 +118,7 @@ public class DrinkActivity extends AppCompatActivity{
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio * 1.5);
                 BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
                 if (BAC >= 0.08){
-                    Toast.makeText(DrinkActivity.this, String.valueOf(BAC), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DrinkActivity.this, "Please stop", Toast.LENGTH_SHORT).show();
 
                 }
             }
