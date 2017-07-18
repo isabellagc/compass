@@ -103,7 +103,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/btLiquor"
-        android:layout_toEndOf="@+id/btLiquor">
+        android:layout_toEndOf="@+id/btLiquor"
+        android:id="@+id/frameLayout">
 
         <com.john.waveview.WaveView
             android:id="@+id/wave_view"
@@ -117,14 +118,17 @@
             wave:wave_hz="normal"
             wave:wave_length="middle" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tint="@android:color/transparent"
-            app:srcCompat="@drawable/ic_001_people" />
-
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/ivPerson"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/frameLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/frameLayout"
+        android:tint="@android:color/transparent"
+        app:srcCompat="@drawable/ic_male" />
 
 </RelativeLayout>

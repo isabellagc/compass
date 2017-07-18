@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class DrinkActivity extends AppCompatActivity{
     TextView tvDrinkNumber;
     TextView tvShot;
     TextView tvLiquor;
+    ImageView ivPerson;
     public int Drink_no = 0;
     public int Shot_no = 0;
     public int Liquor_no = 0;
@@ -50,6 +52,10 @@ public class DrinkActivity extends AppCompatActivity{
         tvLiquor = (TextView) findViewById(R.id.tvLiquor);
         tvShot = (TextView) findViewById(R.id.tvShot);
         waveView = (WaveView) findViewById(R.id.wave_view);
+        ivPerson = (ImageView) findViewById(R.id.ivPerson);
+        if(currentProfile.gender.equals("f")){
+            ivPerson.setImageResource(R.drawable.ic_female);
+        }
         increaseDrinkNumber();
         increaseShotCount();
         increaseLiquorCount();
