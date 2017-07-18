@@ -1,6 +1,7 @@
 package compass.compass;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -12,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+
+import compass.compass.models.User;
 
 /**
  * Created by icamargo on 7/11/17.
@@ -124,6 +128,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+
     //OLD USER DB THINGS IF NOT USING FIREBASE DOES NOT HAVE NEW USER FIELDS IE SCHOOL, WEIGHT, ETC.
 //    //pass in table name ie Users
 //    //this will load all the names into the arraylist of strings, now we just need to go through the row of the
@@ -150,6 +155,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //        db.close();
 //        return values;
 //    }
+
+    //pass in table name ie Users
+    //this will load all the names into the arraylist of strings, now we just need to go through the row of the
+    //table since the id is the names and walk across, making a user out of each row before we move on to next row
+
+    public ArrayList<User> makeUsersOutOfDB(String table) {
+        ArrayList<User> values = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + table, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                String currentName = cursor.getString(cursor.getColumnIndex("Name"));
+                String currentGender = cursor.getString(cursor.getColumnIndex("Gender"));
+                String currentEmail = cursor.getString(cursor.getColumnIndex("Email"));
+//                int userWeight = cursor.getInt(cursor.getColumnIndex("Weight"));
+//                int userHeight = cursor.getInt(cursor.getColumnIndex("Height"));
+               // User currentUser = new User(currentName, currentEmail, currentGender);
+               // values.add(currentUser);
+            }while(cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return values;
+    }
+
 
 
     @Override

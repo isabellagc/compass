@@ -23,6 +23,8 @@ import java.util.Map;
 
 import compass.compass.models.Event;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by amusipatla on 7/14/17.
  */

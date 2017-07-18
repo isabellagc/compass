@@ -117,6 +117,12 @@
             wave:wave_hz="normal"
             wave:wave_length="middle" />
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_001_people" />
+
 
     </FrameLayout>
 

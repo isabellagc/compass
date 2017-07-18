@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.john.waveview.WaveView;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by brucegatete on 7/11/17.
  */
@@ -69,9 +71,9 @@ public class DrinkActivity extends AppCompatActivity{
                     time_elapsed = time_end - time_start;
                 }
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio);
-                BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000 * 3600));
+                BAC = (alcohol_level * 5.14 /(currentProfile.weight * index)) - (time_elapsed * 0.015/(1000 * 3600));
                 if(BAC >= 0.08){
-                    Toast.makeText(DrinkActivity.this, "Please stop", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DrinkActivity.this, String.valueOf(currentProfile.weight), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -92,7 +94,7 @@ public class DrinkActivity extends AppCompatActivity{
                     time_elapsed = time_end - time_start;
                 }
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio * 1.5);
-                BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
+                BAC = (alcohol_level * 5.14 /(currentProfile.weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
                 if(BAC >= 0.08){
                     Toast.makeText(DrinkActivity.this,  "Please stop", Toast.LENGTH_SHORT).show();
 
@@ -116,7 +118,7 @@ public class DrinkActivity extends AppCompatActivity{
                     time_elapsed = time_end - time_start;
                 }
                 alcohol_level= (Drink_no * Drink_ratio * 12) + (Liquor_no * Liquor_ratio) + (Shot_no * Shot_ratio * 1.5);
-                BAC = (alcohol_level * 5.14 /(weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
+                BAC = (alcohol_level * 5.14 /(currentProfile.weight * index)) - (time_elapsed * 0.015/(1000.0 * 3600));
                 if (BAC >= 0.08){
                     Toast.makeText(DrinkActivity.this, "Please stop", Toast.LENGTH_SHORT).show();
 

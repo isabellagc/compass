@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity{
                 user.name = (String) userData.get("name");
                 user.email = (String) userData.get("email");
                 user.gender = (String) userData.get("gender");
+                user.weight = (Integer) ((Long) userData.get("weight")).intValue();
                 contacts.add(user);
             }
 
