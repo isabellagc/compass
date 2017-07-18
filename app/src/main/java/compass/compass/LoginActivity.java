@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "user not found in database", Toast.LENGTH_LONG).show();
                 }else{
                     MainActivity.currentProfile = user;
+                    setAllContacts();
+                    MainActivity.allContacts.remove(user);
                 }
                 Intent i  = new Intent(getBaseContext(), MainActivity.class);
                 i.putExtra("userToCheck", name);
@@ -63,6 +65,14 @@ public class LoginActivity extends AppCompatActivity{
         };
 
         btLogin.setOnClickListener(listener);
+    }
+
+    public void setAllContacts() {
+        MainActivity.allContacts = new ArrayList<User>();
+        for(User x : contacts) {
+            MainActivity.allContacts.add(x);
+        }
+
     }
 
     private void loadUsers(){
