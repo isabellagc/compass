@@ -29,10 +29,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<ChatMessage> mMessages;
     private DatabaseReference mDatabase;
     private Context mContext;
-    private String mUserId;
 
-    public ChatAdapter(Context context, String userId, Long eventId) {
-        this.mUserId = userId;
+
+    public ChatAdapter(Context context, Long eventId) {
         mContext = context;
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

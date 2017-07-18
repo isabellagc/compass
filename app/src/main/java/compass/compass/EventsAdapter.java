@@ -23,6 +23,8 @@ import java.util.Map;
 
 import compass.compass.models.Event;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by amusipatla on 7/14/17.
  */
@@ -42,8 +44,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mEvents = new ArrayList<>();
         mContext = context;
 
-        //TODO: change amulya to currentuser.name
-        getEvents("amulya");
+        getEvents(currentProfile.name);
     }
 
     public void getEvents(String name) {

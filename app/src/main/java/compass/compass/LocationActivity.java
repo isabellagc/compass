@@ -20,6 +20,8 @@ import java.util.Date;
 
 import compass.compass.models.ChatMessage;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by brucegatete on 7/11/17.
  */
@@ -52,8 +54,7 @@ public class LocationActivity extends AppCompatActivity{
         rvChat = (RecyclerView) findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        //TODO: change "name" to currentUser.name
-        mAdapter = new ChatAdapter(LocationActivity.this, "amulya", eventId);
+        mAdapter = new ChatAdapter(LocationActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
@@ -74,8 +75,7 @@ public class LocationActivity extends AppCompatActivity{
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
 
-                //TODO: change "name" to currentUser.name
-                message.setSender("amulya");
+                message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
 
                 mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
