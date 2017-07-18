@@ -10,10 +10,12 @@ public class ChatMessage {
     private String Text;
     private String Sender;
     private long Time;
+    //private String messageName;
 
     public ChatMessage(String messageText, String messageUser) {
         this.Text = messageText;
         this.Sender = messageUser;
+        //this.messageName = messageName;
 
         // Initialize to current time
         this.Time = new Date().getTime();
@@ -22,6 +24,14 @@ public class ChatMessage {
     public ChatMessage(){
 
     }
+
+//    public String getMessageName() {
+//        return messageName;
+//    }
+//
+//    public void setMessageName(String messageName) {
+//        this.messageName = messageName;
+//    }
 
     public String getText() {
         return Text;

@@ -30,7 +30,6 @@ public class LocationActivity extends AppCompatActivity{
 
     EditText etMessage;
     Button btSend;
-
     RecyclerView rvChat;
     ChatAdapter mAdapter;
     // Keep track of initial load to scroll to the bottom of the ListView
@@ -38,6 +37,7 @@ public class LocationActivity extends AppCompatActivity{
     static final int POLL_INTERVAL = 1000; // milliseconds
     Long eventId;
     public DatabaseReference mDatabase;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,8 +58,30 @@ public class LocationActivity extends AppCompatActivity{
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LocationActivity.this);
-        rvChat.setLayoutManager(linearLayoutManager);
+        layoutManager = new LinearLayoutManager(LocationActivity.this);
+        layoutManager.setStackFromEnd(true);
+        rvChat.setLayoutManager(layoutManager);
+
+        mAdapter.registerAdapterDataObserver( new RecyclerView.AdapterDataObserver(){
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                layoutManager.smoothScrollToPosition(rvChat, null, mAdapter.getItemCount());
+//                int friendlyMessageCount = mAdapter.getItemCount();
+//                int lastVisiblePosition =
+//                        layoutManager.findLastCompletelyVisibleItemPosition();
+//                Log.i("recycleViewDataObserver", "Hit here");
+//                // If the recycler view is initially being loaded or the
+//                // user is at the bottom of the list, scroll to the bottom
+//                // of the list to show the newly added message.
+//                if (lastVisiblePosition == -1 ||
+//                        (positionStart >= (friendlyMessageCount - 1) &&
+//                                lastVisiblePosition == (positionStart - 1))) {
+//                    rvChat.scrollToPosition(positionStart);
+//                }
+            }
+        });
+
+
 
         // When send button is clicked, create message object on Parse
         btSend.setOnClickListener(new View.OnClickListener() {
@@ -80,8 +102,12 @@ public class LocationActivity extends AppCompatActivity{
 
                 mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
-
-                etMessage.setText("Write a message...");
+                rvChat.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                    }
+                });
             }
         });
     }
