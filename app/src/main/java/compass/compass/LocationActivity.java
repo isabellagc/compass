@@ -84,9 +84,9 @@ public class LocationActivity extends AppCompatActivity{
 
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
-
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
+                etMessage.getText().clear();
 
                 mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
@@ -94,7 +94,6 @@ public class LocationActivity extends AppCompatActivity{
                     @Override
                     public void run() {
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                        etMessage.setHint("Write message");
                     }
                 });
             }
