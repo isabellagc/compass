@@ -11,6 +11,7 @@ public class User {
     public String name;
     public String email;
     public String gender;
+    public int weight;
     //this is stored as a string  our firebase database
     public Event currentEvent;
 //    public int height;
@@ -37,15 +38,14 @@ public class User {
 //    //of for the user
 //    public String school;
 
-    public User(String nameInfo, String emailInfo, String genderInfo){
+    public User(String nameInfo, String emailInfo, String genderInfo, int weightInfo){
         name = nameInfo;
         email = emailInfo;
         gender = genderInfo;
+        weight = weightInfo;
         added = false;
         //TODO: instead of updating this to null and added to false when you make a new user go through the database for the events and use that info
         currentEvent = null;
-//        height = heightInfo;
-//        weight = weightInfo;
     }
 
     public void setCurrentEvent(Event currentEvent) {

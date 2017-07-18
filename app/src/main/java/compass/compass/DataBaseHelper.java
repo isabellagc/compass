@@ -144,8 +144,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String currentEmail = cursor.getString(cursor.getColumnIndex("Email"));
 //                int userWeight = cursor.getInt(cursor.getColumnIndex("Weight"));
 //                int userHeight = cursor.getInt(cursor.getColumnIndex("Height"));
-                User currentUser = new User(currentName, currentEmail, currentGender);
-                values.add(currentUser);
+               // User currentUser = new User(currentName, currentEmail, currentGender);
+               // values.add(currentUser);
             }while(cursor.moveToNext());
         }
 
