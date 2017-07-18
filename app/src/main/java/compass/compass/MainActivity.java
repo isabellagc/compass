@@ -17,7 +17,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,15 +31,16 @@ public class MainActivity extends AppCompatActivity{
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
-    public User currentProfile;
+    public static User currentProfile;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
 
-    public DataBaseHelper myDbHelper;
+    //public DataBaseHelper myDbHelper;
 
 
     //    public SQLiteDatabase myDb;
     public ArrayList<User> contacts;
+    private String[] userNames;
 
     public DatabaseReference mDatabase;
 
@@ -71,12 +71,20 @@ public class MainActivity extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
         loadUsers();
-
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
-//    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(currentProfile == null){
+            Intent i = new Intent(this, LoginActivity.class);
+            i.putExtra("usernames", contacts);
+            //startActivity(i);
+            startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
+        }
+    }
+
+    //    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
 //    private void writeNewUser(String name, String email, String gender) {
 //        User user = new User(name, email, gender);
 //        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -131,24 +139,20 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == OPEN_LOGIN_ACTIVITY){
-            String user = data.getStringExtra("userToCheck");
-            mDatabase.child("Users").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Map s = (Map) dataSnapshot.getValue();
-                    if(s != null){
-                        currentProfile = new User();
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
+            String name = data.getStringExtra("userToCheck");
+            setCurrentUser(name);
         }
     }
 
+    public boolean setCurrentUser(String name){
+        User user = null;
+        for(User x: contacts){
+            if(x.name == name){
+                currentProfile = x;
+            }
+        }
+        return false;
+    }
 
     private void setHomeScreenButtons(){
         location = (ImageButton) findViewById(R.id.location);

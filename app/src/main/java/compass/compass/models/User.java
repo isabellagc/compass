@@ -1,10 +1,12 @@
 package compass.compass.models;
 
+import org.parceler.Parcel;
+
 /**
  * Created by icamargo on 7/11/17.
  */
 
-
+@Parcel
 public class User {
     public String name;
     public String email;
