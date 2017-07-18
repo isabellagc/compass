@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -27,8 +28,6 @@ dependencies {
     // If you want to use the GPU Filters
     //glide library
     //firebase libraries
-    
-
 
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

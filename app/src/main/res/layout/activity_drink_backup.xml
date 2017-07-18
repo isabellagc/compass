@@ -1,134 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:wave="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     tools:context="compass.compass.DrinkActivity">
 
 
-    <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/btAddDrink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_shadow"
-        android:paddingBottom="15dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:paddingTop="15dp"
-        app:srcCompat="@drawable/beer_2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="47dp" />
-
-    <ImageButton
-        android:id="@+id/btShot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_shadow"
-        android:paddingBottom="15dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:paddingTop="15dp"
-        app:srcCompat="@drawable/drink"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/btAddDrink"
-        android:layout_alignStart="@+id/btAddDrink"
-        android:layout_alignRight="@+id/btAddDrink"
-        android:layout_alignEnd="@+id/btAddDrink" />
-
-    <ImageButton
-        android:id="@+id/btLiquor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_shadow"
-        android:paddingBottom="15dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:paddingTop="15dp"
-        app:srcCompat="@drawable/liquor"
-        android:layout_marginTop="44dp"
-        android:layout_below="@+id/btShot"
-        android:layout_alignLeft="@+id/btShot"
-        android:layout_alignStart="@+id/btShot" />
-
     <TextView
         android:id="@+id/tvDrinkNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btAddDrink"
-        android:layout_alignEnd="@+id/btAddDrink"
-        android:layout_alignRight="@+id/btAddDrink"
-        android:text="0"
-        android:textAlignment="center"
-        android:textColor="@color/Black"
-        android:layout_alignLeft="@+id/btAddDrink"
-        android:layout_alignStart="@+id/btAddDrink" />
-
-    <TextView
-        android:id="@+id/tvShot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btLiquor"
-        android:layout_alignEnd="@+id/btShot"
-        android:layout_alignRight="@+id/btShot"
-        android:text="0"
-        android:textAlignment="center"
-        android:textColor="@color/Black"
-        android:layout_alignLeft="@+id/btShot"
-        android:layout_alignStart="@+id/btShot" />
-
-    <TextView
-        android:id="@+id/tvLiquor"
-        android:layout_width="wrap_content"
+        android:layout_width="369dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btLiquor"
         android:layout_alignEnd="@+id/btLiquor"
+        android:layout_alignLeft="@+id/btLiquor"
         android:layout_alignRight="@+id/btLiquor"
+        android:layout_alignStart="@+id/btLiquor"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="0"
         android:textAlignment="center"
-        android:textColor="@color/Black"
-        android:layout_alignLeft="@+id/btLiquor"
-        android:layout_alignStart="@+id/btLiquor" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btDrinkCounter"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPerson" />
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:wave="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/btLiquor"
-        android:layout_toEndOf="@+id/btLiquor"
-        android:id="@+id/frameLayout">
+    <ImageButton
+        android:id="@+id/btDrinkCounter"
+        android:layout_width="379dp"
+        android:layout_height="79dp"
+        app:srcCompat="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <FrameLayout
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvDrinkNumber"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.john.waveview.WaveView
             android:id="@+id/wave_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="275dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="#FFC200"
+            android:foregroundGravity="center_vertical"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             wave:above_wave_color="@android:color/black"
             wave:blow_wave_color="@android:color/white"
             wave:progress="0"
             wave:wave_height="little"
             wave:wave_hz="normal"
-            wave:wave_length="middle" />
+            wave:wave_length="middle">
 
+        </com.john.waveview.WaveView>
+
+        <ImageView
+            android:id="@+id/ivPerson"
+            android:layout_width="match_parent"
+            android:layout_height="284dp"
+            android:layout_alignLeft="@+id/frameLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/frameLayout"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:cropToPadding="true"
+            android:foregroundGravity="center"
+            android:tint="@android:color/white"
+            app:layout_constraintHorizontal_bias="0.777"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_female" />
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/ivPerson"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignLeft="@+id/frameLayout"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/frameLayout"
-        android:tint="@android:color/transparent"
-        app:srcCompat="@drawable/ic_male" />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
