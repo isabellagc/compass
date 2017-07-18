@@ -25,6 +25,7 @@ public class ContactsAdapter extends
     //store context for easy access
     private Context mContext;
 
+    //todo: update this so it uses firebase db
     public ContactsAdapter(Context context, ArrayList<User> contacts) {
         mContext = context;
         mContacts = contacts;

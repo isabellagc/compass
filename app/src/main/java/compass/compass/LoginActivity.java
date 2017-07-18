@@ -77,6 +77,7 @@ public class LoginActivity extends AppCompatActivity{
                     user.name = (String) userData.get("name");
                     user.email = (String) userData.get("email");
                     user.gender = (String) userData.get("gender");
+                    user.school = (String) userData.get("school");
                     contacts.add(user);
                 }
 

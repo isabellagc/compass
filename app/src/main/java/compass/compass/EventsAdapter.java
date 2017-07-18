@@ -42,8 +42,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mEvents = new ArrayList<>();
         mContext = context;
 
-        //TODO: change amulya to currentuser.name
-        getEvents("amulya");
+        //MAKE SURE THAT DB IS SET UP SO ID FOR A CHILD OF USERS IS ALWAYS IDENTICAL TO NAME
+        getEvents(MainActivity.currentProfile.name);
     }
 
     public void getEvents(String name) {
