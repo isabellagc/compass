@@ -12,6 +12,7 @@ public class User {
     public String email;
     public String gender;
     public String school;
+    public String userId;
     public int drinkCounter;
     public int weight;
 

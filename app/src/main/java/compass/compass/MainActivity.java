@@ -74,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
         //make users out of all items in the Users child in the database
         loadUsers();
 
-//        Intent servIntent = new Intent(this, LocationService.class);
-//        startService(servIntent);
+        Intent servIntent = new Intent(this, LocationService.class);
+        startService(servIntent);
+
     }
 
     @Override
