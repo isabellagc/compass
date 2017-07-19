@@ -103,21 +103,20 @@
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/btLiquor"
         android:layout_toEndOf="@+id/btLiquor"
-        android:layout_alignTop="@+id/btAddDrink"
-        android:layout_alignBottom="@+id/btLiquor">
+        android:layout_alignParentBottom="true">
 
 
         <com.john.waveview.WaveView
             android:id="@+id/wave_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_001_people"
+            android:background="@color/c100"
             wave:above_wave_color="#FFC200"
             wave:blow_wave_color="@android:color/white"
             wave:progress="0"
             wave:wave_height="little"
             wave:wave_hz="normal"
-            wave:wave_length="middle"/>
+            wave:wave_length="middle" />
         <!--<ImageView-->
             <!--android:id="@+id/imageView4"-->
             <!--android:layout_width="match_parent"-->
