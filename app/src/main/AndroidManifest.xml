@@ -38,7 +38,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LocationActivity" />
-        <activity android:name=".DrinkActivity" />
         <activity android:name=".NeedHelpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -47,6 +46,7 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ResourcesActivity" />
         <activity android:name=".LoginActivity" />
+        <activity android:name=".DrinkActivityReal" />
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
