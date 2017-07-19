@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
         loadUsers();
+
+        Intent servIntent = new Intent("compass.compass.LONGRUNSERVICE");
+        startService(servIntent);
     }
 
     @Override
