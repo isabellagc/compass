@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LocationActivity" />
+        <activity android:name=".ChatActivity" />
         <activity android:name=".NeedHelpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

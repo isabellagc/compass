@@ -72,7 +72,7 @@ public class LocationService extends Service implements LocationListener{
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled. DEFAULT COORDINATES
-
+                return tempLocation;
 
             } else {
                 this.canGetLocation = true;

@@ -95,7 +95,7 @@ public class NewEvent extends AppCompatActivity{
     }
 
     private void moveToEventView() {
-        Intent i = new Intent(NewEvent.this, LocationActivity.class);
+        Intent i = new Intent(NewEvent.this, ChatActivity.class);
         startActivity(i);
     }
 
