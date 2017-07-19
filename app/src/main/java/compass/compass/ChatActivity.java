@@ -45,7 +45,6 @@ public class ChatActivity extends AppCompatActivity{
         setContentView(R.layout.activity_chat);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         eventId = getIntent().getExtras().getLong("eventId");
 
         etMessage = (EditText) findViewById(R.id.etMessage);
@@ -108,7 +107,7 @@ public class ChatActivity extends AppCompatActivity{
 
     //launch the profile activity
     public void launchNewEvent (MenuItem miProfile) {
-        Intent i = new Intent(this, NewEvent.class);
+        Intent i = new Intent(this, NewEventActivity.class);
         startActivity(i);
     }
 

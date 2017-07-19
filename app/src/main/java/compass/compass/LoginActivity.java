@@ -38,10 +38,6 @@ public class LoginActivity extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
         loadUsers();
-
-//        Intent i = getIntent();
-//        Bundle bundle = i.getExtras();
-        //contacts = (ArrayList) bundle.get("usernames");
         contacts = new ArrayList<>();
         etName = (EditText) findViewById(R.id.etName);
         btLogin = (Button) findViewById(R.id.btLogin);
@@ -76,7 +72,6 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void loadUsers(){
-
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -142,11 +137,4 @@ public class LoginActivity extends AppCompatActivity{
         }
         return null;
     }
-//    private void setMainUser(String s){
-//        if(MainActivity.checkDBForUser(s)){
-//            //move on to next intent
-//        }else{
-//            //do something to tell the people they didnt pick a good user
-//        }
-//    }
 }

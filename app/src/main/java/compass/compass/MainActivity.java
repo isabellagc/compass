@@ -36,14 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<User> allContacts;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
-
-    //public DataBaseHelper myDbHelper;
-
-
-    //    public SQLiteDatabase myDb;
     public ArrayList<User> contacts;
-    private String[] userNames;
-
     public DatabaseReference mDatabase;
 
 
@@ -53,18 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setHomeScreenButtons();
         setOnClickListeners();
-
-        //*** TODO: DELETE THIS AND OTHER LOCAL DATABSE THINGS AND HOOKUP TO NEW FIREBASE DB WHEN SETUP
-        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
-        //that comes with the APK of each app.
-//            myDbHelper = new DataBaseHelper(this);
-//            //initialize
-//            initializeDB();
-//
-//            //now contacts has all the users
-//            //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
-//            //once then take the line out and run again to delete your version of the database and store the new one.
-//            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
 
@@ -85,30 +66,9 @@ public class MainActivity extends AppCompatActivity {
         if (currentProfile == null) {
             Intent i = new Intent(this, LoginActivity.class);
             i.putExtra("usernames", contacts);
-            //startActivity(i);
             startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
         }
-
-//        Intent i = new Intent(this, LoginActivity.class);
-//        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
-
-    //    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
-//    private void writeNewUser(String name, String email, String gender) {
-//        User user = new User(name, email, gender);
-//        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                dataSnapshot.getValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
 
     private void loadUsers() {
         mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
@@ -180,27 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    // public static ArrayList<User> getContacts() {
-//        return contacts;
-//    }
-
-//    private void initializeDB(){
-//        //try to create the database
-//        try {
-//            myDbHelper.createDatabase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//
-//        //open the database
-//        try {
-//            myDbHelper.openDatabase();
-//            //myDb = myDbHelper.myDataBase;
-//        }catch(SQLException sqle){
-//            throw sqle;
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -225,13 +164,6 @@ public class MainActivity extends AppCompatActivity {
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-//                String token = FirebaseInstanceId.getInstance().getToken();
-//                //        registerToken(token);
-//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
-//                Log.d("Token Bruce", token);
-
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
                 startActivity(i);
             }
@@ -262,3 +194,23 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
