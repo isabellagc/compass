@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity{
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, DrinkActivity.class);
+                Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
 //                String token = FirebaseInstanceId.getInstance().getToken();
 //                //        registerToken(token);
 //                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
