@@ -28,7 +28,7 @@ import compass.compass.models.User;
 
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity{
     private String[] userNames;
 
     public DatabaseReference mDatabase;
-
 
 
     @Override
@@ -74,12 +73,15 @@ public class MainActivity extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
         loadUsers();
+
+//        Intent servIntent = new Intent(this, LocationService.class);
+//        startService(servIntent);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(currentProfile == null){
+        if (currentProfile == null) {
             Intent i = new Intent(this, LoginActivity.class);
             i.putExtra("usernames", contacts);
             //startActivity(i);
@@ -107,8 +109,7 @@ public class MainActivity extends AppCompatActivity{
 //    }
 
 
-
-    private void loadUsers(){
+    private void loadUsers() {
         mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -146,16 +147,16 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == OPEN_LOGIN_ACTIVITY){
+        if (requestCode == OPEN_LOGIN_ACTIVITY) {
             String name = data.getStringExtra("userToCheck");
             setCurrentUser(name);
         }
     }
 
-    public boolean setCurrentUser(String name){
+    public boolean setCurrentUser(String name) {
         User user = null;
-        for(User x: contacts){
-            if(x.name == name){
+        for (User x : contacts) {
+            if (x.name == name) {
                 currentProfile = x;
                 Toast.makeText(MainActivity.this, "setting current profile", Toast.LENGTH_SHORT).show();
                 allContacts = contacts;
@@ -165,13 +166,13 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
-    private void setHomeScreenButtons(){
+    private void setHomeScreenButtons() {
         location = (ImageButton) findViewById(R.id.location);
         drink = (ImageButton) findViewById(R.id.drink);
         needhelp = (ImageButton) findViewById(R.id.needHelp);
     }
 
-    private void setOnClickListeners(){
+    private void setOnClickListeners() {
         launchLocation();
         launchDrinkActivity();
         launchNeedHelp();
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     //Launch the location activity
-    public void launchLocation(){
+    public void launchLocation() {
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,18 +218,27 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
     //Launch the drink activity
-    public void launchDrinkActivity (){
+    public void launchDrinkActivity() {
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//                //        registerToken(token);
+//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
+//                Log.d("Token Bruce", token);
+
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
                 startActivity(i);
             }
         });
     }
+
     //launch the needhelp button
-    public void launchNeedHelp (){
+    public void launchNeedHelp() {
         needhelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,18 +248,16 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
     //launch the profile activity
-    public void launchProfile (MenuItem miProfile) {
+    public void launchProfile(MenuItem miProfile) {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }
 
     //launch the resourches activity
-    public void launchResources (MenuItem miResources){
+    public void launchResources(MenuItem miResources) {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
-
-
-
 }

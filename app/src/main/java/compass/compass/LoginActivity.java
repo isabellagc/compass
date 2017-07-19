@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity{
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Map userData = (Map) ds.getValue();
                     User user = new User();
+                    user.userId = (String) ds.getKey();
                     user.name = (String) userData.get("name");
                     user.email = (String) userData.get("email");
                     user.gender = (String) userData.get("gender");
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private User checkForUser(String name){
         for(User x : contacts){
-            if(x.name.equals(name)){
+            if(x.userId.equals(name)){
                 return x;
             }
         }
