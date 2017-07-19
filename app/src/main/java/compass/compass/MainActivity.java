@@ -223,10 +223,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
-//                String token = FirebaseInstanceId.getInstance().getToken();
-//                //        registerToken(token);
-//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
-//                Log.d("Token Bruce", token);
                 startActivity(i);
             }
         });
