@@ -144,7 +144,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     Long eventId = mEvents.get(pos).id;
-                    Intent i = new Intent(mContext, LocationActivity.class);
+                    Intent i = new Intent(mContext, ChatActivity.class);
                     i.putExtra("eventId", eventId);
                     mContext.startActivity(i);
                 }

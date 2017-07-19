@@ -26,7 +26,7 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/11/17.
  */
 
-public class LocationActivity extends AppCompatActivity{
+public class ChatActivity extends AppCompatActivity{
 
     EditText etMessage;
     Button btSend;
@@ -42,7 +42,7 @@ public class LocationActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        setContentView(R.layout.activity_chat);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -54,11 +54,11 @@ public class LocationActivity extends AppCompatActivity{
         rvChat = (RecyclerView) findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        mAdapter = new ChatAdapter(LocationActivity.this, eventId);
+        mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
-        layoutManager = new LinearLayoutManager(LocationActivity.this);
+        layoutManager = new LinearLayoutManager(ChatActivity.this);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);
 
@@ -80,7 +80,7 @@ public class LocationActivity extends AppCompatActivity{
 //                message.put(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 //                message.put(BODY_KEY, data);
 
-                Toast.makeText(LocationActivity.this, data, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
 
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
