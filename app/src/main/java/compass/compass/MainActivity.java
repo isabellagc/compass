@@ -225,6 +225,13 @@ public class MainActivity extends AppCompatActivity{
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//                //        registerToken(token);
+//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
+//                Log.d("Token Bruce", token);
+
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
                 startActivity(i);
             }
@@ -252,7 +259,5 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
-
-
 
 }
