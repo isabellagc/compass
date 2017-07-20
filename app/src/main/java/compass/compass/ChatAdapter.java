@@ -143,6 +143,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvChatText);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+
+            imageOther.setImageResource(R.drawable.rsz_girl);
         }
     }
 }

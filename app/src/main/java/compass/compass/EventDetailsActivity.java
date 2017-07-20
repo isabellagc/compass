@@ -48,7 +48,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     //launch the profile activity
     public void launchNewEvent (MenuItem miProfile) {
-        Intent i = new Intent(this, NewEvent.class);
+        Intent i = new Intent(this, NewEventActivity.class);
         startActivity(i);
     }
 
