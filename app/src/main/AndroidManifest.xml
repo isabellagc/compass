@@ -39,15 +39,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".ChatActivity" />
-        <activity android:name=".NeedHelpActivity">
+        <activity android:name=".NeedHelpActivity"
+            android:label="HelpFinder">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".ResourcesActivity" />
+        <activity android:name=".ResourcesActivity"
+            android:label="Resources"/>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".DrinkActivityReal" />
+        <activity android:name=".DrinkActivityReal"
+            android:label="DrinkCounter"/>
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -64,8 +67,9 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".NewEvent" />
-        <activity android:name=".EventActivity" />
+        <activity android:name=".NewEventActivity" />
+        <activity android:name=".EventActivity"
+            android:label="Events"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

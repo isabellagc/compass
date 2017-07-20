@@ -28,7 +28,7 @@ import compass.compass.models.User;
 
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     public ImageButton location;
     public ImageButton drink;
     public ImageButton needhelp;
@@ -36,16 +36,8 @@ public class MainActivity extends AppCompatActivity{
     public static ArrayList<User> allContacts;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
-
-    //public DataBaseHelper myDbHelper;
-
-
-    //    public SQLiteDatabase myDb;
     public ArrayList<User> contacts;
-    private String[] userNames;
-
     public DatabaseReference mDatabase;
-
 
 
     @Override
@@ -54,18 +46,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         setHomeScreenButtons();
         setOnClickListeners();
-
-        //*** TODO: DELETE THIS AND OTHER LOCAL DATABSE THINGS AND HOOKUP TO NEW FIREBASE DB WHEN SETUP
-        //DATABASE: create, initialize, and load all the potential contacts out of the premade SQL database
-        //that comes with the APK of each app.
-//            myDbHelper = new DataBaseHelper(this);
-//            //initialize
-//            initializeDB();
-//
-//            //now contacts has all the users
-//            //NOTE: IF WE ADD MORE CONTACTS TO OUR ORIGINAL DB go to dbhelper file and run the db_delete
-//            //once then take the line out and run again to delete your version of the database and store the new one.
-//            contacts = myDbHelper.makeUsersOutOfDB("Users");
 
         //***start of firebase db!!****//
 
@@ -77,41 +57,20 @@ public class MainActivity extends AppCompatActivity{
 
         Intent servIntent = new Intent(this, LocationService.class);
         startService(servIntent);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(currentProfile == null){
+        if (currentProfile == null) {
             Intent i = new Intent(this, LoginActivity.class);
             i.putExtra("usernames", contacts);
-            //startActivity(i);
             startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
         }
-
-//        Intent i = new Intent(this, LoginActivity.class);
-//        startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
     }
 
-    //    //WRONG DONT RUN THIS IT DELETES ALL OUR USERS
-//    private void writeNewUser(String name, String email, String gender) {
-//        User user = new User(name, email, gender);
-//        mDatabase.child("Users").child("isabella").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                dataSnapshot.getValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-
-
-    private void loadUsers(){
+    private void loadUsers() {
         mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -149,16 +108,16 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == OPEN_LOGIN_ACTIVITY){
+        if (requestCode == OPEN_LOGIN_ACTIVITY) {
             String name = data.getStringExtra("userToCheck");
             setCurrentUser(name);
         }
     }
 
-    public boolean setCurrentUser(String name){
+    public boolean setCurrentUser(String name) {
         User user = null;
-        for(User x: contacts){
-            if(x.name == name){
+        for (User x : contacts) {
+            if (x.name == name) {
                 currentProfile = x;
                 Toast.makeText(MainActivity.this, "setting current profile", Toast.LENGTH_SHORT).show();
                 allContacts = contacts;
@@ -168,39 +127,18 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
-    private void setHomeScreenButtons(){
+    private void setHomeScreenButtons() {
         location = (ImageButton) findViewById(R.id.location);
         drink = (ImageButton) findViewById(R.id.drink);
         needhelp = (ImageButton) findViewById(R.id.needHelp);
     }
 
-    private void setOnClickListeners(){
+    private void setOnClickListeners() {
         launchLocation();
         launchDrinkActivity();
         launchNeedHelp();
 
     }
-
-//    // public static ArrayList<User> getContacts() {
-//        return contacts;
-//    }
-
-//    private void initializeDB(){
-//        //try to create the database
-//        try {
-//            myDbHelper.createDatabase();
-//        } catch (IOException ioe) {
-//            throw new Error("Unable to create database");
-//        }
-//
-//        //open the database
-//        try {
-//            myDbHelper.openDatabase();
-//            //myDb = myDbHelper.myDataBase;
-//        }catch(SQLException sqle){
-//            throw sqle;
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,7 +147,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     //Launch the location activity
-    public void launchLocation(){
+    public void launchLocation() {
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,25 +158,20 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
     //Launch the drink activity
-    public void launchDrinkActivity (){
+    public void launchDrinkActivity() {
         drink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-//                String token = FirebaseInstanceId.getInstance().getToken();
-//                //        registerToken(token);
-//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_LONG).show();
-//                Log.d("Token Bruce", token);
-
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
                 startActivity(i);
             }
         });
     }
+
     //launch the needhelp button
-    public void launchNeedHelp (){
+    public void launchNeedHelp() {
         needhelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,16 +181,36 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
     //launch the profile activity
-    public void launchProfile (MenuItem miProfile) {
+    public void launchProfile(MenuItem miProfile) {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }
 
     //launch the resourches activity
-    public void launchResources (MenuItem miResources){
+    public void launchResources(MenuItem miResources) {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
