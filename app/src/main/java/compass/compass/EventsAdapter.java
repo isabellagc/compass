@@ -2,12 +2,12 @@ package compass.compass;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -58,9 +58,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Map temp = (Map) dataSnapshot.getValue();
                             Event event = new Event();
+//                            Object y = temp.get("End");
+//                            String x = (String) temp.get("End");
                             event.setEndTime((Long) temp.get("End"));
                             event.setStartTime((Long) temp.get("Start"));
-                            event.id = (Long) Long.valueOf(eventKey);
+//                            event.setEndTime(Long.toString((Long) temp.get("End")));
+//                            event.setStartTime(Long.toString((Long) temp.get("Start")));
+//                            event.setEndTime(temp.get("End"));
+//                            event.setStartTime((String) temp.get("Start"));
+                            event.id = eventKey;
                             event.setName((String) temp.get("EventName"));
 
                             mEvents.add(event);
@@ -129,7 +135,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public TextView tvEventName;
         public TextView tvStart;
         public TextView tvEnd;
-        public RelativeLayout rlEvent;
+        public ConstraintLayout rlEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -137,20 +143,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvEventName = (TextView) itemView.findViewById(R.id.tvEventName);
             tvStart = (TextView) itemView.findViewById(R.id.tvStart);
             tvEnd = (TextView) itemView.findViewById(R.id.tvEnd);
-            rlEvent = (RelativeLayout) itemView.findViewById(R.id.rlEvent);
+            rlEvent = (ConstraintLayout) itemView.findViewById(R.id.rlEvent);
 
             rlEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    Long eventId = mEvents.get(pos).id;
+                    String eventId = mEvents.get(pos).id;
                     Intent i = new Intent(mContext, ChatActivity.class);
                     i.putExtra("eventId", eventId);
                     mContext.startActivity(i);
                 }
             });
-
-
         }
     }
 }
