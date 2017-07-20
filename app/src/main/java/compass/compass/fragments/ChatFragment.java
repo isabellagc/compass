@@ -1,11 +1,13 @@
-package compass.compass;
+package compass.compass.fragments;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,15 +17,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
+import compass.compass.ChatAdapter;
+import compass.compass.R;
 import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
 
-/**
- * Created by brucegatete on 7/11/17.
- */
-
-public class ChatActivity extends AppCompatActivity{
+public class ChatFragment extends Fragment {
 
     EditText etMessage;
     Button btSend;
@@ -32,40 +32,52 @@ public class ChatActivity extends AppCompatActivity{
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
-    Long eventId;
+    String eventId;
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
 
+    Context context;
+
+    public ChatFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_chat, container, false);
+        context = getActivity().getApplicationContext();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        eventId = getIntent().getExtras().getLong("eventId");
+        eventId = getArguments().getString("eventId");
 
-        etMessage = (EditText) findViewById(R.id.etMessage);
-        btSend = (Button) findViewById(R.id.btSend);
+        etMessage = (EditText) v.findViewById(R.id.etMessage);
+        btSend = (Button) v.findViewById(R.id.btSend);
 
-        rvChat = (RecyclerView) findViewById(R.id.rvChat);
+        rvChat = (RecyclerView) v.findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        mAdapter = new ChatAdapter(ChatActivity.this, eventId);
+        mAdapter = new ChatAdapter(context, Long.valueOf(eventId));
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
-        layoutManager = new LinearLayoutManager(ChatActivity.this);
+        layoutManager = new LinearLayoutManager(context);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);
 
-        mAdapter.registerAdapterDataObserver( new RecyclerView.AdapterDataObserver(){
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 layoutManager.smoothScrollToPosition(rvChat, null, mAdapter.getItemCount());
             }
         });
-
 
 
         // When send button is clicked, create message object on Parse
@@ -77,7 +89,7 @@ public class ChatActivity extends AppCompatActivity{
 //                message.put(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 //                message.put(BODY_KEY, data);
 
-                Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
 
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
@@ -85,9 +97,9 @@ public class ChatActivity extends AppCompatActivity{
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
 
-                mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
+                mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
-                rvChat.post( new Runnable() {
+                rvChat.post(new Runnable() {
                     @Override
                     public void run() {
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
@@ -95,6 +107,9 @@ public class ChatActivity extends AppCompatActivity{
                 });
             }
         });
+
+        return v;
     }
+
 
 }

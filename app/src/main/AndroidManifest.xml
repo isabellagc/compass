@@ -94,6 +94,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".EventDetailsActivity"></activity>
     </application>
 
 </manifest>
