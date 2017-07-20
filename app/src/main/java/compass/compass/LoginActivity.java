@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void loadUsers(){
+
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,6 +88,8 @@ public class LoginActivity extends AppCompatActivity{
                     user.school = (String) userData.get("school");
                     user.weight = ((Long)userData.get("weight")).intValue();
                     contacts.add(user);
+
+                    Log.d("he","ashdkf");
                 }
 
             }
@@ -131,7 +135,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private User checkForUser(String name){
         for(User x : contacts){
-            if(x.userId.equals(name)){
+            if(x.name.equals(name)){
                 return x;
             }
         }
