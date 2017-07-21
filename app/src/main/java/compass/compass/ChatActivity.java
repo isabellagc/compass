@@ -1,17 +1,25 @@
 package compass.compass;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +27,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -33,12 +44,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.models.ChatMessage;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
 
@@ -48,6 +62,7 @@ import static compass.compass.MainActivity.currentProfile;
 
 public class ChatActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    StorageReference storage;
     private GoogleMap mMap;
     EditText etMessage;
     Button btSend;
@@ -57,11 +72,17 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
-    String eventName;
+    String eventId;
+
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
     Double latitude;
     Double longitude;
+    NotificationManager mNotificationManager;
+
+    Double myLatitude;
+    Double myLongitude;
+    LatLng myLocation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +92,9 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         markerMap = new HashMap<String, Marker>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        eventName = getIntent().getExtras().getString("eventName");
+
+        storage = FirebaseStorage.getInstance().getReference();
+        eventId = getIntent().getStringExtra("eventId");
 
 
         etMessage = (EditText) findViewById(R.id.etMessage);
@@ -80,7 +103,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         rvChat = (RecyclerView) findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        mAdapter = new ChatAdapter(ChatActivity.this, eventName);
+        mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
@@ -112,7 +135,21 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
 
-                mDatabase.child("messages").child(eventName).push().setValue(message);
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
+                        .setSmallIcon(R.drawable.ic_need_help)
+                        .setContentTitle("New Message from " + message.getSender())
+                        .setContentText(message.getText())
+                        .setOnlyAlertOnce(true)
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                mBuilder.setAutoCancel(true);
+                mBuilder.setLocalOnly(false);
+//
+//
+                mNotificationManager.notify(Integer.parseInt(currentProfile.userId), mBuilder.build());
+                mDatabase.child("messages").child(eventId).push().setValue(message);
+
                 mAdapter.notifyDataSetChanged();
                 rvChat.post( new Runnable() {
                     @Override
@@ -126,7 +163,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
 
-        mDatabase.child("Events").child(eventName).child("Members").addChildEventListener(new ChildEventListener() {
+
+        mDatabase.child("Events").child(eventId).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final String memberName = dataSnapshot.getKey();
@@ -134,7 +172,10 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 if(!memberName.equals(currentProfile.userId)){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
-                        Marker temp2 = mMap.addMarker(new MarkerOptions().position(temp).title(memberName));
+                        Marker temp2 = mMap.addMarker(new MarkerOptions()
+                                .position(temp)
+                                .title(memberName)
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(memberName))));
                         markerMap.put(memberName, temp2);
                     }
 
@@ -168,6 +209,40 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                         });
 
                     }
+                }
+                else{
+                    mDatabase.child("Users").child(memberName).child("latitude").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            myLatitude = (Double) dataSnapshot.getValue();
+                            if(myLatitude != null && myLongitude != null){
+                                myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    mDatabase.child("Users").child(memberName).child("longitude").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            myLongitude = (Double) dataSnapshot.getValue();
+                            if(myLatitude != null && myLongitude != null){
+                                myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
 
             }
@@ -225,27 +300,61 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(47.628911, -122.342969);
+        //LatLng sydney = new LatLng(47.628911, -122.342969);
 //        Marker something = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        if(myLocation != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
 
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
 
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        if (location != null)
-        {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
+
+
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .target(myLocation)      // Sets the center of the map to location user
                     .zoom(15)                   // Sets the zoom
                     .bearing(0)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 40 degrees
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
+    }
+
+    private Bitmap getMarkerBitmapFromView(String picName) {
+
+        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+        CircleImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
+
+        StorageReference ref = storage.child(picName + ".jpg");
+
+        Glide.with(getApplicationContext())
+                .using(new FirebaseImageLoader())
+                .load(ref)
+                .placeholder(R.color.c50)
+                .dontAnimate()
+                .into(markerImageView);
+//
+//        Glide.with(this)
+//                .load(R.color.Black)
+//                .into(markerImageView);
+
+//        markerImageView.setImageResource(R.color.Black);
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+        return returnedBitmap;
     }
 
 }

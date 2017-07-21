@@ -53,16 +53,6 @@ public class NewEventActivity extends AppCompatActivity{
         etStartTime = (EditText) findViewById(R.id.etStartTime);
         etEndTime = (EditText) findViewById(R.id.etEndTime);
         etNameBox = (EditText) findViewById(R.id.etNameBox);
-
-        btCreateGroup = (Button) findViewById(R.id.btCreateGroup);
-        btCreateGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createEvent();
-                moveToEventView();
-            }
-        });
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         //get recyclerview from layout
@@ -75,6 +65,15 @@ public class NewEventActivity extends AppCompatActivity{
         rvContacts.setAdapter(adapter);
         //set layout manager to position the items
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
+
+        btCreateGroup = (Button) findViewById(R.id.btCreateGroup);
+        btCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createEvent();
+                moveToEventView();
+            }
+        });
     }
 
     @Override
@@ -145,7 +144,7 @@ public class NewEventActivity extends AppCompatActivity{
 
     private void moveToEventView() {
         Intent i = new Intent(NewEventActivity.this, ChatActivity.class);
-        i.putExtra("eventName", eventName);
+        i.putExtra("eventId", eventName);
         startActivity(i);
     }
 
