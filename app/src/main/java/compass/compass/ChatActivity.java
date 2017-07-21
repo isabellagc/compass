@@ -79,6 +79,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double latitude;
     Double longitude;
     NotificationManager mNotificationManager;
+    public int NOTIFICATION_ID = 12;
 
     Double myLatitude;
     Double myLongitude;
@@ -135,6 +136,16 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
 
+
+                mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
+                mAdapter.notifyDataSetChanged();
+                rvChat.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                    }
+                });
+
                 mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
@@ -147,7 +158,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 mBuilder.setLocalOnly(false);
 //
 //
-                mNotificationManager.notify(Integer.parseInt(currentProfile.userId), mBuilder.build());
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                 mDatabase.child("messages").child(eventId).push().setValue(message);
 
                 mAdapter.notifyDataSetChanged();
