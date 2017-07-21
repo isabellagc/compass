@@ -60,7 +60,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                             Event event = new Event();
                             event.setEndTime((Long) temp.get("End"));
                             event.setStartTime((Long) temp.get("Start"));
-                            event.id = (Long) Long.valueOf(eventKey);
+                            event.id = (String) eventKey;
                             event.setName((String) temp.get("EventName"));
 
                             mEvents.add(event);
@@ -143,7 +143,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    Long eventId = mEvents.get(pos).id;
+                    String eventId = mEvents.get(pos).id;
                     Intent i = new Intent(mContext, ChatActivity.class);
                     i.putExtra("eventId", eventId);
                     mContext.startActivity(i);

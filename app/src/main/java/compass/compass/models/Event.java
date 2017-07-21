@@ -17,7 +17,7 @@ public class Event {
     public Date endTime;
     public Timer timer;
     public TimerTask timerTask;
-    public Long id;
+    public String id;
 
 
     public Event(){
