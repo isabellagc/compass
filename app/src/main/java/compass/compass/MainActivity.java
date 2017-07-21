@@ -193,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        startService(new Intent(this, NotificationService.class));
+//    }
 }
 
 
