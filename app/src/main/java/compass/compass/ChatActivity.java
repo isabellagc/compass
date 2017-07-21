@@ -12,7 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,10 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -79,6 +80,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double latitude;
     Double longitude;
     NotificationManager mNotificationManager;
+    Uri linkToPic;
     public int NOTIFICATION_ID = 12;
 
     Double myLatitude;
@@ -135,7 +137,17 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
-                //Notification sender,When the message is sent
+                mDatabase.child("messages").child(eventId).push().setValue(message);
+                mAdapter.notifyDataSetChanged();
+                rvChat.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                    }
+                });
+
+
+                // notification manager to send notification when the message is sent
                 mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
                         .setSmallIcon(R.drawable.ic_need_help)
@@ -171,10 +183,11 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 if(!memberName.equals(currentProfile.userId)){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
+                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
                                 .title(memberName)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(memberName))));
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
                     }
 
@@ -323,25 +336,23 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Bitmap getMarkerBitmapFromView(String picName) {
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-        CircleImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
+        ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
-        StorageReference ref = storage.child(picName + ".jpg");
 
-        Glide.with(getApplicationContext())
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .placeholder(R.color.c50)
-                .dontAnimate()
-                .into(markerImageView);
+//        Glide.with(getApplicationContext())
+//                .load(linkToPic)
+//                .placeholder(R.color.c50)
+//                .dontAnimate()
+//                .into(markerImageView);
 //
 //        Glide.with(this)
 //                .load(R.color.Black)
 //                .into(markerImageView);
 
-//        markerImageView.setImageResource(R.color.Black);
+        markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
         customMarkerView.buildDrawingCache();
