@@ -64,7 +64,7 @@ public class ChatFragment extends Fragment {
         rvChat = (RecyclerView) v.findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        mAdapter = new ChatAdapter(context, Long.valueOf(eventId));
+        mAdapter = new ChatAdapter(context, eventId);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView

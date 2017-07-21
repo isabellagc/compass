@@ -15,7 +15,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,38 +45,84 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         getEvents(MainActivity.currentProfile.userId);
     }
 
-    public void getEvents(String name) {
-        mDatabase.child("Users").child(name).child("events").addChildEventListener(new ChildEventListener() {
+//    public void getEvents(String name) {
+//        mDatabase.child("Users").child(name).child("events").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                final String eventKey = dataSnapshot.getKey();
+//                keys.add(eventKey);
+//                if(eventKey != null) {
+//                    mDatabase.child("Events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Map temp = (Map) dataSnapshot.getValue();
+//                            Event event = new Event();
+//                            event.setEndTime((Long) temp.get("End"));
+//                            event.setStartTime((Long) temp.get("Start"));
+//                            event.id = eventKey;
+//                            event.setName((String) temp.get("EventName"));
+//
+//                            mEvents.add(event);
+//                            notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                Log.d("wow", "here");
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                final String eventKey = dataSnapshot.getKey();
+//                int index = keys.indexOf(eventKey);
+//                keys.remove(index);
+//                mEvents.remove(index);
+//                notifyDataSetChanged();
+//                Log.d("wow", "here");
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                Log.d("wow", "here");
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d("wow", "here");
+//            }
+//        });
+//
+//    }
+
+    public void getEvents(final String name) {
+        mDatabase.child("Events").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final String eventKey = dataSnapshot.getKey();
                 keys.add(eventKey);
                 if(eventKey != null) {
-                    mDatabase.child("Events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map temp = (Map) dataSnapshot.getValue();
-                            Event event = new Event();
-//                            Object y = temp.get("End");
-//                            String x = (String) temp.get("End");
-                            event.setEndTime((Long) temp.get("End"));
-                            event.setStartTime((Long) temp.get("Start"));
-//                            event.setEndTime(Long.toString((Long) temp.get("End")));
-//                            event.setStartTime(Long.toString((Long) temp.get("Start")));
-//                            event.setEndTime(temp.get("End"));
-//                            event.setStartTime((String) temp.get("Start"));
-                            event.id = eventKey;
-                            event.setName((String) temp.get("EventName"));
+                    Map info = (Map) dataSnapshot.getValue();
+                    Map users = (Map) info.get("Members");
 
-                            mEvents.add(event);
-                            notifyDataSetChanged();
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    if (users.containsKey(name)) {
+                        Event event = new Event();
+                        event.setEndTime((Long) info.get("End"));
+                        event.setStartTime((Long) info.get("Start"));
+                        event.id = eventKey;
+                        event.setName((String) info.get("EventName"));
 
-                        }
-                    });
+                        mEvents.add(event);
+                        notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -88,12 +133,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                final String eventKey = dataSnapshot.getKey();
-                int index = keys.indexOf(eventKey);
-                keys.remove(index);
-                mEvents.remove(index);
-                notifyDataSetChanged();
-                Log.d("wow", "here");
+                Log.d("childremovedadapter", "why is this getting removed??");
+//                final String eventKey = dataSnapshot.getKey();
+//                int index = keys.indexOf(eventKey);
+//                keys.remove(index);
+//                mEvents.remove(index);
+//                notifyDataSetChanged();
+//                Log.d("wow", "here");
             }
 
             @Override
@@ -151,7 +197,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     int pos = getAdapterPosition();
                     String eventId = mEvents.get(pos).id;
                     Intent i = new Intent(mContext, ChatActivity.class);
-                    i.putExtra("eventId", eventId);
+                    i.putExtra("eventName", eventId);
                     mContext.startActivity(i);
                 }
             });

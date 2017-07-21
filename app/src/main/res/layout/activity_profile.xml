@@ -21,7 +21,9 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/tvName"
@@ -35,7 +37,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/tvSchool"
@@ -46,13 +50,14 @@
         android:layout_below="@id/tvSecondName"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
         android:text="School"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/tvGroups"
@@ -68,8 +73,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvGroupsProfView"
-        android:layout_width="368dp"
-        android:layout_height="169dp"
+        android:layout_width="369dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -77,6 +82,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGroups"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>

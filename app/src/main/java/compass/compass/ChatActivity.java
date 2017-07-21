@@ -57,7 +57,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
-    Long eventId;
+    String eventName;
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
     Double latitude;
@@ -71,7 +71,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         markerMap = new HashMap<String, Marker>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        eventId = getIntent().getExtras().getLong("eventId");
+        eventName = getIntent().getExtras().getString("eventName");
+
 
         etMessage = (EditText) findViewById(R.id.etMessage);
         btSend = (Button) findViewById(R.id.btSend);
@@ -79,7 +80,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         rvChat = (RecyclerView) findViewById(R.id.rvChat);
         mFirstLoad = true;
 
-        mAdapter = new ChatAdapter(ChatActivity.this, eventId);
+        mAdapter = new ChatAdapter(ChatActivity.this, eventName);
         rvChat.setAdapter(mAdapter);
 
         // associate the LayoutManager with the RecylcerView
@@ -111,7 +112,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
 
-                mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
+                mDatabase.child("messages").child(eventName).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
                 rvChat.post( new Runnable() {
                     @Override
@@ -125,7 +126,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
 
-        mDatabase.child("Events").child(eventId.toString()).child("Members").addChildEventListener(new ChildEventListener() {
+        mDatabase.child("Events").child(eventName).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final String memberName = dataSnapshot.getKey();
