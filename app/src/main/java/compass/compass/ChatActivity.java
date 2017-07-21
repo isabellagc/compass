@@ -137,17 +137,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 etMessage.getText().clear();
 
 
-                mDatabase.child("messages").child(eventId.toString()).push().setValue(message);
-                mAdapter.notifyDataSetChanged();
-                rvChat.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                    }
-                });
-
                 mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
                         .setSmallIcon(R.drawable.ic_need_help)
                         .setContentTitle("New Message from " + message.getSender())
@@ -160,7 +150,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 //
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                 mDatabase.child("messages").child(eventId).push().setValue(message);
-
                 mAdapter.notifyDataSetChanged();
                 rvChat.post( new Runnable() {
                     @Override
