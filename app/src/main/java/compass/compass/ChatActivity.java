@@ -12,7 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,10 +27,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,6 +40,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,6 +81,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double latitude;
     Double longitude;
     NotificationManager mNotificationManager;
+    Uri linkToPic;
 
     Double myLatitude;
     Double myLongitude;
@@ -167,6 +171,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 if(!memberName.equals(currentProfile.userId)){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
+                        int drawableResourceId = getResources().getIdentifier("amulya", "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
                                 .title(memberName)
@@ -319,16 +324,21 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Bitmap getMarkerBitmapFromView(String picName) {
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int picName) {
 
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-        CircleImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
+        ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
         StorageReference ref = storage.child(picName + ".jpg");
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                linkToPic = uri;
+            }
+        });
 
         Glide.with(getApplicationContext())
-                .using(new FirebaseImageLoader())
-                .load(ref)
+                .load(linkToPic)
                 .placeholder(R.color.c50)
                 .dontAnimate()
                 .into(markerImageView);
