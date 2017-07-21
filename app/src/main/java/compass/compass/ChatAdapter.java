@@ -2,6 +2,7 @@ package compass.compass;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import compass.compass.models.ChatMessage;
+
+import static compass.compass.MainActivity.currentProfile;
 
 /**
  * Created by amusipatla on 7/14/17.
@@ -93,17 +96,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
-//        final boolean isMe = message.getSender() != null && message.getSender().equals(mUserId);
-//
-//        if (isMe) {
-//            holder.imageMe.setVisibility(View.VISIBLE);
-//            holder.imageOther.setVisibility(View.GONE);
-//            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-//        } else {
-//            holder.imageOther.setVisibility(View.VISIBLE);
-//            holder.imageMe.setVisibility(View.GONE);
-//            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-//        }
+        final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
+
+        if (isMe) {
+            holder.imageMe.setVisibility(View.VISIBLE);
+            holder.imageOther.setVisibility(View.GONE);
+            holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            holder.imageMe.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+        } else {
+            holder.imageOther.setVisibility(View.VISIBLE);
+            holder.imageMe.setVisibility(View.GONE);
+            holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+            holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+        }
 
 //        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
 //        Glide.with(mContext).load(getProfileUrl(message.getSender())).into(profileView);

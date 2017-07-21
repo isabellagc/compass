@@ -6,11 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static compass.compass.MainActivity.currentProfile;
 
 
 public class ProfileActivity extends AppCompatActivity {
     TextView tvName, tvSchool;
+    ImageView ivProfileImage;
     RecyclerView rvGroupsProfView;
 
     @Override
@@ -22,8 +28,11 @@ public class ProfileActivity extends AppCompatActivity {
         tvSchool = (TextView) findViewById(R.id.tvSchool);
         rvGroupsProfView =  (RecyclerView) findViewById(R.id.rvGroupsProfView);
 
-        tvName.setText(capitalize(MainActivity.currentProfile.name));
-        tvSchool.setText(capitalize(MainActivity.currentProfile.school));
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImage);
+        ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
+
+        tvName.setText(capitalize(currentProfile.name));
+        tvSchool.setText(capitalize(currentProfile.school));
 
         rvGroupsProfView.setAdapter(new EventsAdapter(this));
         rvGroupsProfView.setLayoutManager(new LinearLayoutManager(this));
