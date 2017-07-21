@@ -175,7 +175,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
                                 .title(memberName)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(memberName))));
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.color.Black))));
                         markerMap.put(memberName, temp2);
                     }
 
