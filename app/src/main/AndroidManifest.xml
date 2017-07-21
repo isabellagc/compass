@@ -98,15 +98,15 @@
             </intent-filter>
         </service>
 
-        <service android:name=".NotificationService">
-            android:name=".NotificationService"
-            android:label="@string/app_name"
-        <intent-filter>
-            <action android:name="your.app.domain.NotificationService" />
+        <!--<service android:name=".NotificationService">-->
+            <!--android:name=".NotificationService"-->
+            <!--android:label="@string/app_name"-->
+        <!--<intent-filter>-->
+            <!--<action android:name="your.app.domain.NotificationService" />-->
 
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-    </service>
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--</intent-filter>-->
+    <!--</service>-->
 
         <!--Messanging functionality for push notifications-->
         <service android:name=".ChatActivity">
