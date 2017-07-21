@@ -22,6 +22,8 @@ import compass.compass.models.Event;
 import compass.compass.models.Group;
 import compass.compass.models.User;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by icamargo on 7/12/17.
  */
@@ -97,6 +99,8 @@ public class NewEventActivity extends AppCompatActivity{
                 currentUser.currentEvent = newEvent;
             }
         }
+        usersAdded.add(currentProfile);
+        currentProfile.currentEvent = newEvent;
 
 
         Group group = new Group(usersAdded, true);
@@ -147,6 +151,9 @@ public class NewEventActivity extends AppCompatActivity{
             mDatabase.child("Users").child(user.userId).child("events").updateChildren(infoToAdd);
             //TODO: ADD NOTIFICATION HERE
         }
+        HashMap<String, Object> infoToAdd = new HashMap<>();
+        infoToAdd.put(eventName, "true");
+        mDatabase.child("Users").child(currentProfile.userId).child("events").updateChildren(infoToAdd);
 
     }
 

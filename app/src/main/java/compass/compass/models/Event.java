@@ -2,7 +2,6 @@ package compass.compass.models;
 
 import android.util.Log;
 
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,24 +12,36 @@ import java.util.TimerTask;
 public class Event {
     public Group group;
     public String name;
-    public Date startTime;
-    public Date endTime;
+//    public Date startTime;
+//    public Date endTime;
+    public Long startTime;
+    public Long endTime;
     public Timer timer;
     public TimerTask timerTask;
-    public Long id;
+    public String id;
 
 
     public Event(){
         //default constructor
     }
+
     public Event(String myname, Group invitees, Long starting, Long ending){
         name = myname;
         group = invitees;
-        startTime = new Date(starting);
-        endTime = new Date(ending);
-
+        startTime = starting;
+        endTime = ending;
         setTimer();
     }
+
+//    public Event(String myname, Group invitees, Long starting, Long ending){
+//        name = myname;
+//        group = invitees;
+////        startTime = new Date(starting);
+////        endTime = new Date(ending);
+//
+//
+//        setTimer();
+//    }
 
     public Group getGroup() {
         return group;
@@ -48,21 +59,36 @@ public class Event {
         this.name = name;
     }
 
-    public Date getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
     public void setStartTime(Long startTime) {
-        this.startTime = new Date(startTime);
+        this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
     public void setEndTime(Long endTime) {
-        this.endTime = new Date(endTime);
+        this.endTime = endTime;
     }
+    //    public Date getStartTime() {
+//        return startTime;
+//    }
+//
+//    public void setStartTime(Long startTime) {
+//        this.startTime = new Date(startTime);
+//    }
+//
+//    public Date getEndTime() {
+//        return endTime;
+//    }
+//
+//    public void setEndTime(Long endTime) {
+//        this.endTime = new Date(endTime);
+//    }
 
     public void setTimer(){
         timer = new Timer("Event Timer", true);
