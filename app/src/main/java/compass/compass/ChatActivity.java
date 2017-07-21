@@ -1,6 +1,7 @@
 package compass.compass;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -148,26 +149,34 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                 // notification manager to send notification when the message is sent
-                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
                         .setSmallIcon(R.drawable.ic_need_help)
                         .setContentTitle("New Message from " + message.getSender())
                         .setContentText(message.getText())
                         .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setSound(notificationSound)
+                        .setContentIntent(pendingIntent);
                 mBuilder.setAutoCancel(true);
                 mBuilder.setLocalOnly(false);
-//
-//
+
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-                mDatabase.child("messages").child(eventId).push().setValue(message);
-                mAdapter.notifyDataSetChanged();
-                rvChat.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                    }
-                });
+
+//                mDatabase.child("messages").child(eventId).push().setValue(message);
+//                mAdapter.notifyDataSetChanged();
+//                rvChat.post( new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+//                    }
+//                });
             }
         });
 
