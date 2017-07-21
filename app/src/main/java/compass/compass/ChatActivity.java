@@ -137,7 +137,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
-
                 mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
                 rvChat.post( new Runnable() {
@@ -148,6 +147,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 });
 
 
+                // notification manager to send notification when the message is sent
                 mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
                         .setSmallIcon(R.drawable.ic_need_help)
