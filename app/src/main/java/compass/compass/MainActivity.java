@@ -106,13 +106,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == OPEN_LOGIN_ACTIVITY) {
-            String name = data.getStringExtra("userToCheck");
-            setCurrentUser(name);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == OPEN_LOGIN_ACTIVITY) {
+//            String name = data.getStringExtra("userToCheck");
+//            setCurrentUser(name);
+//        }
+//    }
 
     public boolean setCurrentUser(String name) {
         User user = null;
@@ -193,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        startService(new Intent(this, NotificationService.class));
+//    }
 }
 
 

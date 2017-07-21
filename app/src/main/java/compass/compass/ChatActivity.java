@@ -1,5 +1,6 @@
 package compass.compass;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,10 +11,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,6 +77,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     private LinearLayoutManager layoutManager;
     Double latitude;
     Double longitude;
+    NotificationManager mNotificationManager;
 
     Double myLatitude;
     Double myLongitude;
@@ -127,6 +131,19 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
+                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
+                        .setSmallIcon(R.drawable.ic_need_help)
+                        .setContentTitle("New Message from " + message.getSender())
+                        .setContentText(message.getText())
+                        .setOnlyAlertOnce(true)
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                mBuilder.setAutoCancel(true);
+                mBuilder.setLocalOnly(false);
+//
+//
+                mNotificationManager.notify(Integer.parseInt(currentProfile.userId), mBuilder.build());
 
                 mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
