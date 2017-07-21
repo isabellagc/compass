@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +39,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -76,12 +74,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
     String eventId;
+
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
     Double latitude;
     Double longitude;
     NotificationManager mNotificationManager;
     Uri linkToPic;
+    public int NOTIFICATION_ID = 12;
 
     Double myLatitude;
     Double myLongitude;
@@ -95,8 +95,10 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         markerMap = new HashMap<String, Marker>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         storage = FirebaseStorage.getInstance().getReference();
         eventId = getIntent().getStringExtra("eventId");
+
 
         etMessage = (EditText) findViewById(R.id.etMessage);
         btSend = (Button) findViewById(R.id.btSend);
@@ -135,6 +137,17 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
+
+
+                mDatabase.child("messages").child(eventId).push().setValue(message);
+                mAdapter.notifyDataSetChanged();
+                rvChat.post( new Runnable() {
+                    @Override
+                    public void run() {
+                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                    }
+                });
+
                 mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
@@ -147,9 +160,9 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 mBuilder.setLocalOnly(false);
 //
 //
-                mNotificationManager.notify(Integer.parseInt(currentProfile.userId), mBuilder.build());
-
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                 mDatabase.child("messages").child(eventId).push().setValue(message);
+
                 mAdapter.notifyDataSetChanged();
                 rvChat.post( new Runnable() {
                     @Override
@@ -163,6 +176,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
 
+
         mDatabase.child("Events").child(eventId).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -171,11 +185,11 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 if(!memberName.equals(currentProfile.userId)){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
-                        int drawableResourceId = getResources().getIdentifier("amulya", "drawable", getPackageName());
+                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
                                 .title(memberName)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.color.Black))));
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
                     }
 
@@ -324,30 +338,23 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int picName) {
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
-        StorageReference ref = storage.child(picName + ".jpg");
-        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                linkToPic = uri;
-            }
-        });
 
-        Glide.with(getApplicationContext())
-                .load(linkToPic)
-                .placeholder(R.color.c50)
-                .dontAnimate()
-                .into(markerImageView);
+//        Glide.with(getApplicationContext())
+//                .load(linkToPic)
+//                .placeholder(R.color.c50)
+//                .dontAnimate()
+//                .into(markerImageView);
 //
 //        Glide.with(this)
 //                .load(R.color.Black)
 //                .into(markerImageView);
 
-//        markerImageView.setImageResource(R.color.Black);
+        markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
         customMarkerView.buildDrawingCache();

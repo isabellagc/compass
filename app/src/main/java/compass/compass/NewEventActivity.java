@@ -38,7 +38,7 @@ public class NewEventActivity extends AppCompatActivity{
     public EditText etEndTime;
     public DatabaseReference mDatabase;
     public String eventName;
-    public String endTime, startTime;
+    public Long endTime, startTime;
 
 
     @Override
@@ -53,16 +53,6 @@ public class NewEventActivity extends AppCompatActivity{
         etStartTime = (EditText) findViewById(R.id.etStartTime);
         etEndTime = (EditText) findViewById(R.id.etEndTime);
         etNameBox = (EditText) findViewById(R.id.etNameBox);
-
-        btCreateGroup = (Button) findViewById(R.id.btCreateGroup);
-        btCreateGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createEvent();
-                moveToEventView();
-            }
-        });
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         //get recyclerview from layout
@@ -75,6 +65,15 @@ public class NewEventActivity extends AppCompatActivity{
         rvContacts.setAdapter(adapter);
         //set layout manager to position the items
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
+
+        btCreateGroup = (Button) findViewById(R.id.btCreateGroup);
+        btCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createEvent();
+                moveToEventView();
+            }
+        });
     }
 
     @Override
@@ -88,8 +87,8 @@ public class NewEventActivity extends AppCompatActivity{
 
         //populate data fields with entered text
         eventName = etNameBox.getText().toString();
-        endTime = etEndTime.getText().toString();
-        startTime = etStartTime.getText().toString();
+        endTime = Long.valueOf(etEndTime.getText().toString());
+        startTime = Long.valueOf(etStartTime.getText().toString());
         newEvent.setName(eventName);
 
         for(int i = 0; i < contacts.size(); i ++){
@@ -105,8 +104,9 @@ public class NewEventActivity extends AppCompatActivity{
 
         Group group = new Group(usersAdded, true);
         addEventToDB(usersAdded);
-        notifyUsersOfNewEvent(usersAdded);
+        addEventToMessagesDB();
         newEvent.setGroup(group);
+        notifyUsersOfNewEvent(usersAdded);
 
         //TODO: FIGURE OUT START AND END TIMES
         //newEvent.setStartTime(etStartTime.getText())
@@ -115,32 +115,36 @@ public class NewEventActivity extends AppCompatActivity{
 
     private void addEventToDB(ArrayList<User> usersAdded){
         //add to database
+        HashMap<String, Object> masterMap = new HashMap<>();
+        HashMap<String, Object> infoToAdd = new HashMap<>();
+        HashMap<String, Object> membersMap = new HashMap<>();
+
+        masterMap.put(eventName, infoToAdd);
+        infoToAdd.put("End", (Long) endTime);
+        infoToAdd.put("Start", (Long) startTime);
+        infoToAdd.put("EventName", eventName);
+
+        for(User user: usersAdded){
+            membersMap.put(user.userId, "true");
+        }
+
+        infoToAdd.put("Members", membersMap);
+
+        mDatabase.child("Events").child(eventName).setValue(infoToAdd);
+    }
+
+    private void addEventToMessagesDB(){
+        //add to database
         HashMap<String, Object> infoToAdd = new HashMap<>();
 
         //creates new event child
-        infoToAdd.put(eventName, null);
-        mDatabase.child("Events").updateChildren(infoToAdd);
-
-        //now, populate the child
-        infoToAdd.clear();
-        infoToAdd.put("End", endTime);
-        infoToAdd.put("Start", startTime);
-        infoToAdd.put("EventName", eventName);
-        infoToAdd.put("Members", null);
-        mDatabase.child("Events").child(eventName).updateChildren(infoToAdd);
-
-        //now, populate subchild member with appropriate members
-        infoToAdd.clear();
-        for(User user: usersAdded){
-            infoToAdd.put(user.userId, "true");
-        }
-        mDatabase.child("Events").child(eventName).child("Members").updateChildren(infoToAdd);
-
+        infoToAdd.put(eventName, true);
+        mDatabase.child("messages").updateChildren(infoToAdd);
     }
 
     private void moveToEventView() {
         Intent i = new Intent(NewEventActivity.this, ChatActivity.class);
-        i.putExtra("eventID", eventName);
+        i.putExtra("eventId", eventName);
         startActivity(i);
     }
 

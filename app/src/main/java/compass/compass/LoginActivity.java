@@ -48,16 +48,17 @@ public class LoginActivity extends AppCompatActivity{
                 String name = etName.getText().toString();
                 User user = checkForUser(name);
                 if(user == null){
-                    Toast.makeText(getApplicationContext(), "user not found in database", Toast.LENGTH_LONG).show();
+                    etName.clearComposingText();
+                    Toast.makeText(getApplicationContext(), "That user was not found in the database!", Toast.LENGTH_LONG).show();
                 }else{
                     MainActivity.currentProfile = user;
                     setAllContacts();
                     MainActivity.allContacts.remove(user);
+                    Intent i  = new Intent(getBaseContext(), MainActivity.class);
+                    i.putExtra("userToCheck", name);
+                    startActivity(i);
+                    //setMainUser(name);
                 }
-                Intent i  = new Intent(getBaseContext(), MainActivity.class);
-                i.putExtra("userToCheck", name);
-                startActivity(i);
-                //setMainUser(name);
             }
         };
 
@@ -134,8 +135,9 @@ public class LoginActivity extends AppCompatActivity{
 
 
     private User checkForUser(String name){
+        name = name.trim();
         for(User x : contacts){
-            if(x.name.equals(name)){
+            if(x.name.equalsIgnoreCase(name)){
                 return x;
             }
         }

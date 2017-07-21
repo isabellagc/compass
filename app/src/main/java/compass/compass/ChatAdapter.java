@@ -34,7 +34,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mContext = context;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mMessages = new ArrayList<>();
-
         getMessages(eventId);
     }
 
