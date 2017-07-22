@@ -28,16 +28,12 @@ public class ContactsAdapter extends
     String eventID;
 
     //todo: update this so it uses firebase db
-    public ContactsAdapter(Context context, ArrayList<User> contacts) {
+    public ContactsAdapter(Context context, ArrayList<User> contacts, String eventIdInfo) {
         mContext = context;
         mContacts = contacts;
         startedActivity = true;
-        eventID = "";
+        eventID = eventIdInfo;
         //uncheckBoxes();
-    }
-
-    public String getEventID() {
-        return eventID;
     }
 
     public void setEventID(String eventID) {

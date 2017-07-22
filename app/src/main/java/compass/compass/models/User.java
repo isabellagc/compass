@@ -24,13 +24,17 @@ public class User {
 //    public int weight;
     //this is just a boolean for now (one event) but when multiple events will have to be included in a
     //hash map of sorts (change the adapter)
+
     public HashMap<String, Boolean> added;
+
+
     //data class for geographic location: latitude, lognitude, timestamp, and other info
     //public Location location;
 
 
     //added the default constructor for Firebase interactions...
     public User(){
+        added = new HashMap<>();
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
