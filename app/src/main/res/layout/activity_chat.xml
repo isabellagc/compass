@@ -7,11 +7,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvChat"
         android:layout_width="wrap_content"
-        android:layout_height="240dp"
+        android:layout_height="270dp"
         android:layout_above="@+id/rlSend"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
         android:paddingTop="10dp"
         android:transcriptMode="alwaysScroll" />
     <RelativeLayout

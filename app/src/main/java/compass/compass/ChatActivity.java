@@ -11,14 +11,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -147,27 +145,27 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 });
 
 
-                // notification manager to send notification when the message is sent
-                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
-                        .setSmallIcon(R.drawable.ic_need_help)
-                        .setContentTitle("New Message from " + message.getSender())
-                        .setContentText(message.getText())
-                        .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                mBuilder.setAutoCancel(true);
-                mBuilder.setLocalOnly(false);
-//
-//
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-                mDatabase.child("messages").child(eventId).push().setValue(message);
-                mAdapter.notifyDataSetChanged();
-                rvChat.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                    }
-                });
+//                // notification manager to send notification when the message is sent
+//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
+//                        .setSmallIcon(R.drawable.ic_need_help)
+//                        .setContentTitle("New Message from " + message.getSender())
+//                        .setContentText(message.getText())
+//                        .setOnlyAlertOnce(true)
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+//                mBuilder.setAutoCancel(true);
+//                mBuilder.setLocalOnly(false);
+////
+////
+//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+//                mDatabase.child("messages").child(eventId).push().setValue(message);
+//                mAdapter.notifyDataSetChanged();
+//                rvChat.post( new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+//                    }
+//                });
             }
         });
 
@@ -189,6 +187,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                                 .title(memberName)
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
+
                     }
 
                     if(memberName != null){
@@ -229,6 +228,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                             myLatitude = (Double) dataSnapshot.getValue();
                             if(myLatitude != null && myLongitude != null){
                                 myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
                             }
                         }
@@ -245,6 +245,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                             myLongitude = (Double) dataSnapshot.getValue();
                             if(myLatitude != null && myLongitude != null){
                                 myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
                             }
                         }
@@ -323,8 +324,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             Criteria criteria = new Criteria();
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
-
-
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(myLocation)      // Sets the center of the map to location user
