@@ -46,9 +46,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import compass.compass.models.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -85,6 +88,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double myLongitude;
     LatLng myLocation;
 
+    String[] members;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +118,22 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         layoutManager = new LinearLayoutManager(ChatActivity.this);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);
+
+        //get other members of group
+        mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map otherPeople = (Map) dataSnapshot.getValue();
+                Set<String> people= otherPeople.keySet();
+                people.remove(currentProfile.name.replaceAll(" ", ""));
+                members = (String[]) people.toArray(new String[people.size()]);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mAdapter.registerAdapterDataObserver( new RecyclerView.AdapterDataObserver(){
             @Override
@@ -147,15 +168,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
                 //send notification to the user
-                sendNotificationToUser("puf", message);
 
-
+                sendNotificationToUser(members, message);
 
 
                 // notification manager to send notification when the message is sent
 //
-                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 //                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 //                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -390,17 +410,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         return returnedBitmap;
     }
 
-    public static void sendNotificationToUser(String user, final ChatMessage message) {
+    public void sendNotificationToUser(String[] user, final ChatMessage message) {
 
-        DatabaseReference mRef;
-
-        mRef = FirebaseDatabase.getInstance().getReference();
-
+        ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
 
         Map notification = new HashMap<>();
-        notification.put("username", user);
-        notification.put("message", message);
-        mRef.child("notification").push().setValue(notification);
+        notification.put("recipients", recipients);
+        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + eventId + ":" + message.getText());
+        mDatabase.child("notifications").push().setValue(notification);
 
     }
 

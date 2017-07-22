@@ -1,23 +1,16 @@
 package compass.compass;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,8 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
 import static compass.compass.R.id.resourcesMap;
@@ -199,43 +190,8 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        //mMap.setMyLocationEnabled(true);
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(47.628911, -122.342969);
-//        Marker something = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
     }
 
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
-
-        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-        ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
-
-
-//        Glide.with(getApplicationContext())
-//                .load(linkToPic)
-//                .placeholder(R.color.c50)
-//                .dontAnimate()
-//                .into(markerImageView);
-//
-//        Glide.with(this)
-//                .load(R.color.Black)
-//                .into(markerImageView);
-
-        markerImageView.setImageResource(resId);
-        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
-        customMarkerView.buildDrawingCache();
-        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(returnedBitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        Drawable drawable = customMarkerView.getBackground();
-        if (drawable != null)
-            drawable.draw(canvas);
-        customMarkerView.draw(canvas);
-        return returnedBitmap;
-    }
 
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
         Canvas canvas = new Canvas();
