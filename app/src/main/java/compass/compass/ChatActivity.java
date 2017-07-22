@@ -1,7 +1,6 @@
 package compass.compass;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,14 +11,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -88,6 +85,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double myLongitude;
     LatLng myLocation;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +107,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
+
 
         // associate the LayoutManager with the RecylcerView
         layoutManager = new LinearLayoutManager(ChatActivity.this);
@@ -140,34 +139,39 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 etMessage.getText().clear();
                 mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
+
                 rvChat.post( new Runnable() {
                     @Override
                     public void run() {
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
                     }
                 });
+                //send notification to the user
+                sendNotificationToUser("puf", message);
+
+
 
 
                 // notification manager to send notification when the message is sent
-
+//
                 Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
-                        .setSmallIcon(R.drawable.ic_need_help)
-                        .setContentTitle("New Message from " + message.getSender())
-                        .setContentText(message.getText())
-                        .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setSound(notificationSound)
-                        .setContentIntent(pendingIntent);
-                mBuilder.setAutoCancel(true);
-                mBuilder.setLocalOnly(false);
-
-                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+//                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
+//                        .setSmallIcon(R.drawable.ic_need_help)
+//                        .setContentTitle("New Message from " + message.getSender())
+//                        .setContentText(message.getText())
+//                        .setOnlyAlertOnce(true)
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                        .setSound(notificationSound)
+//                        .setContentIntent(pendingIntent);
+//                mBuilder.setAutoCancel(true);
+//                mBuilder.setLocalOnly(false);
+//
+//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
 //                mDatabase.child("messages").child(eventId).push().setValue(message);
 //                mAdapter.notifyDataSetChanged();
@@ -375,5 +379,21 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         customMarkerView.draw(canvas);
         return returnedBitmap;
     }
+
+    public static void sendNotificationToUser(String user, final ChatMessage message) {
+
+        DatabaseReference mRef;
+
+        mRef = FirebaseDatabase.getInstance().getReference();
+
+
+        Map notification = new HashMap<>();
+        notification.put("username", user);
+        notification.put("message", message);
+        mRef.child("notification").push().setValue(notification);
+
+    }
+
+
 
 }
