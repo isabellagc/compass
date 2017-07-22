@@ -42,7 +42,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("eventId", eventName);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -56,6 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setOnlyAlertOnce(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSound(notificationSound)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
         mBuilder.setAutoCancel(true);
         mBuilder.setLocalOnly(false);
