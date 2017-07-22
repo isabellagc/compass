@@ -2,7 +2,6 @@ package compass.compass;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -48,8 +47,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     //launch the profile activity
     public void launchNewEvent (MenuItem miProfile) {
-        Intent i = new Intent(this, NewEventActivity.class);
-        startActivity(i);
+
     }
 
 }

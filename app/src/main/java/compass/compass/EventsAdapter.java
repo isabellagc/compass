@@ -28,11 +28,11 @@ import compass.compass.models.Event;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
-    public ArrayList<Event> mEvents;
+    public static ArrayList<Event> mEvents;
     public Map userEvents;
     public DatabaseReference mDatabase;
     public ArrayList keys;
-    Context mContext;
+    static Context mContext;
 
     public EventsAdapter(Context context) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -112,7 +112,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     Map info = (Map) dataSnapshot.getValue();
                     Map users = (Map) info.get("Members");
 
-
                     if (users.containsKey(name)) {
                         Event event = new Event();
                         event.setEndTime((Long) info.get("End"));
@@ -177,11 +176,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return mEvents.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvEventName;
         public TextView tvStart;
         public TextView tvEnd;
-        public ConstraintLayout rlEvent;
+        public static ConstraintLayout rlEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -198,9 +197,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     String eventId = mEvents.get(pos).id;
                     Intent i = new Intent(mContext, ChatActivity.class);
                     i.putExtra("eventId", eventId);
+
+                    String fromHere = "";
+                    if(mContext instanceof EventActivity){
+                        fromHere = "eventActivity";
+                    }else if(mContext instanceof ProfileActivity){
+                        fromHere = "profileActivity";
+                    }
+                    i.putExtra("fromHere", fromHere);
                     mContext.startActivity(i);
                 }
             });
         }
+
+//        public static void makeClickable(boolean bool){
+//            rlEvent.setClickable(bool);
+//        }
     }
+
+
 }

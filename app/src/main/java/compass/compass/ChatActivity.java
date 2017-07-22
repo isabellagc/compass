@@ -2,7 +2,6 @@ package compass.compass;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -84,6 +85,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double myLatitude;
     Double myLongitude;
     LatLng myLocation;
+    String fromHere;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
         storage = FirebaseStorage.getInstance().getReference();
         eventId = getIntent().getStringExtra("eventId");
+        fromHere = getIntent().getStringExtra("fromHere");
 
 
         etMessage = (EditText) findViewById(R.id.etMessage);
@@ -279,8 +282,17 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
     //launch the profile activity
     public void launchNewEvent (MenuItem miProfile) {
-        Intent i = new Intent(this, NewEventActivity.class);
-        startActivity(i);
+        //create the user fragment
+        android.support.v4.app.Fragment newEventFragment = (android.support.v4.app.Fragment) NewEventFragment.newInstance();
+
+        //display the user timeline fragment inside the container (dynamically)
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        //make changes
+        ft.replace(R.id.frameNewEvent, newEventFragment);
+
+        //commit transaction
+        ft.commit();
     }
 
     @Override
@@ -311,9 +323,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             Criteria criteria = new Criteria();
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
-
-
-
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(myLocation)      // Sets the center of the map to location user
                     .zoom(15)                   // Sets the zoom
@@ -356,5 +365,21 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         customMarkerView.draw(canvas);
         return returnedBitmap;
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Intent i;
+//        if(fromHere.equals("profileActivity")){
+//            i = new Intent(getApplicationContext(), ProfileActivity.class);
+//        }else if(fromHere.equals("eventActivity")){
+//            i = new Intent(getApplicationContext(), EventActivity.class);
+//        }else if(fromHere.equals("newEventFragment")){
+//            i = new Intent(getApplicationContext(), EventActivity.class);
+//        }else{
+//            i = new Intent(getApplicationContext(), MainActivity.class);
+//        }
+//        startActivity(i);
+//        finish();
+//    }
 
 }

@@ -42,10 +42,6 @@ public class ChatFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +52,7 @@ public class ChatFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        //gets the bundle arguments
         eventId = getArguments().getString("eventId");
 
         etMessage = (EditText) v.findViewById(R.id.etMessage);
@@ -96,7 +93,6 @@ public class ChatFragment extends Fragment {
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
-
                 mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
                 rvChat.post(new Runnable() {
