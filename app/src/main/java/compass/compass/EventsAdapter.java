@@ -22,6 +22,8 @@ import java.util.Map;
 
 import compass.compass.models.Event;
 
+import static compass.compass.MainActivity.currentProfile;
+
 /**
  * Created by amusipatla on 7/14/17.
  */
@@ -42,7 +44,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         mContext = context;
 
         //MAKE SURE THAT DB IS SET UP SO ID FOR A CHILD OF USERS IS ALWAYS IDENTICAL TO NAME
-        getEvents(MainActivity.currentProfile.userId);
+        getEvents(currentProfile.userId);
     }
 
 //    public void getEvents(String name) {

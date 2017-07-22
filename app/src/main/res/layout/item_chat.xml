@@ -5,16 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileOther"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="12dp"
         app:srcCompat="@color/Black" />
 
     <TextView
@@ -22,8 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/ivProfileOther"
+        android:text="TextView"
+        android:layout_toLeftOf="@+id/ivProfileMe"
+        android:layout_toStartOf="@+id/ivProfileMe"
         android:layout_toRightOf="@+id/ivProfileOther"
-        android:text="TextView" />
+        android:layout_toEndOf="@+id/ivProfileOther" />
 
     <TextView
         android:id="@+id/tvChatText"
@@ -31,17 +32,18 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvUserName"
         android:layout_alignStart="@+id/tvUserName"
+        android:layout_toLeftOf="@+id/ivProfileMe"
+        android:layout_toStartOf="@+id/ivProfileMe"
         android:layout_below="@+id/tvUserName"
         android:text="TextView" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileMe"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/tvUserName"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
-        android:layout_toEndOf="@+id/tvUserName"
-        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="12dp"
         app:srcCompat="@color/c600" />
 </RelativeLayout>

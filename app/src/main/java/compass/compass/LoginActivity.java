@@ -15,11 +15,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import compass.compass.models.User;
+
+import static compass.compass.MainActivity.currentProfile;
 
 /**
  * Created by icamargo on 7/14/17.
@@ -51,8 +54,9 @@ public class LoginActivity extends AppCompatActivity{
                     etName.clearComposingText();
                     Toast.makeText(getApplicationContext(), "That user was not found in the database!", Toast.LENGTH_LONG).show();
                 }else{
-                    MainActivity.currentProfile = user;
+                    currentProfile = user;
                     setAllContacts();
+                    FirebaseMessaging.getInstance().subscribeToTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
                     MainActivity.allContacts.remove(user);
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra("userToCheck", name);

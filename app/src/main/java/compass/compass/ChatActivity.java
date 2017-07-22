@@ -10,8 +10,9 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.LocationManager;
-import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,10 +26,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,9 +47,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
@@ -80,12 +83,16 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double latitude;
     Double longitude;
     NotificationManager mNotificationManager;
+    Uri linkToPic;
     public int NOTIFICATION_ID = 12;
 
     Double myLatitude;
     Double myLongitude;
     LatLng myLocation;
     String fromHere;
+
+    String[] members;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,10 +117,27 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
+
         // associate the LayoutManager with the RecylcerView
         layoutManager = new LinearLayoutManager(ChatActivity.this);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);
+
+        //get other members of group
+        mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map otherPeople = (Map) dataSnapshot.getValue();
+                Set<String> people= otherPeople.keySet();
+                people.remove(currentProfile.name.replaceAll(" ", ""));
+                members = (String[]) people.toArray(new String[people.size()]);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mAdapter.registerAdapterDataObserver( new RecyclerView.AdapterDataObserver(){
             @Override
@@ -138,28 +162,58 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 etMessage.getText().clear();
-
-
-                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
-                        .setSmallIcon(R.drawable.ic_need_help)
-                        .setContentTitle("New Message from " + message.getSender())
-                        .setContentText(message.getText())
-                        .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                mBuilder.setAutoCancel(true);
-                mBuilder.setLocalOnly(false);
-//
-//
-                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
                 mDatabase.child("messages").child(eventId).push().setValue(message);
                 mAdapter.notifyDataSetChanged();
+
                 rvChat.post( new Runnable() {
                     @Override
                     public void run() {
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
                     }
                 });
+                //send notification to the user
+
+                sendNotificationToUser(members, message);
+
+
+                // notification manager to send notification when the message is sent
+//
+//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+//                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                // notification manager to send notification when the message is sent
+//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
+//                        .setSmallIcon(R.drawable.ic_need_help)
+//                        .setContentTitle("New Message from " + message.getSender())
+//                        .setContentText(message.getText())
+//                        .setOnlyAlertOnce(true)
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                        .setSound(notificationSound)
+//                        .setContentIntent(pendingIntent);
+//                mBuilder.setAutoCancel(true);
+//                mBuilder.setLocalOnly(false);
+//
+//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+//                mBuilder.setAutoCancel(true);
+//                mBuilder.setLocalOnly(false);
+////
+////
+//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+//                mDatabase.child("messages").child(eventId).push().setValue(message);
+//                mAdapter.notifyDataSetChanged();
+//                rvChat.post( new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+//                    }
+//                });
             }
         });
 
@@ -175,11 +229,13 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                 if(!memberName.equals(currentProfile.userId)){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
+                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
                                 .title(memberName)
-                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(memberName))));
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
+
                     }
 
                     if(memberName != null){
@@ -220,6 +276,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                             myLatitude = (Double) dataSnapshot.getValue();
                             if(myLatitude != null && myLongitude != null){
                                 myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
                             }
                         }
@@ -236,6 +293,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                             myLongitude = (Double) dataSnapshot.getValue();
                             if(myLatitude != null && myLongitude != null){
                                 myLocation = new LatLng(myLatitude, myLongitude);
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
                             }
                         }
@@ -333,25 +391,23 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private Bitmap getMarkerBitmapFromView(String picName) {
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
-        CircleImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
+        ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
-        StorageReference ref = storage.child(picName + ".jpg");
 
-        Glide.with(getApplicationContext())
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .placeholder(R.color.c50)
-                .dontAnimate()
-                .into(markerImageView);
+//        Glide.with(getApplicationContext())
+//                .load(linkToPic)
+//                .placeholder(R.color.c50)
+//                .dontAnimate()
+//                .into(markerImageView);
 //
 //        Glide.with(this)
 //                .load(R.color.Black)
 //                .into(markerImageView);
 
-//        markerImageView.setImageResource(R.color.Black);
+        markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
         customMarkerView.buildDrawingCache();
@@ -366,20 +422,15 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         return returnedBitmap;
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent i;
-//        if(fromHere.equals("profileActivity")){
-//            i = new Intent(getApplicationContext(), ProfileActivity.class);
-//        }else if(fromHere.equals("eventActivity")){
-//            i = new Intent(getApplicationContext(), EventActivity.class);
-//        }else if(fromHere.equals("newEventFragment")){
-//            i = new Intent(getApplicationContext(), EventActivity.class);
-//        }else{
-//            i = new Intent(getApplicationContext(), MainActivity.class);
-//        }
-//        startActivity(i);
-//        finish();
-//    }
+    public void sendNotificationToUser(String[] user, final ChatMessage message) {
+
+        ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
+
+        Map notification = new HashMap<>();
+        notification.put("recipients", recipients);
+        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + eventId + ":" + message.getText());
+        mDatabase.child("notifications").push().setValue(notification);
+
+    }
 
 }
