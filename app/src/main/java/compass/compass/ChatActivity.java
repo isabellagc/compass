@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -155,7 +153,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 //                message.put(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 //                message.put(BODY_KEY, data);
 
-                Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
 
                 ChatMessage message = new ChatMessage();
                 message.setText(data);
