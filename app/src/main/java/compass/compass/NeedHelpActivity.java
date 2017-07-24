@@ -100,8 +100,6 @@ public class NeedHelpActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
 
