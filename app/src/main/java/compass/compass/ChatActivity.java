@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,6 +90,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng myLocation;
     String fromHere;
 
+    String myStatus;
+
     String[] members;
 
 
@@ -115,18 +118,29 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
-
         // associate the LayoutManager with the RecylcerView
         layoutManager = new LinearLayoutManager(ChatActivity.this);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);
+
+
+        //mDatabase.child("Events").child(eventId).child("Members").addValueEventListener()
 
         //get other members of group
         mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map otherPeople = (Map) dataSnapshot.getValue();
-                Set<String> people= otherPeople.keySet();
+                Set<String> people= new HashSet<String>();
+                for(Object s : otherPeople.keySet()) {
+                    String temp = s.toString().replaceAll(" ", "");
+                    if(s.toString().contentEquals(currentProfile.userId)){
+                        myStatus = otherPeople.get(s).toString();
+                    }
+                    if((otherPeople.get(s).toString().contentEquals("out"))){
+                        people.add(temp);
+                    }
+                }
                 people.remove(currentProfile.name.replaceAll(" ", ""));
                 members = (String[]) people.toArray(new String[people.size()]);
             }
@@ -169,49 +183,10 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                         rvChat.smoothScrollToPosition(mAdapter.getItemCount());
                     }
                 });
-                //send notification to the user
 
+                //send notification to the user
                 sendNotificationToUser(members, message);
 
-
-                // notification manager to send notification when the message is sent
-//
-//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-//                PendingIntent pendingIntent = PendingIntent.getActivity(ChatActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-//                Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                // notification manager to send notification when the message is sent
-//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ChatActivity.this)
-//                        .setSmallIcon(R.drawable.ic_need_help)
-//                        .setContentTitle("New Message from " + message.getSender())
-//                        .setContentText(message.getText())
-//                        .setOnlyAlertOnce(true)
-//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//                        .setSound(notificationSound)
-//                        .setContentIntent(pendingIntent);
-//                mBuilder.setAutoCancel(true);
-//                mBuilder.setLocalOnly(false);
-//
-//                mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
-//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-//                mBuilder.setAutoCancel(true);
-//                mBuilder.setLocalOnly(false);
-////
-////
-//                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-//                mDatabase.child("messages").child(eventId).push().setValue(message);
-//                mAdapter.notifyDataSetChanged();
-//                rvChat.post( new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-//                    }
-//                });
             }
         });
 

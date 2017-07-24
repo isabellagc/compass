@@ -14,11 +14,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import compass.compass.models.ChatMessage;
 
@@ -32,6 +34,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<ChatMessage> mMessages;
     private DatabaseReference mDatabase;
     private Context mContext;
+    String my_events[];
+    String[] receivers;
+
+
 
     public ChatAdapter(Context context, String eventId) {
         mContext = context;
@@ -40,18 +46,69 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         getMessages(eventId);
     }
 
+
+
     public void getMessages(String eventId) {
         mDatabase.child("messages").child(eventId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map message = (Map) dataSnapshot.getValue();
-                ChatMessage newMessage = new ChatMessage();
+                final ChatMessage newMessage = new ChatMessage();
                 newMessage.setTime((Long) message.get("time"));
                 newMessage.setText((String) message.get("text"));
                 newMessage.setSender((String) message.get("sender"));
-                mMessages.add(newMessage);
-                scrollView();
-                notifyDataSetChanged();
+                //check if the person is available to receive the message
+                mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map events = (Map) dataSnapshot.getValue();
+                        Set<String> valid_events = events.keySet();
+                        my_events = (String[]) valid_events.toArray(new String[valid_events.size()]);
+                        //go through those valid events
+                        for (int i = 0; i < my_events.length; i++ ){
+                            final String this_event = my_events[i];
+                            mDatabase.child("Events").child(this_event).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Map the_members = (Map) dataSnapshot.getValue();
+                                    Set<String> people = the_members.keySet();
+                                    receivers =  people.toArray(new String[people.size()]);
+                                    //SEND THE MESSAGE
+                                    for(int i = 0; i <receivers.length; i ++){
+                                        mDatabase.child("Events").child(this_event).child("Members").child(receivers[i]).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                String my_members = (String) dataSnapshot.getValue();
+                                                //String availability = String.valueOf(my_members.keySet());
+                                                if (my_members != "null"){
+                                                    //send message
+                                                    mMessages.add(newMessage);
+                                                    scrollView();
+                                                    notifyDataSetChanged();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -152,5 +209,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             imageOther.setImageResource(R.drawable.rsz_girl);
         }
+    }
+    //constructor for chat adapter
+    public ChatAdapter(Class<ChatActivity> chatActivityClass, String eventId) {
     }
 }

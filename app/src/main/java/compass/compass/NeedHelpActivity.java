@@ -10,8 +10,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+import compass.compass.models.ChatMessage;
+
+import static compass.compass.MainActivity.currentProfile;
 
 /**
  * Created by brucegatete on 7/11/17.
@@ -25,6 +40,9 @@ public class NeedHelpActivity extends AppCompatActivity {
     ImageButton sa;
     ImageButton other;
     SwipeButton callPolice;
+    public DatabaseReference mDatabase;
+    ChatAdapter mAdapter;
+    String [] eventId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +56,9 @@ public class NeedHelpActivity extends AppCompatActivity {
         other = (ImageButton) findViewById(R.id.ibOther);
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         SwipeButtonCustomItems swipeButtonSettings = new SwipeButtonCustomItems() {
             @Override
             public void onSwipeConfirm() {
@@ -48,7 +69,40 @@ public class NeedHelpActivity extends AppCompatActivity {
         if (callPolice != null) {
             callPolice.setSwipeButtonCustomItems(swipeButtonSettings);
         }
+        //get the events that will receive the message
+        mDatabase.child("Users").child(currentProfile.name).child("events").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map receivers = (Map) dataSnapshot.getValue();
+                Set<String> valid_events = receivers.keySet();
+                eventId = (String[]) valid_events.toArray(new String[valid_events.size()]);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //Send the message to the event
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Alert_message = ("Please help, " + currentProfile.name + " needs your help");
+                ChatMessage message = new ChatMessage();
+                message.setText(Alert_message);
+                message.setSender(currentProfile.name);
+                message.setTime((new Date().getTime()));
+                //change the database and notify the adapter
+                for (int i = 0; i < eventId.length; i ++) {
+                    mDatabase.child("messages").child(eventId[i]).push().setValue(message);
+                    mAdapter = new ChatAdapter(ChatActivity.class, eventId[i]);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
+
+
 
     private void onSwiped() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -68,4 +122,9 @@ public class NeedHelpActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
     }
+
+    public void sendMessages (String [] members, final ChatMessage message){
+
+    }
+
 }

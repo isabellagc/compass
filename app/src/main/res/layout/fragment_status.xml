@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="compass.compass.fragments.StatusFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/ivStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="This is your first time opening this event. Choose your status:" />
+
+        <RadioGroup
+            android:id="@+id/rgStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ivStatusText"
+            android:layout_marginStart="37dp"
+            android:checkedButton="@+id/rbOnCall">
+
+            <RadioButton
+                android:id="@+id/rbOnCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Join event as on call" />
+
+            <RadioButton
+                android:id="@+id/rbOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Join event as going out" />
+
+            <RadioButton
+                android:id="@+id/rbLeave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Do not join event" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/bSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/rgStatus"
+            android:layout_below="@+id/rgStatus"
+            android:text="Add Status" />
+
+    </RelativeLayout>
+</FrameLayout>
