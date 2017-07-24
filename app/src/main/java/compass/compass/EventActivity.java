@@ -46,6 +46,11 @@ public class EventActivity extends AppCompatActivity {
         //display the user timeline fragment inside the container (dynamically)
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
+//        ft.setCustomAnimations(android.R.anim.slide_in_left, 0);
+
+//        View newEventContainer = findViewById(R.id.frameNewEvent);
+//        View oldEventContainer = view;
+//        CustomAnimator.slide(oldEventContainer, newEventContainer, CustomAnimator.DIRECTION_LEFT, 400);
         //make changes
         ft.replace(R.id.frameNewEvent, newEventFragment);
 
