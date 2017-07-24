@@ -40,6 +40,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         getMessages(eventId);
     }
 
+    public ChatAdapter(Class<ChatActivity> chatActivityClass, String eventId) {
+    }
+
     public void getMessages(String eventId) {
         mDatabase.child("messages").child(eventId).addChildEventListener(new ChildEventListener() {
             @Override
