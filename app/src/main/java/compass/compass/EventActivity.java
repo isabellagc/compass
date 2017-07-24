@@ -1,7 +1,7 @@
 package compass.compass;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +10,11 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.Event;
 
 public class EventActivity extends AppCompatActivity {
-
-    RecyclerView rvEvents;
+    public static RecyclerView rvEvents;
     ArrayList<Event> eventList;
     EventsAdapter eventAdapter;
 
@@ -38,8 +38,18 @@ public class EventActivity extends AppCompatActivity {
     }
 
     //launch the profile activity
-    public void launchNewEvent (MenuItem miProfile) {
-        Intent i = new Intent(this, NewEventActivity.class);
-        startActivity(i);
+    public void launchNewEvent (MenuItem miNewEvent) {
+        //EventsAdapter.ViewHolder.rlEvent.setClickable(false);
+        //create the user fragment
+        android.support.v4.app.Fragment newEventFragment = (android.support.v4.app.Fragment) NewEventFragment.newInstance();
+
+        //display the user timeline fragment inside the container (dynamically)
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        //make changes
+        ft.replace(R.id.frameNewEvent, newEventFragment);
+
+        //commit transaction
+        ft.commit();
     }
 }

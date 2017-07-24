@@ -24,12 +24,34 @@ public class ContactsAdapter extends
     private ArrayList<User> mContacts;
     //store context for easy access
     private Context mContext;
+    private boolean startedActivity;
+    String eventID;
 
     //todo: update this so it uses firebase db
-    public ContactsAdapter(Context context, ArrayList<User> contacts) {
+    public ContactsAdapter(Context context, ArrayList<User> contacts, String eventIdInfo) {
         mContext = context;
         mContacts = contacts;
+        startedActivity = true;
+        eventID = eventIdInfo;
+        //uncheckBoxes();
     }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
+    //    public void uncheckBoxes() {
+//        for(int i = 0; i < getItemCount(); i ++) {
+//
+//        }
+//        for (int i = 0; i < mListView.getCount(); i++) {
+//            View mChild = mListView.getChildAt(i);
+//
+//            //Replace R.id.checkbox with the id of CheckBox in your layout
+//            CheckBox mCheckBox = (CheckBox) mChild.findViewById(R.id.checkbox);
+//            mCheckBox.setChecked(false);
+//        }
+//    }
 
     //provide direct reference to each of the views within our data item (item_contact)
     public class ViewHolder extends  RecyclerView.ViewHolder{
@@ -49,7 +71,7 @@ public class ContactsAdapter extends
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     User currentUser = mContacts.get(position);
-                    currentUser.added = cbAddContact.isChecked();
+                    currentUser.added.put(eventID, cbAddContact.isChecked());
                 }
             });
         }
@@ -84,7 +106,7 @@ public class ContactsAdapter extends
         ImageView ivProfileImage = holder.ivProfileImage;
 
         tvContactName.setText(user.name);
-        cbAddContact.setChecked(user.added);
+        cbAddContact.setChecked(user.added.get(eventID));
         //TODO: set profile image usign glide library
     }
 

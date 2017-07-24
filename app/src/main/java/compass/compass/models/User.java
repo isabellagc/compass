@@ -2,6 +2,8 @@ package compass.compass.models;
 
 import org.parceler.Parcel;
 
+import java.util.HashMap;
+
 /**
  * Created by icamargo on 7/11/17.
  */
@@ -22,13 +24,17 @@ public class User {
 //    public int weight;
     //this is just a boolean for now (one event) but when multiple events will have to be included in a
     //hash map of sorts (change the adapter)
-    public boolean added;
+
+    public HashMap<String, Boolean> added;
+
+
     //data class for geographic location: latitude, lognitude, timestamp, and other info
     //public Location location;
 
 
     //added the default constructor for Firebase interactions...
     public User(){
+        added = new HashMap<>();
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
@@ -48,7 +54,7 @@ public class User {
         email = emailInfo;
         gender = genderInfo;
         weight = weightInfo;
-        added = false;
+        added = new HashMap<>();
         drinkCounter = drinkInfo;
         //TODO: instead of updating this to null and added to false when you make a new user go through the database for the events and use that info
         currentEvent = null;
