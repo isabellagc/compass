@@ -106,8 +106,8 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
                         .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_green, null))));
                 tvCounseling.setText(currentProfile.school + " Counseling Services");
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(counselingLatLng));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
+                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
 
                 temp.setLatitude(latitude);
                 temp.setLongitude(longitude);
