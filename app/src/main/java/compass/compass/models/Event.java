@@ -19,6 +19,7 @@ public class Event {
     public Timer timer;
     public TimerTask timerTask;
     public String id;
+    public String myStatus;
 
 
     public Event(){
@@ -107,4 +108,11 @@ public class Event {
         //NEED TO MAKE THIS AFFECT THE BOOLEAN WITHIN GROUP
     }
 
+    public String getMyStatus() {
+        return myStatus;
+    }
+
+    public void setMyStatus(String myStatus) {
+        this.myStatus = myStatus;
+    }
 }

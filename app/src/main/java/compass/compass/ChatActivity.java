@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -92,6 +91,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng myLocation;
     String fromHere;
 
+    String myStatus;
+
     String[] members;
 
 
@@ -118,7 +119,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
 
-
         // associate the LayoutManager with the RecylcerView
         layoutManager = new LinearLayoutManager(ChatActivity.this);
         layoutManager.setStackFromEnd(true);
@@ -132,25 +132,12 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map otherPeople = (Map) dataSnapshot.getValue();
-                Set<String> people= otherPeople.keySet();
-                people.remove(currentProfile.name.replaceAll(" ", ""));
-                members = (String[]) people.toArray(new String[people.size()]);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        //get other members of group
-        mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map otherPeople = (Map) dataSnapshot.getValue();
                 Set<String> people= new HashSet<String>();
                 for(Object s : otherPeople.keySet()) {
                     String temp = s.toString().replaceAll(" ", "");
+                    if(s.toString().contentEquals(currentProfile.userId)){
+                        myStatus = otherPeople.get(s).toString();
+                    }
                     if((otherPeople.get(s).toString().contentEquals("out"))){
                         people.add(temp);
                     }

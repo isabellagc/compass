@@ -3,6 +3,8 @@ package compass.compass;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import compass.compass.fragments.StatusFragment;
 import compass.compass.models.Event;
 
 import static compass.compass.MainActivity.currentProfile;
@@ -119,6 +122,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         event.setEndTime((Long) info.get("End"));
                         event.setStartTime((Long) info.get("Start"));
                         event.id = eventKey;
+                        event.setMyStatus((String) users.get(name));
                         event.setName((String) info.get("EventName"));
 
                         mEvents.add(event);
@@ -197,8 +201,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     String eventId = mEvents.get(pos).id;
-                    Intent i = new Intent(mContext, ChatActivity.class);
-                    i.putExtra("eventId", eventId);
 
                     String fromHere = "";
                     if(mContext instanceof EventActivity){
@@ -206,8 +208,21 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     }else if(mContext instanceof ProfileActivity){
                         fromHere = "profileActivity";
                     }
-                    i.putExtra("fromHere", fromHere);
-                    mContext.startActivity(i);
+
+                    if(mEvents.get(pos).myStatus.contentEquals("null")){
+                        FragmentActivity activity = (FragmentActivity) mContext;
+                        FragmentManager fm = activity.getSupportFragmentManager();
+                        StatusFragment statusFragment = StatusFragment.newInstance(eventId, fromHere);
+                        statusFragment.show(fm, "tag");
+                    }
+                    else{
+                        Intent i = new Intent(mContext, ChatActivity.class);
+                        i.putExtra("eventId", eventId);
+                        i.putExtra("fromHere", fromHere);
+                        mContext.startActivity(i);
+                    }
+
+
                 }
             });
         }
