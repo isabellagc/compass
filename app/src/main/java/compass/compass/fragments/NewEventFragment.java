@@ -256,7 +256,6 @@ public class NewEventFragment extends android.support.v4.app.Fragment {
 
         newEventContactsFragment.setArguments(b);
 
-        ft.setCustomAnimations(R.anim., 0);
         //make changes
         ft.replace(R.id.frameNewEvent, newEventContactsFragment);
 
