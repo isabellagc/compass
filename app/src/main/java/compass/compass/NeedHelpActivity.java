@@ -20,7 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,7 +45,8 @@ public class NeedHelpActivity extends AppCompatActivity {
     SwipeButton callPolice;
     public DatabaseReference mDatabase;
     ChatAdapter mAdapter;
-    String [] eventId;
+    String [] event_n0;
+    String[] members;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +59,6 @@ public class NeedHelpActivity extends AppCompatActivity {
         sa = (ImageButton) findViewById(R.id.ibSA);
         other = (ImageButton) findViewById(R.id.ibOther);
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
@@ -75,7 +78,7 @@ public class NeedHelpActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map receivers = (Map) dataSnapshot.getValue();
                 Set<String> valid_events = receivers.keySet();
-                eventId = (String[]) valid_events.toArray(new String[valid_events.size()]);
+                event_n0 = (String[]) valid_events.toArray(new String[valid_events.size()]);
             }
 
             @Override
@@ -83,7 +86,30 @@ public class NeedHelpActivity extends AppCompatActivity {
 
             }
         });
-        //Send the message to the event
+
+//        mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+//
+////            @Override
+////            public void onDataChange(DataSnapshot dataSnapshot) {
+////                Map otherPeople = (Map) dataSnapshot.getValue();
+////                Set<String> people= new HashSet<String>();
+////                for(Object s : otherPeople.keySet()) {
+////                    String temp = s.toString().replaceAll(" ", "");
+////                    if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
+////                        people.add(temp);
+////                    }
+////                }
+////                people.remove(currentProfile.name.replaceAll(" ", ""));
+////                members = (String[]) people.toArray(new String[people.size()]);
+////            }
+////
+////            @Override
+////            public void onCancelled(DatabaseError databaseError) {
+////
+//            }
+//        });
+
+            //Send the message to the event
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,11 +119,12 @@ public class NeedHelpActivity extends AppCompatActivity {
                 message.setSender(currentProfile.name);
                 message.setTime((new Date().getTime()));
                 //change the database and notify the adapter
-                for (int i = 0; i < eventId.length; i ++) {
-                    mDatabase.child("messages").child(eventId[i]).push().setValue(message);
-                    mAdapter = new ChatAdapter(ChatActivity.class, eventId[i]);
+                for (int i = 0; i < event_n0.length; i ++) {
+                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
+                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
                     mAdapter.notifyDataSetChanged();
                 }
+                sendNotificationToUser(members, message);
             }
         });
     }
@@ -124,6 +151,17 @@ public class NeedHelpActivity extends AppCompatActivity {
     }
 
     public void sendMessages (String [] members, final ChatMessage message){
+
+    }
+
+    public void sendNotificationToUser(String[] user, final ChatMessage message) {
+
+        ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
+
+        Map notification = new HashMap<>();
+        notification.put("recipients", recipients);
+        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + event_n0 + ":" + message.getText());
+        mDatabase.child("notifications").push().setValue(notification);
 
     }
 
