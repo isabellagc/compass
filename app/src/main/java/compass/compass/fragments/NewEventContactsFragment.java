@@ -160,7 +160,7 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         infoToAdd.put("EventName", eventName);
 
         for(User user: usersAdded){
-            membersMap.put(user.userId, "true");
+            membersMap.put(user.userId, "null");
         }
 
         infoToAdd.put("Members", membersMap);
@@ -180,7 +180,7 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
     private void notifyUsersOfNewEvent(ArrayList<User> usersAdded){
         for(User user: usersAdded){
             HashMap<String, Object> infoToAdd = new HashMap<>();
-            infoToAdd.put(eventName, "true");
+            infoToAdd.put(eventName, "null");
             mDatabase.child("Users").child(user.userId).child("events").updateChildren(infoToAdd);
             //TODO: ADD NOTIFICATION HERE
         }

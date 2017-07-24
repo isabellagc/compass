@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import compass.compass.ChatActivity;
+import compass.compass.EventActivity;
+import compass.compass.EventsAdapter;
 import compass.compass.R;
 
 import static compass.compass.MainActivity.currentProfile;
@@ -84,6 +86,8 @@ public class StatusFragment extends DialogFragment {
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).removeValue();
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).removeValue();
                     dismiss();
+                    EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
+                    ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
                 }
                 if (rbOut.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("out");
