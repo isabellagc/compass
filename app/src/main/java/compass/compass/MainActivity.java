@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -192,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
     public void launchResources(MenuItem miResources) {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
+        super.onBackPressed();
     }
 
     //    @Override

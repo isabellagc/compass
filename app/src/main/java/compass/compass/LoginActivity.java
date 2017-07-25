@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +32,7 @@ public class LoginActivity extends AppCompatActivity{
     private Button btLogin;
     private ArrayList<User> contacts;
     public DatabaseReference mDatabase;
+    private User user;
 
 
     @Override
@@ -41,15 +41,16 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //make users out of all items in the Users child in the database
-        loadUsers();
         contacts = new ArrayList<>();
+        loadUsers();
+
         etName = (EditText) findViewById(R.id.etName);
         btLogin = (Button) findViewById(R.id.btLogin);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = etName.getText().toString();
-                User user = checkForUser(name);
+                user = checkForUser(name);
                 if(user == null){
                     etName.clearComposingText();
                     Toast.makeText(getApplicationContext(), "That user was not found in the database!", Toast.LENGTH_LONG).show();
@@ -58,10 +59,10 @@ public class LoginActivity extends AppCompatActivity{
                     setAllContacts();
                     FirebaseMessaging.getInstance().subscribeToTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
                     MainActivity.allContacts.remove(user);
+//                    setDrinksToZero();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra("userToCheck", name);
                     startActivity(i);
-                    //setMainUser(name);
                 }
             }
         };
@@ -77,12 +78,16 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    private void loadUsers(){
+//    private void setDrinksToZero(){
+//        HashMap<String, Object> drinkMap = new HashMap<>();
+//        drinkMap.put("drinkCounter", 0);
+//        mDatabase.child("Users").child(user.userId).updateChildren(drinkMap);
+//    }
 
+    private void loadUsers(){
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Map userData = (Map) ds.getValue();
                     User user = new User();
@@ -93,10 +98,8 @@ public class LoginActivity extends AppCompatActivity{
                     user.school = (String) userData.get("school");
                     user.weight = ((Long)userData.get("weight")).intValue();
                     contacts.add(user);
-
-                    Log.d("he","ashdkf");
+                    //SET THE DRINKS ON DB TO 0: WE ARE ALL STARTING WITH 0 DRINKS WHEN WE LOGIN TO APP
                 }
-
             }
 
             @Override
