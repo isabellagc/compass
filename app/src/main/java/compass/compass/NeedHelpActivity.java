@@ -135,7 +135,7 @@ public class NeedHelpActivity extends AppCompatActivity {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
-                message.setSender(currentProfile.name);
+                message.setSender("BOT");
                 message.setTime((new Date().getTime()));
                 //change the database and notify the adapter
                 for (int i = 0; i < event_n0.length; i ++) {
@@ -154,7 +154,7 @@ public class NeedHelpActivity extends AppCompatActivity {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
-                message.setSender(currentProfile.name);
+                message.setSender("BOT");
                 message.setTime((new Date().getTime()));
                 //change the database and notify the adapter
                 for (int i = 0; i < event_n0.length; i ++) {
@@ -173,7 +173,7 @@ public class NeedHelpActivity extends AppCompatActivity {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
-                message.setSender(currentProfile.name);
+                message.setSender("BOT");
                 message.setTime((new Date().getTime()));
                 //change the database and notify the adapter
                 for (int i = 0; i < event_n0.length; i ++) {
