@@ -141,7 +141,9 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                         people.add(temp);
                     }
                 }
-                people.remove(currentProfile.name.replaceAll(" ", ""));
+                if (people.contains(currentProfile.name.replaceAll(" ", ""))){
+                    people.remove(currentProfile.name.replaceAll(" ", ""));
+                }
                 members = (String[]) people.toArray(new String[people.size()]);
             }
 

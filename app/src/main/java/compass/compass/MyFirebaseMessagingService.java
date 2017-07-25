@@ -36,6 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         total = remoteMessage.getData().toString();
+
         sender = total.substring(total.indexOf("=")+1,total.indexOf(":"));
         eventName = total.substring(total.indexOf(":")+1,total.lastIndexOf(":"));
         message = total.substring(total.lastIndexOf(":")+1, total.length()-1);
@@ -54,7 +55,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_need_help)
                 .setContentTitle("New Message from " + sender + " to " + eventName)
                 .setContentText(message)
-                .setOnlyAlertOnce(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSound(notificationSound)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
