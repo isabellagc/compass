@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -131,7 +132,7 @@ public class NeedHelpActivity extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help");
+                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender(currentProfile.name);
@@ -143,8 +144,50 @@ public class NeedHelpActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                 }
                 sendNotificationToUser(members, message);
+                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
             }
         });
+
+        alc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
+                ChatMessage message = new ChatMessage();
+                message.setText(Alert_message);
+                message.setSender(currentProfile.name);
+                message.setTime((new Date().getTime()));
+                //change the database and notify the adapter
+                for (int i = 0; i < event_n0.length; i ++) {
+                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
+                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
+                    mAdapter.notifyDataSetChanged();
+                }
+                sendNotificationToUser(members, message);
+                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        sa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
+                ChatMessage message = new ChatMessage();
+                message.setText(Alert_message);
+                message.setSender(currentProfile.name);
+                message.setTime((new Date().getTime()));
+                //change the database and notify the adapter
+                for (int i = 0; i < event_n0.length; i ++) {
+                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
+                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
+                    mAdapter.notifyDataSetChanged();
+                }
+                sendNotificationToUser(members, message);
+                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+
     }
 
 
