@@ -54,7 +54,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_need_help)
                 .setContentTitle("New Message from " + sender + " to " + eventName)
                 .setContentText(message)
-                .setOnlyAlertOnce(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSound(notificationSound)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
