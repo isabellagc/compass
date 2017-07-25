@@ -40,6 +40,7 @@ public class StatusFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putString("eventId", eventId);
         args.putString("fromHere", fromHere);
+        args.putBoolean("newEvent", true);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,13 +80,11 @@ public class StatusFragment extends DialogFragment {
                 if (rgStatus.getCheckedRadioButtonId() == -1)
                 {
                     Toast.makeText(getContext(), "Please choose a status", Toast.LENGTH_SHORT).show();
-                }
-                if (rbLeave.isChecked()){
+                }else if (rbLeave.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).removeValue();
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).removeValue();
                     dismiss();
-                }
-                if (rbOut.isChecked()){
+                }else if (rbOut.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("out");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("out");
                     dismiss();
@@ -93,9 +92,9 @@ public class StatusFragment extends DialogFragment {
                     Intent i = new Intent(getActivity(), ChatActivity.class);
                     i.putExtra("fromHere", fromHere);
                     i.putExtra("eventId", eventId);
+                    i.putExtra("firstLogin", "goingOut");
                     startActivity(i);
-                }
-                if (rbOnCall.isChecked()){
+                }else if (rbOnCall.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("on call");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("on call");
                     dismiss();

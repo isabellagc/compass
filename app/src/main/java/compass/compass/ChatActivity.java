@@ -16,6 +16,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +54,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import compass.compass.fragments.AlarmFragment;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -89,6 +91,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Double myLongitude;
     LatLng myLocation;
     String fromHere;
+    boolean alarmSet = false;
 
     String myStatus;
 
@@ -99,6 +102,20 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Bundle args = getIntent().getExtras();
+
+        if(args.containsKey("firstLogin")){
+            if(args.getString("firstLogin").equals("goingOut") && !alarmSet){
+                //ALARM FRAGMENT//
+//                FragmentActivity activity = (FragmentActivity) getApplicationContext();
+                FragmentManager fm = getSupportFragmentManager();
+                AlarmFragment alarmFragment = AlarmFragment.newInstance(eventId, fromHere);
+                alarmFragment.show(fm, "tag");
+                alarmSet = true;
+            }
+        }
+
 
         markerMap = new HashMap<String, Marker>();
 
