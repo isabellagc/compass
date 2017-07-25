@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,7 +128,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         event.setMyStatus((String) users.get(name));
                         event.setName((String) info.get("EventName"));
 
-                        mEvents.add(event);
+                        if(event.getMyStatus().contentEquals("null")){
+                            mEvents.add(0, event);
+                        }
+                        else{
+                            mEvents.add(event);
+                        }
                         notifyDataSetChanged();
                     }
                 }
@@ -190,7 +196,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.tvEnd.setText(dateFormattedEnd);
 
+        if(mEvents.get(position).getMyStatus().contentEquals("null")){
+            holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.c50));
 
+        }
     }
 
     @Override

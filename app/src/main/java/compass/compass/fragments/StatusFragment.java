@@ -94,6 +94,9 @@ public class StatusFragment extends DialogFragment {
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("out");
                     dismiss();
 
+                    EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
+                    ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
+
                     Intent i = new Intent(getActivity(), ChatActivity.class);
                     i.putExtra("fromHere", fromHere);
                     i.putExtra("eventId", eventId);
@@ -103,6 +106,9 @@ public class StatusFragment extends DialogFragment {
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("on call");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("on call");
                     dismiss();
+
+                    EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
+                    ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
 
                     Intent i = new Intent(getActivity(), ChatActivity.class);
                     i.putExtra("fromHere", fromHere);
