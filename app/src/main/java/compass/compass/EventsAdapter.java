@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,7 +128,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                         event.setMyStatus((String) users.get(name));
                         event.setName((String) info.get("EventName"));
 
-                        mEvents.add(event);
+                        if(event.getMyStatus().contentEquals("null")){
+                            mEvents.add(0, event);
+                        }
+                        else{
+                            mEvents.add(event);
+                        }
                         notifyDataSetChanged();
                     }
                 }
@@ -173,8 +181,25 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(EventsAdapter.ViewHolder holder, int position) {
         holder.tvEventName.setText(mEvents.get(position).getName());
-        holder.tvStart.setText(mEvents.get(position).getStartTime().toString());
-        holder.tvEnd.setText(mEvents.get(position).getEndTime().toString());
+
+        Calendar calStart = Calendar.getInstance();
+        calStart.setTimeInMillis(mEvents.get(position).getStartTime());
+        DateFormat formatterStart = DateFormat.getDateTimeInstance();
+        String dateFormattedStart = formatterStart.format(calStart.getTime());
+
+        holder.tvStart.setText(dateFormattedStart);
+
+        Calendar calEnd = Calendar.getInstance();
+        calEnd.setTimeInMillis(mEvents.get(position).getEndTime());
+        DateFormat formatterEnd = DateFormat.getDateTimeInstance();
+        String dateFormattedEnd = formatterEnd.format(calEnd.getTime());
+
+        holder.tvEnd.setText(dateFormattedEnd);
+
+        if(mEvents.get(position).getMyStatus().contentEquals("null")){
+            holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.c50));
+
+        }
     }
 
     @Override
