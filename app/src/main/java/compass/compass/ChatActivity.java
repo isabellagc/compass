@@ -224,7 +224,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                         int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
-                                .title(memberName)
+                                .title(memberName + "\nDrinks: ")
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
 
