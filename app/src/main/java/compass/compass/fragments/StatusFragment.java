@@ -86,19 +86,24 @@ public class StatusFragment extends DialogFragment {
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).removeValue();
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).removeValue();
                     dismiss();
-                }else if (rbOut.isChecked()){
+
                     EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
                     ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
 
+                }else if (rbOut.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("out");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("out");
                     dismiss();
+
+                    EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
+                    ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
 
                     Intent i = new Intent(getActivity(), ChatActivity.class);
                     i.putExtra("fromHere", fromHere);
                     i.putExtra("eventId", eventId);
                     i.putExtra("firstLogin", "goingOut");
                     startActivity(i);
+
                 }else if (rbOnCall.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("on call");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("on call");
