@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,27 +88,44 @@ public class NeedHelpActivity extends AppCompatActivity {
             }
         });
 
-//        mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
-//
-////            @Override
-////            public void onDataChange(DataSnapshot dataSnapshot) {
-////                Map otherPeople = (Map) dataSnapshot.getValue();
-////                Set<String> people= new HashSet<String>();
-////                for(Object s : otherPeople.keySet()) {
-////                    String temp = s.toString().replaceAll(" ", "");
-////                    if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
-////                        people.add(temp);
-////                    }
-////                }
-////                people.remove(currentProfile.name.replaceAll(" ", ""));
-////                members = (String[]) people.toArray(new String[people.size()]);
-////            }
-////
-////            @Override
-////            public void onCancelled(DatabaseError databaseError) {
-////
-//            }
-//        });
+        final Set<String> people= new HashSet<String>();
+
+        mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map Events = (Map) dataSnapshot.getValue();
+                Set<String> events = new HashSet<String>();
+                for (Object e : Events.keySet()){
+                    String temp = e.toString();
+                    mDatabase.child("Events").child(temp).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map otherPeople = (Map) dataSnapshot.getValue();
+                            for(Object s : otherPeople.keySet()) {
+                                String temp = s.toString().replaceAll(" ", "");
+                                if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
+                                    people.add(temp);
+                                }
+                            }
+                            people.remove(currentProfile.name.replaceAll(" ", ""));
+                            members = (String[]) people.toArray(new String[people.size()]);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
             //Send the message to the event
         home.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +178,7 @@ public class NeedHelpActivity extends AppCompatActivity {
 
         Map notification = new HashMap<>();
         notification.put("recipients", recipients);
-        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + event_n0 + ":" + message.getText());
+        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + " anything " + ":" + message.getText());
         mDatabase.child("notifications").push().setValue(notification);
 
     }
