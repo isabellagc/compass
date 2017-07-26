@@ -52,6 +52,7 @@ public class DrinkActivityReal extends AppCompatActivity{
         btAddDrink = (ImageButton) findViewById(R.id.btDrinkCounter);
         tvDrinkNumber = (TextView) findViewById(R.id.tvDrinkNumber);
         drinks = currentProfile.drinkCounter;
+        tvDrinkNumber.setText(String.valueOf(drinks));
 
         weight = currentProfile.weight;
 
