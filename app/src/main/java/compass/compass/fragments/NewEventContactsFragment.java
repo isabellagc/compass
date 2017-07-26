@@ -185,7 +185,7 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
             //TODO: ADD NOTIFICATION HERE
         }
         HashMap<String, Object> infoToAdd = new HashMap<>();
-        infoToAdd.put(eventName, "true");
+        infoToAdd.put(eventName, "out");
         mDatabase.child("Users").child(currentProfile.userId).child("events").updateChildren(infoToAdd);
     }
 

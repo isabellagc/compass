@@ -142,7 +142,14 @@ public class LocationService extends Service implements LocationListener{
             mDatabase.child("Users").child(currentProfile.userId).child("longitude").setValue(longitude);
         }
         Log.i("NEW LOCATION", "Latitude: " + latitude + "- Longitude: " + longitude);
+        checkTimers();
     }
+
+    private void checkTimers(){
+
+    }
+
+
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
