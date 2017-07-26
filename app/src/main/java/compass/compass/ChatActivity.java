@@ -98,7 +98,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
     String[] members;
 
-    boolean expanded;
+    boolean mapExpanded;
+    boolean chatExpanded;
     SupportMapFragment mapFragment;
     int originalHeight;
 
@@ -138,6 +139,23 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
         rvChat.setAdapter(mAdapter);
+
+        chatExpanded = false;
+
+        rvChat.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (chatExpanded){
+                    resizeChat(rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, 270);
+                    chatExpanded = false;
+                }
+                else{
+                    resizeChat(rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    chatExpanded = true;
+                }
+                return true;
+            }
+        });
 
         // associate the LayoutManager with the RecylcerView
         layoutManager = new LinearLayoutManager(ChatActivity.this);
@@ -213,7 +231,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        expanded = false;
+        mapExpanded = false;
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
         final View view = mapFragment.getView();
@@ -365,6 +383,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void resizeChat(RecyclerView rvChat, int newWidth, int newHeight) {
+        if (rvChat != null) {
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(newWidth, newHeight);
+            rvChat.setLayoutParams(p);
+            rvChat.requestLayout();
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -372,13 +398,13 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                if(expanded){
+                if(mapExpanded){
                     resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
-                    expanded = false;
+                    mapExpanded = false;
                 }
                 else{
                     resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    expanded = true;
+                    mapExpanded = true;
                 }
 
             }

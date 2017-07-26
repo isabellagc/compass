@@ -1,20 +1,40 @@
 package compass.compass;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,14 +50,16 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.models.ChatMessage;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.R.id.friendMap;
 
 /**
  * Created by brucegatete on 7/11/17.
  */
 
-public class NeedHelpActivity extends AppCompatActivity {
+public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     SeekBar level;
     ImageButton alc;
@@ -49,6 +71,20 @@ public class NeedHelpActivity extends AppCompatActivity {
     ChatAdapter mAdapter;
     String [] event_n0;
     String[] members;
+
+    LocationManager locationManager;
+    Location myLocation;
+    Location tempLocation = new Location(LocationManager.GPS_PROVIDER);
+    Location closest;
+    Float distanceToClosest;
+    Double closestLatitude;
+    Double closestLongitude;
+    Marker closestFriend;
+    Map location;
+    Double latitude;
+    Double longitude;
+    private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +99,23 @@ public class NeedHelpActivity extends AppCompatActivity {
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        locationManager = (LocationManager) getBaseContext().getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(friendMap);
+        mapFragment.getMapAsync(NeedHelpActivity.this);
 
         SwipeButtonCustomItems swipeButtonSettings = new SwipeButtonCustomItems() {
             @Override
@@ -110,6 +163,49 @@ public class NeedHelpActivity extends AppCompatActivity {
                             }
                             people.remove(currentProfile.name.replaceAll(" ", ""));
                             members = (String[]) people.toArray(new String[people.size()]);
+
+                            for(String s: members){
+                                if(s.equals("testperson")){
+                                    s = "test person";
+                                }
+                                final String finalS = s;
+                                mDatabase.child("Users").child(s).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        location = (Map) dataSnapshot.getValue();
+                                        latitude = (Double) location.get("latitude");
+                                        longitude = (Double) location.get("longitude");
+                                        LatLng latLng = new LatLng(latitude, longitude);
+                                        int drawableResourceId = getResources().getIdentifier(finalS.replaceAll(" ",""), "drawable", getPackageName());
+
+
+                                        tempLocation.setLatitude(latitude);
+                                        tempLocation.setLongitude(longitude);
+                                        Float distance = myLocation.distanceTo(tempLocation);
+
+                                        if(distanceToClosest == null || distance < distanceToClosest){
+                                            distanceToClosest = distance;
+                                            closestLatitude = latitude;
+                                            closestLongitude = longitude;
+                                            if(closestFriend != null){
+                                                closestFriend.remove();
+                                            }
+                                            closestFriend = mMap.addMarker(new MarkerOptions()
+                                                    .position(latLng)
+                                                    .title(finalS)
+                                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
 
                         }
 
@@ -225,5 +321,63 @@ public class NeedHelpActivity extends AppCompatActivity {
         mDatabase.child("notifications").push().setValue(notification);
 
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+    }
+
+    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, 100, 100);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
+
+        View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
+        ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
+
+
+//        Glide.with(getApplicationContext())
+//                .load(linkToPic)
+//                .placeholder(R.color.c50)
+//                .dontAnimate()
+//                .into(markerImageView);
+//
+//        Glide.with(this)
+//                .load(R.color.Black)
+//                .into(markerImageView);
+
+        markerImageView.setImageResource(resId);
+        customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
+        customMarkerView.buildDrawingCache();
+        Bitmap returnedBitmap = Bitmap.createBitmap(customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Drawable drawable = customMarkerView.getBackground();
+        if (drawable != null)
+            drawable.draw(canvas);
+        customMarkerView.draw(canvas);
+        return returnedBitmap;
+    }
+
 
 }
