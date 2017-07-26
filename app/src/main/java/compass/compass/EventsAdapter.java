@@ -52,7 +52,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         //MAKE SURE THAT DB IS SET UP SO ID FOR A CHILD OF USERS IS ALWAYS IDENTICAL TO NAME
         getEvents(currentProfile.userId);
     }
-
 //    public void getEvents(String name) {
 //        mDatabase.child("Users").child(name).child("events").addChildEventListener(new ChildEventListener() {
 //            @Override
