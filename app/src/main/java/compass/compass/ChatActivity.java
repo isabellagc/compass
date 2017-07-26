@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,6 +97,10 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     String myStatus;
 
     String[] members;
+
+    boolean expanded;
+    SupportMapFragment mapFragment;
+    int originalHeight;
 
 
     @Override
@@ -208,8 +213,17 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
+        expanded = false;
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
+        final View view = mapFragment.getView();
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                originalHeight = view.getHeight(); //height is ready
+            }
+        });
 
 
         mDatabase.child("Events").child(eventId).child("Members").addChildEventListener(new ChildEventListener() {
@@ -217,50 +231,47 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final String memberName = dataSnapshot.getKey();
 
-                if(!memberName.equals(currentProfile.userId)){
+                if(!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")){
                     if(!markerMap.containsKey(memberName)){
                         LatLng temp = new LatLng(47.628911, -122.342969);
                         int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
-                                .title(memberName)
+                                .title(memberName + "\nDrinks: ")
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
 
                     }
 
-                    if(memberName != null){
-                        mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                latitude = (Double) dataSnapshot.getValue();
-                                longitude = markerMap.get(memberName).getPosition().longitude;
-                                markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
-                            }
+                    mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            latitude = (Double) dataSnapshot.getValue();
+                            longitude = markerMap.get(memberName).getPosition().longitude;
+                            markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
+                        }
+                         @Override
+                         public void onCancelled(DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                         }
+                    });
 
-                            }
-                        });
+                    mDatabase.child("Users").child(memberName).child("longitude").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            longitude = (Double) dataSnapshot.getValue();
+                            latitude = markerMap.get(memberName).getPosition().latitude;
+                            markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
+                        }
 
-                        mDatabase.child("Users").child(memberName).child("longitude").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                longitude = (Double) dataSnapshot.getValue();
-                                latitude = markerMap.get(memberName).getPosition().latitude;
-                                markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
-                            }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
 
-                            }
-                        });
-
-                    }
                 }
-                else{
+                else if (memberName.equals(currentProfile.userId)){
                     mDatabase.child("Users").child(memberName).child("latitude").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -344,9 +355,34 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         ft.commit();
     }
 
+    private void resizeMap(SupportMapFragment f, int newWidth, int newHeight) {
+        if (f != null) {
+            View view = f.getView();
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(newWidth, newHeight);
+            view.setLayoutParams(p);
+            view.requestLayout();
+
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(expanded){
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
+                    expanded = false;
+                }
+                else{
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    expanded = true;
+                }
+
+            }
+        });
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

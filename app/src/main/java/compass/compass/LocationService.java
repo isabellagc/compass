@@ -37,7 +37,7 @@ public class LocationService extends Service implements LocationListener{
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
 
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1 * 10000;
+    private static final long MIN_TIME_BW_UPDATES = 1 * 5000;
 
     String provider;
 

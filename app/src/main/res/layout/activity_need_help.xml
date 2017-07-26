@@ -30,54 +30,53 @@
 
     <ImageButton
         android:id="@+id/ibAlc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        app:srcCompat="@drawable/ic_drink"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignStart="@+id/level"
         android:layout_below="@+id/level"
-        android:layout_toRightOf="@+id/tvLevel"
-        android:layout_toEndOf="@+id/tvLevel" />
+        android:layout_marginTop="23dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_drink" />
 
     <ImageButton
         android:id="@+id/ibSA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignTop="@+id/ibAlc"
-        android:layout_marginLeft="29dp"
-        android:layout_marginStart="29dp"
+        android:layout_marginLeft="25dp"
         android:layout_toEndOf="@+id/ibAlc"
-        android:layout_toRightOf="@+id/ibAlc"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_need_help" />
 
     <ImageButton
         android:id="@+id/ibOther"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ibSA"
-        android:layout_alignStart="@+id/ibSA"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="25dp"
+        app:srcCompat="@drawable/ic_add"
+        android:scaleType="fitXY"
         android:layout_alignTop="@+id/ibHome"
-        app:srcCompat="@drawable/ic_add" />
+        android:layout_toEndOf="@+id/ibHome" />
 
     <ImageButton
         android:id="@+id/ibHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="25dp"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_home"
-        android:layout_below="@+id/ibAlc"
-        android:layout_alignLeft="@+id/ibAlc"
-        android:layout_alignStart="@+id/ibAlc" />
+        android:layout_alignTop="@+id/ibSA"
+        android:layout_toEndOf="@+id/ibSA" />
 
     <TextView
         android:id="@+id/tvCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/level"
-        android:layout_alignStart="@+id/level"
-        android:layout_below="@+id/ibHome"
-        android:layout_marginTop="46dp"
         android:textSize="20sp"
-        android:text="Call 911?" />
+        android:text="Call 911?"
+        android:layout_above="@+id/callPolice"
+        android:layout_alignStart="@+id/ibAlc"
+        android:layout_marginBottom="12dp" />
 
     <compass.compass.SwipeButton
         android:id="@+id/callPolice"
@@ -87,7 +86,32 @@
         android:text="@string/swipeText"
         android:textAlignment="center"
         android:textColor="#000000"
-        android:layout_below="@+id/tvCall"
-        android:layout_alignLeft="@+id/tvCall"
+        android:layout_marginBottom="27dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/tvCall" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvCall"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvClosestFriend"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="13dp"
+        tools:context="compass.compass.MapsActivity" />
+
+    <TextView
+        android:id="@+id/tvClosestFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ibAlc"
+        android:layout_below="@+id/ibAlc"
+        android:layout_marginTop="13dp"
+        android:text="Your Closest Friend:"
+        android:textSize="20sp" />
+
 </RelativeLayout>
