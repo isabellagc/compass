@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setHomeScreenButtons();
@@ -60,6 +61,30 @@ public class MainActivity extends AppCompatActivity {
         startService(servIntent);
 
     }
+
+//    private void setAlarms(){
+////        AlarmManager alarmManager = (AlarmManager) getSystemService(getApplicationContext().ALARM_SERVICE);
+////        Intent intent = new Intent(this, AlarmReceiver.class);
+////        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0010000,intent,0);
+////
+////        Calendar time = Calendar.getInstance();
+////        time.set(Calendar.HOUR, 5);
+////        time.set(Calendar.MINUTE, 59);
+////        time.set(Calendar.SECOND, 0);
+////
+////        alarmManager.set(AlarmManager.RTC,time.getTimeInMillis(),pendingIntent);
+//
+//        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+//        Set<String> keys = currentProfile.alarms.keySet();
+//        for(String key: keys){
+//            if(currentProfile.alarms.get(key).equals("null")){
+//                Intent intent = new Intent(this, Alarm.class);
+//                intent.putExtra("alarmName", key);
+//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+//                alarmManager.set(AlarmManager.RTC_WAKEUP, currentProfile.alarms.get(key), pendingIntent);
+//            }
+//        }
+//    }
 
     @Override
     protected void onStart() {
