@@ -33,7 +33,6 @@
         android:layout_alignBottom="@+id/ivProfileOther"
         android:layout_toEndOf="@+id/ivProfileOther"
         android:layout_toStartOf="@+id/ivProfileMe"
-        android:layout_marginLeft="40dp"
         android:background="@drawable/selector"
         android:backgroundTint="#ECF0F1"
         android:text="TextView"
