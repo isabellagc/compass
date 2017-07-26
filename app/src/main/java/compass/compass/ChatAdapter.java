@@ -108,21 +108,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
 
         if (isMe) {
-            holder.imageMe.setVisibility(View.VISIBLE);
+           // holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);
             holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-            holder.imageMe.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+//            holder.imageMe.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
         } else if(isBOT) {
             holder.imageOther.setVisibility(View.GONE);
-            holder.imageMe.setVisibility(View.GONE);
+           // holder.imageMe.setVisibility(View.GONE);
             holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
             holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
 
         } else {
             holder.imageOther.setVisibility(View.VISIBLE);
-            holder.imageMe.setVisibility(View.GONE);
+            //holder.imageMe.setVisibility(View.GONE);
             holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
             holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
             holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
