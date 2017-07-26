@@ -6,42 +6,54 @@
     android:layout_height="match_parent"
     tools:context="compass.compass.ProfileActivity">
 
+    <TextView
+        android:id="@+id/tvEmergencyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="Emergency Contacts"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvOtherTitle"
+        android:layout_marginStart="16dp" />
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImage"
-        android:layout_width="164dp"
-        android:layout_height="168dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
         app:border_color="@color/c500"
         app:border_width="1dp"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_person"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_person" />
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:layout_toRightOf="@id/ivProfileImage"
         android:text="Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textAppearance="@android:style/TextAppearance.Material.Display1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
 
     <TextView
         android:id="@+id/tvSchool"
@@ -50,40 +62,171 @@
         android:layout_alignLeft="@+id/tvSecondName"
         android:layout_alignStart="@+id/tvSecondName"
         android:layout_below="@id/tvSecondName"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:text="School"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textAppearance="@android:style/TextAppearance.Material.Subhead"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
+        app:layout_constraintLeft_toLeftOf="@+id/tvName"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tvName" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvGroups"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Current Groups"-->
+        <!--android:textAppearance="@android:style/TextAppearance.Material.Headline"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvGroupsProfView"-->
+        <!--android:layout_width="369dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/tvGroups"-->
+        <!--app:layout_constraintVertical_bias="1.0" />-->
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="Address"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        app:layout_constraintTop_toBottomOf="@+id/tvSchool"
+        app:layout_constraintLeft_toLeftOf="@+id/tvName"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tvName"
+        app:layout_constraintHorizontal_bias="0.461"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
     <TextView
-        android:id="@+id/tvGroups"
+        android:id="@+id/tvHealthInfotitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Health Information"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tvAsthmaTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="7dp"
+        android:text="Asthma:"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAllergyInfo"
+        android:layout_marginStart="24dp" />
+
+    <TextView
+        android:id="@+id/tvOtherTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="7dp"
+        android:text="Other:"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDiabetesTitle"
+        android:layout_marginStart="24dp" />
+
+    <TextView
+        android:id="@+id/tvDiabetesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Diabetes:"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAsthmaTitle"
+        android:layout_marginStart="24dp" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:text="Allergies:"
+        android:textAllCaps="false"
+        android:textAppearance="@android:style/TextAppearance.Material.Body2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvHealthInfotitle"
+        android:layout_marginStart="24dp" />
+
+    <TextView
+        android:id="@+id/tvAsthmaInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:text="asthma info"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAsthmaTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/tvAllergyInfo"
+        android:layout_marginStart="3dp" />
+
+    <TextView
+        android:id="@+id/tvOtherInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="other informatin"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/tvOtherTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/tvDiabetesInfo" />
+
+    <TextView
+        android:id="@+id/tvDiabetesInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="diabetes information"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDiabetesTitle"
+        app:layout_constraintLeft_toLeftOf="@+id/tvAsthmaInfo" />
+
+    <TextView
+        android:id="@+id/tvAllergyInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="7dp"
-        android:text="Current Groups"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSchool" />
+        android:text="allergy information"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintLeft_toRightOf="@+id/textView14"
+        android:layout_marginStart="8dp" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvGroupsProfView"
-        android:layout_width="369dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/rvEmergencyContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGroups"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmergencyTitle" />
 
 </android.support.constraint.ConstraintLayout>

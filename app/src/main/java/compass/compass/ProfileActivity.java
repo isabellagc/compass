@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
@@ -17,7 +18,10 @@ import static compass.compass.MainActivity.currentProfile;
 public class ProfileActivity extends AppCompatActivity {
     TextView tvName, tvSchool;
     ImageView ivProfileImage;
-    RecyclerView rvGroupsProfView;
+//    RecyclerView rvGroupsProfView;
+    TextView tvAddress, tvAllergyInfo, tvAsthmaInfo, tvDiabetesInfo, tvOtherInfo;
+    RecyclerView rvEmergencyContacts;
+    EmergencyContactsAdapter emergencyContactsAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,16 +30,30 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvName = (TextView) findViewById(R.id.tvName);
         tvSchool = (TextView) findViewById(R.id.tvSchool);
-        rvGroupsProfView =  (RecyclerView) findViewById(R.id.rvGroupsProfView);
+        tvAddress = (TextView) findViewById(R.id.tvAddress);
+        tvAllergyInfo = (TextView) findViewById(R.id.tvAllergyInfo);
+        tvAsthmaInfo = (TextView) findViewById(R.id.tvAsthmaInfo);
+        tvDiabetesInfo = (TextView) findViewById(R.id.tvDiabetesInfo);
+        tvOtherInfo = (TextView) findViewById(R.id.tvOtherInfo);
+        rvEmergencyContacts = (RecyclerView) findViewById(R.id.rvEmergencyContacts);
+//        rvGroupsProfView =  (RecyclerView) findViewById(rvGroupsProfView);
 
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImage);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
-
         tvName.setText(capitalize(currentProfile.name));
         tvSchool.setText(capitalize(currentProfile.school));
+        tvAllergyInfo.setText(currentProfile.healthInfo.get(User.KEY_ALLERGIES_INFO));
+        tvAsthmaInfo.setText(currentProfile.healthInfo.get(User.KEY_ASTHMA_INFO));
+        tvDiabetesInfo.setText(currentProfile.healthInfo.get(User.KEY_DIABETES_INFO));
+        tvOtherInfo.setText(currentProfile.healthInfo.get(User.KEY_OTHER_INFO));
 
-        rvGroupsProfView.setAdapter(new EventsAdapter(this));
-        rvGroupsProfView.setLayoutManager(new LinearLayoutManager(this));
+        emergencyContactsAdapter = new EmergencyContactsAdapter(this);
+        rvEmergencyContacts.setAdapter(emergencyContactsAdapter);
+        rvEmergencyContacts.setLayoutManager(new LinearLayoutManager(this));
+        rvEmergencyContacts.invalidate();
+
+//        rvGroupsProfView.setAdapter(new EventsAdapter(this));
+//        rvGroupsProfView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
