@@ -104,6 +104,10 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_chat);
 
         Bundle args = getIntent().getExtras();
+        storage = FirebaseStorage.getInstance().getReference();
+        eventId = getIntent().getStringExtra("eventId");
+        fromHere = getIntent().getStringExtra("fromHere");
+
 
         if(args.containsKey("firstLogin")){
             if(args.getString("firstLogin").equals("goingOut") && !alarmSet){
@@ -120,11 +124,6 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         markerMap = new HashMap<String, Marker>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        storage = FirebaseStorage.getInstance().getReference();
-        eventId = getIntent().getStringExtra("eventId");
-        fromHere = getIntent().getStringExtra("fromHere");
-
 
         etMessage = (EditText) findViewById(R.id.etMessage);
         btSend = (Button) findViewById(R.id.btSend);
