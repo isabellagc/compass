@@ -14,10 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,6 +58,7 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.fragments.AlarmFragment;
+import compass.compass.fragments.ChatPagerAdapter;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -102,6 +105,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     boolean chatExpanded;
     SupportMapFragment mapFragment;
     int originalHeight;
+    ViewPager vpPager;
+    ChatPagerAdapter chatPagerAdapter;
 
 
     @Override
@@ -113,6 +118,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         storage = FirebaseStorage.getInstance().getReference();
         eventId = getIntent().getStringExtra("eventId");
         fromHere = getIntent().getStringExtra("fromHere");
+        vpPager = findViewById(R.id.viewpager);
+        chatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(chatPagerAdapter);
+
+        //add the sliding_tab
+        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(vpPager);
+
 
 
         if(args.containsKey("firstLogin")){
@@ -163,7 +176,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         rvChat.setLayoutManager(layoutManager);
 
 
-        //mDatabase.child("Events").child(eventId).child("Members").addValueEventListener()
+        //mDatabase.child("Events").child().child("Members").addValueEventListener()
 
         //get other members of group
         mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {

@@ -1,6 +1,7 @@
 package compass.compass;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         mMessages = new ArrayList<>();
         getMessages(eventId);
     }
+
 
 
 
@@ -172,5 +174,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     //constructor for chat adapter
     public ChatAdapter(Class<ChatActivity> chatActivityClass, String eventId) {
     }
+    //another constructor for chat adapter
+    public ChatAdapter(FragmentManager supportFragmentManager, ChatActivity chatActivity) {
+    }
+
 
 }
