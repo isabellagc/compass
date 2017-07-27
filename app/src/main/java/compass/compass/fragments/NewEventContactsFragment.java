@@ -93,7 +93,8 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         //get recyclerview from layout
         rvContacts = (RecyclerView) v.findViewById(R.id.rvContacts);
         //initialize contacts
-        contacts = MainActivity.allContacts;
+        contacts = new ArrayList<>();
+        contacts.addAll(MainActivity.allContacts.values());
         //create adapter passing in sample contact data
         adapter = new ContactsAdapter(context, contacts, eventName);
         //attatch adapter to recyclerview to populate items

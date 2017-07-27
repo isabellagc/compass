@@ -26,6 +26,7 @@ public class User {
     public HashMap<String, Long> alarms;
     public HashMap<String, String> healthInfo;
     public String phoneNumber;
+    public double currentBAC;
 
     //this is stored as a string  our firebase database
     public Event currentEvent;

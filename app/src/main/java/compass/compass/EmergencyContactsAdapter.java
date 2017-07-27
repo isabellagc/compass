@@ -62,7 +62,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
                     mEmergencyContactNames.add(key.toString());
                     if(value.toString().equals("true")){
                         //get the stuff from allcontacts
-                        User user = getUser(key.toString());
+                        User user = allContacts.get(key.toString());
                         mEmergencyContacts.put(user.userId, user.phoneNumber);
                     }else{
                         mEmergencyContacts.put(key.toString(), value.toString());
@@ -75,15 +75,6 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
             }
         });
-    }
-
-    private User getUser(String s){
-        for(User user: allContacts){
-            if(user.userId.equals(s)){
-                return user;
-            }
-        }
-        return null;
     }
 
     @Override

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import compass.compass.models.User;
 
+import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
 
 /**
@@ -62,11 +63,14 @@ public class LoginActivity extends AppCompatActivity{
                     currentProfile = user;
                     //setUserEvents();
                     //setAlarms();
-                    initAlarms();
+
+                    //TODO: UNCOMMENT IF WE WANT ALARM USEAGE
+                    //initAlarms();
                     setAllContacts();
                     FirebaseMessaging.getInstance().subscribeToTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
-                    MainActivity.allContacts.remove(user);
+                    allContacts.remove(user.userId);
 //                    setDrinksToZero();
+                    setDrinkListeners();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra("userToCheck", name);
                     startActivity(i);
@@ -77,13 +81,104 @@ public class LoginActivity extends AppCompatActivity{
         btLogin.setOnClickListener(listener);
     }
 
+    private void setDrinkListeners() {
+
+        mDatabase.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    Map<String, Object> newInfo = (Map) ds.getValue();
+                    Object BAC = newInfo.get("BAC");
+                    Object drinkCount = newInfo.get("drink count");
+                    Object key = ds.getKey();
+                    if(allContacts.containsKey(key.toString())){
+                        User user = allContacts.get(key.toString());
+                        //find and cast BAC
+                        if(BAC instanceof Integer){
+                            Integer temp = ((Integer) BAC).intValue();
+                            user.currentBAC = temp.doubleValue();
+                        }else if (BAC instanceof Double){
+                            user.currentBAC = (double) BAC;
+                        }else if (BAC instanceof Long){
+                            Long x = (Long) BAC;
+                            user.currentBAC = x.doubleValue();
+                        }
+                        //find and cast drink count
+                        if(drinkCount instanceof Integer){
+                            user.drinkCounter = (int) drinkCount;
+                        }else if (drinkCount instanceof Double){
+                            Double d = ((Double) drinkCount).doubleValue();
+                            user.drinkCounter = d.intValue();
+                        }else if (drinkCount instanceof Long){
+                            Long x = (Long) drinkCount;
+                            user.drinkCounter = x.intValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+//        mDatabase.child("Drinks").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Map<String, Object> newInfo = (Map) dataSnapshot.getValue();
+//                Object BAC = newInfo.get("BAC");
+//                Object drinkCount = newInfo.get("drink count");
+//                Object key = dataSnapshot.getKey();
+//                if(allContacts.containsKey(key.toString())){
+//                    User user = allContacts.get(key.toString());
+//                    Long l = (Long) drinkCount;
+//                    user.drinkCounter = l.intValue();
+//                    Long x = (Long) BAC;
+//                    user.currentBAC = x.doubleValue();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                Map<String, Object> newInfo = (Map) dataSnapshot.getValue();
+//                Object BAC = newInfo.get("BAC");
+//                Object drinkCount = newInfo.get("drink count");
+//                Object key = dataSnapshot.getKey();
+//                if(allContacts.containsKey(key.toString())){
+//                    User user = allContacts.get(key.toString());
+//                    Long l = (Long) drinkCount;
+//                    user.drinkCounter = l.intValue();
+//                    Long x = (Long) BAC;
+//                    user.currentBAC = x.doubleValue();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
+
+    }
     public void setAllContacts() {
-        MainActivity.allContacts = new ArrayList<User>();
+        allContacts = new HashMap<>();
         for(User x : contacts) {
-            MainActivity.allContacts.add(x);
+            allContacts.put(x.userId, x);
         }
 
     }
+
 
 //    private void setAlarms(){
 //        HashMap<String, Long> alarmsFromDB = new HashMap<>();

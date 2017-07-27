@@ -80,7 +80,8 @@ public class NewEventFragment extends android.support.v4.app.Fragment {
         final View v = inflater.inflate(R.layout.fragment_new_event_first, container, false);
         getActivity().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);;
-        contacts = MainActivity.allContacts;
+        contacts = new ArrayList<>();
+        contacts.addAll(MainActivity.allContacts.values());
 
         eventName = null;
         startDate = endDate = null;

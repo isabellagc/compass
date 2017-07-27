@@ -33,25 +33,11 @@ public class ContactsAdapter extends
         mContacts = contacts;
         startedActivity = true;
         eventID = eventIdInfo;
-        //uncheckBoxes();
     }
 
     public void setEventID(String eventID) {
         this.eventID = eventID;
     }
-
-    //    public void uncheckBoxes() {
-//        for(int i = 0; i < getItemCount(); i ++) {
-//
-//        }
-//        for (int i = 0; i < mListView.getCount(); i++) {
-//            View mChild = mListView.getChildAt(i);
-//
-//            //Replace R.id.checkbox with the id of CheckBox in your layout
-//            CheckBox mCheckBox = (CheckBox) mChild.findViewById(R.id.checkbox);
-//            mCheckBox.setChecked(false);
-//        }
-//    }
 
     //provide direct reference to each of the views within our data item (item_contact)
     public class ViewHolder extends  RecyclerView.ViewHolder{

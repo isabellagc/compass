@@ -10,7 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.john.waveview.WaveView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static compass.compass.MainActivity.currentProfile;
 
@@ -33,9 +38,9 @@ public class DrinkActivityReal extends AppCompatActivity{
     //info: refers to number of STANDARD DRINKS (1.5 oz hard, 12oz beer, 5(?) oz wine, etc)
     public int drinks;
 
+    public DatabaseReference mDatabase;
     public double BAC;
     public int weight;
-    public double index = 0.66;
     public long time_start;
     public long time_end;
     public long time_elapsed;
@@ -47,6 +52,7 @@ public class DrinkActivityReal extends AppCompatActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_real);
         btAddDrink = (ImageButton) findViewById(R.id.btDrinkCounter);
@@ -77,8 +83,17 @@ public class DrinkActivityReal extends AppCompatActivity{
                 if(BAC >= 0.08){
                     Toast.makeText(DrinkActivityReal.this, "BAC level: " + Double.toString(BAC) + " SLOW DOWN!", Toast.LENGTH_SHORT).show();
                 }
+                currentProfile.currentBAC = BAC;
+                sendDbDrinkMessage();
             }
         });
+    }
+
+    private void sendDbDrinkMessage(){
+        Map<String, Object> info = new HashMap<>();
+        info.put("drink count", currentProfile.drinkCounter);
+        info.put("BAC", BAC);
+        mDatabase.child("Drinks").child(currentProfile.userId).updateChildren(info);
     }
 
     private void setProgress(){
