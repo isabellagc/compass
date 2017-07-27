@@ -78,6 +78,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Button btSend;
     RecyclerView rvChat;
     ChatAdapter mAdapter;
+
     Map<String, Marker> markerMap;
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;

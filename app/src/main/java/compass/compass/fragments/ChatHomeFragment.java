@@ -143,10 +143,9 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         view.post(new Runnable() {
             @Override
             public void run() {
-                originalHeight = view.getHeight(); //height is ready
+                originalHeight = view.getHeight();
             }
         });
-
         return v;
     }
 
