@@ -37,6 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvChatText"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:text="TextView"
         android:textSize="10sp" />
 
@@ -57,10 +59,12 @@
         android:id="@+id/tvBot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserName"
+        android:layout_above="@+id/tvChatText"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
+        android:layout_marginTop="5dp"
         android:text="TextView" />
 
 </RelativeLayout>

@@ -135,11 +135,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } else {
             holder.body.setVisibility(View.VISIBLE);
             if(position == 0){
+                holder.tvUserName.setVisibility(View.VISIBLE);
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 holder.tvUserName.setText(message.getSender());
 
             }
             else if(!(mMessages.get(position-1).getSender().contentEquals(message.getSender()))){
+                holder.tvUserName.setVisibility(View.VISIBLE);
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 holder.tvUserName.setText(message.getSender());
 
