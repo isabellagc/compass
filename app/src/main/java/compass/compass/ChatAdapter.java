@@ -1,6 +1,8 @@
 package compass.compass;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -103,7 +105,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
         final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
@@ -131,33 +133,36 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
            // holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
             holder.tvBot.setText(message.getText()+ '\n');
         } else {
+            holder.body.setVisibility(View.VISIBLE);
             if(position == 0){
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 holder.tvUserName.setText(message.getSender());
+
             }
             else if(!(mMessages.get(position-1).getSender().contentEquals(message.getSender()))){
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
                 holder.tvUserName.setText(message.getSender());
+
             }
             else{
                 holder.tvUserName.setVisibility(View.GONE);
+
             }
             if(position != getItemCount()-1 && mMessages.get(position+1).getSender().contentEquals(message.getSender())){
                 holder.imageOther.setVisibility(View.GONE);
             }
             else{
                 holder.imageOther.setVisibility(View.VISIBLE);
-                int temp = mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName());
-                holder.imageOther.setImageResource(temp);
+                int tempId = mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName());
+                Drawable something = ContextCompat.getDrawable(mContext, tempId);
+                holder.imageOther.setImageDrawable(something);
             }
             //holder.imageMe.setVisibility(View.GONE);
             holder.tvMeChatText.setVisibility(View.GONE);
             holder.tvBot.setVisibility(View.GONE);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-            holder.body.setText(message.getText());
             //holder.rlChat.setMinimumHeight(holder.body.getHeight());
-            RelativeLayout.LayoutParams temp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            holder.rlChat.setLayoutParams(temp);
+            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.START | Gravity.FILL_VERTICAL);
+            holder.body.setText(message.getText());
 
         }
     }

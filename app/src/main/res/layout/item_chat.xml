@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlChat"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,17 +15,18 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tvUserName"
         android:layout_marginEnd="12dp"
+        android:layout_marginStart="70dp"
         android:background="@drawable/selector"
-        android:backgroundTint="#ECF0F1"
+        android:backgroundTint="@color/c50"
         android:text="TextView"
         android:textColor="@color/Black" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileOther"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/tvChatText"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvUserName"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         app:srcCompat="@color/Black" />
@@ -42,11 +44,12 @@
         android:id="@+id/tvChatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivProfileOther"
         android:layout_below="@+id/tvUserName"
         android:layout_marginLeft="54dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/selector"
         android:backgroundTint="#ECF0F1"
+        android:baselineAligned="false"
         android:text="TextView"
         android:textColor="@color/Black" />
 
@@ -56,6 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUserName"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:text="TextView" />
 
 </RelativeLayout>
