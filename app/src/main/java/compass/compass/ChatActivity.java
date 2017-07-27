@@ -14,10 +14,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,6 +59,7 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.fragments.AlarmFragment;
+import compass.compass.fragments.ChatPagerAdapter;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -76,6 +80,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     Button btSend;
     RecyclerView rvChat;
     ChatAdapter mAdapter;
+
     Map<String, Marker> markerMap;
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
@@ -104,6 +109,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     boolean chatExpanded;
     SupportMapFragment mapFragment;
     int originalHeight;
+    ViewPager vpPager;
+    ChatPagerAdapter chatPagerAdapter;
 
 
     @Override
@@ -115,6 +122,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         storage = FirebaseStorage.getInstance().getReference();
         eventId = getIntent().getStringExtra("eventId");
         fromHere = getIntent().getStringExtra("fromHere");
+        vpPager = findViewById(R.id.viewpager);
+        chatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(chatPagerAdapter);
+
+        //add the sliding_tab
+        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(vpPager);
+
 
 
         if(args.containsKey("firstLogin")){
@@ -165,7 +180,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         rvChat.setLayoutManager(layoutManager);
 
 
-        //mDatabase.child("Events").child(eventId).child("Members").addValueEventListener()
+        //mDatabase.child("Events").child().child("Members").addValueEventListener()
 
         //get other members of group
         mDatabase.child("Events").child(eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -211,24 +226,30 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 //                message.put(BODY_KEY, data);
 
                 //Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
+                if(data.matches("( *)"))
+                {
+                    Toast.makeText(ChatActivity.this, "Cannot send empty message", Toast.LENGTH_SHORT).show();
+                    etMessage.getText().clear();
+                }
+                else{
+                    ChatMessage message = new ChatMessage();
+                    message.setText(data);
+                    message.setSender(currentProfile.name);
+                    message.setTime((new Date().getTime()));
+                    etMessage.getText().clear();
+                    mDatabase.child("messages").child(eventId).push().setValue(message);
+                    mAdapter.notifyDataSetChanged();
 
-                ChatMessage message = new ChatMessage();
-                message.setText(data);
-                message.setSender(currentProfile.name);
-                message.setTime((new Date().getTime()));
-                etMessage.getText().clear();
-                mDatabase.child("messages").child(eventId).push().setValue(message);
-                mAdapter.notifyDataSetChanged();
+                    rvChat.post( new Runnable() {
+                        @Override
+                        public void run() {
+                            rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                        }
+                    });
 
-                rvChat.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                    }
-                });
-
-                //send notification to the user
-                sendNotificationToUser(members, message);
+                    //send notification to the user
+                    sendNotificationToUser(members, message);
+                }
 
             }
         });
