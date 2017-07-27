@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.models.User;
@@ -210,6 +211,19 @@ public class LoginActivity extends AppCompatActivity{
                     user.gender = (String) userData.get("gender");
                     user.school = (String) userData.get("school");
                     user.weight = ((Long)userData.get("weight")).intValue();
+                    user.phoneNumber = Long.toString((Long) userData.get("phone"));
+                    Map userHealthData = (Map) userData.get("health info");
+                    String allergyInfo = (String) userHealthData.get(User.KEY_ALLERGIES_INFO);
+                    String diabeticInfo = (String) userHealthData.get(User.KEY_DIABETES_INFO);
+                    String asthmaInfo = (String) userHealthData.get(User.KEY_ASTHMA_INFO);
+                    String otherInfo = (String) userHealthData.get(User.KEY_OTHER_INFO);
+                    HashMap<String, String> healthInfo = new HashMap<>();
+                    healthInfo.put(User.KEY_ASTHMA_INFO, asthmaInfo);
+                    healthInfo.put(User.KEY_ALLERGIES_INFO, allergyInfo);
+                    healthInfo.put(User.KEY_DIABETES_INFO, diabeticInfo);
+                    healthInfo.put(User.KEY_OTHER_INFO, otherInfo);
+                    user.healthInfo = healthInfo;
+
                     contacts.add(user);
                     //SET THE DRINKS ON DB TO 0: WE ARE ALL STARTING WITH 0 DRINKS WHEN WE LOGIN TO APP
                 }

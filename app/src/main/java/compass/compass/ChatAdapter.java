@@ -1,13 +1,17 @@
 package compass.compass;
 
+
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -24,6 +28,8 @@ import java.util.Map;
 import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
+
+
 
 /**
  * Created by amusipatla on 7/14/17.
@@ -104,36 +110,68 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
         final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
 
         if (isMe) {
-           // holder.imageMe.setVisibility(View.VISIBLE);
+//            holder.imageMe.setVisibility(View.VISIBLE);
             holder.imageOther.setVisibility(View.GONE);
-            holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            holder.tvMeChatText.setVisibility(View.VISIBLE);
+            holder.tvMeChatText.setText(message.getText());
+            holder.body.setVisibility(View.GONE);
+            holder.tvBot.setVisibility(View.GONE);
+ //           holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+            holder.tvMeChatText.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
 //            holder.imageMe.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+//            holder.body.setText(message.getText());
+            holder.tvUserName.setVisibility(View.GONE);
         } else if(isBOT) {
             holder.imageOther.setVisibility(View.GONE);
            // holder.imageMe.setVisibility(View.GONE);
-            holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
-            holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
-
+            holder.tvUserName.setVisibility(View.GONE);
+            holder.tvMeChatText.setVisibility(View.GONE);
+            holder.tvBot.setVisibility(View.VISIBLE);
+            holder.body.setVisibility(View.GONE);
+            holder.tvBot.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
+           // holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+            holder.tvBot.setText(message.getText()+ '\n');
         } else {
-            holder.imageOther.setVisibility(View.VISIBLE);
-            //holder.imageMe.setVisibility(View.GONE);
-            holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-            holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
-        }
+            holder.body.setVisibility(View.VISIBLE);
+            if(position == 0){
+                holder.tvUserName.setVisibility(View.VISIBLE);
+                holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+                holder.tvUserName.setText(message.getSender());
 
-//        final ImageView profileView = isMe ? holder.imageMe : holder.imageOther;
-//        Glide.with(mContext).load(getProfileUrl(message.getSender())).into(profileView);
-        holder.body.setText(message.getText());
-        holder.tvUserName.setText(message.getSender());
+            }
+            else if(!(mMessages.get(position-1).getSender().contentEquals(message.getSender()))){
+                holder.tvUserName.setVisibility(View.VISIBLE);
+                holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+                holder.tvUserName.setText(message.getSender());
+
+            }
+            else{
+                holder.tvUserName.setVisibility(View.GONE);
+
+            }
+            if(position != getItemCount()-1 && mMessages.get(position+1).getSender().contentEquals(message.getSender())){
+                holder.imageOther.setVisibility(View.GONE);
+            }
+            else{
+                holder.imageOther.setVisibility(View.VISIBLE);
+                int tempId = mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName());
+                Drawable something = ContextCompat.getDrawable(mContext, tempId);
+                holder.imageOther.setImageDrawable(something);
+            }
+            //holder.imageMe.setVisibility(View.GONE);
+            holder.tvMeChatText.setVisibility(View.GONE);
+            holder.tvBot.setVisibility(View.GONE);
+            //holder.rlChat.setMinimumHeight(holder.body.getHeight());
+            holder.body.setGravity(Gravity.CENTER_VERTICAL | Gravity.START | Gravity.FILL_VERTICAL);
+            holder.body.setText(message.getText());
+
+        }
     }
 
     // Create a gravatar image based on the hash value obtained from userId
@@ -160,13 +198,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         ImageView imageMe;
         TextView tvUserName;
         TextView body;
+        TextView tvBot;
+        TextView tvMeChatText;
+        RelativeLayout rlChat;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageOther = (ImageView)itemView.findViewById(R.id.ivProfileOther);
-            imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
+            //imageMe = (ImageView)itemView.findViewById(R.id.ivProfileMe);
             body = (TextView)itemView.findViewById(R.id.tvChatText);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvBot = (TextView) itemView.findViewById(R.id.tvBot);
+            tvMeChatText = (TextView) itemView.findViewById(R.id.tvMeChatText);
+            rlChat = (RelativeLayout) itemView.findViewById(R.id.rlChat);
 
             imageOther.setImageResource(R.drawable.rsz_girl);
         }

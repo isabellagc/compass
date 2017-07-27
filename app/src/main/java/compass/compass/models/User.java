@@ -10,6 +10,11 @@ import java.util.HashMap;
 
 @Parcel
 public class User {
+    public static final String KEY_ASTHMA_INFO = "asthma";
+    public static final String KEY_OTHER_INFO = "other";
+    public static final String KEY_DIABETES_INFO = "diabetic";
+    public static final String KEY_ALLERGIES_INFO = "allergies";
+
     public static final long KEY_NULL_VALUE = -1;
     public String name;
     public String email;
@@ -19,6 +24,8 @@ public class User {
     public int drinkCounter;
     public int weight;
     public HashMap<String, Long> alarms;
+    public HashMap<String, String> healthInfo;
+    public String phoneNumber;
 
     //this is stored as a string  our firebase database
     public Event currentEvent;
@@ -38,6 +45,7 @@ public class User {
     public User(){
         added = new HashMap<>();
         alarms = new HashMap<>();
+        healthInfo = new HashMap<>();
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 

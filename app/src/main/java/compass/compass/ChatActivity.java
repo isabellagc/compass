@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -222,24 +223,30 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 //                message.put(BODY_KEY, data);
 
                 //Toast.makeText(ChatActivity.this, data, Toast.LENGTH_SHORT).show();
+                if(data.matches("( *)"))
+                {
+                    Toast.makeText(ChatActivity.this, "Cannot send empty message", Toast.LENGTH_SHORT).show();
+                    etMessage.getText().clear();
+                }
+                else{
+                    ChatMessage message = new ChatMessage();
+                    message.setText(data);
+                    message.setSender(currentProfile.name);
+                    message.setTime((new Date().getTime()));
+                    etMessage.getText().clear();
+                    mDatabase.child("messages").child(eventId).push().setValue(message);
+                    mAdapter.notifyDataSetChanged();
 
-                ChatMessage message = new ChatMessage();
-                message.setText(data);
-                message.setSender(currentProfile.name);
-                message.setTime((new Date().getTime()));
-                etMessage.getText().clear();
-                mDatabase.child("messages").child(eventId).push().setValue(message);
-                mAdapter.notifyDataSetChanged();
+                    rvChat.post( new Runnable() {
+                        @Override
+                        public void run() {
+                            rvChat.smoothScrollToPosition(mAdapter.getItemCount());
+                        }
+                    });
 
-                rvChat.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        rvChat.smoothScrollToPosition(mAdapter.getItemCount());
-                    }
-                });
-
-                //send notification to the user
-                sendNotificationToUser(members, message);
+                    //send notification to the user
+                    sendNotificationToUser(members, message);
+                }
 
             }
         });
