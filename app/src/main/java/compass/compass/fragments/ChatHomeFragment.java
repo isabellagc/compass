@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.ChatAdapter;
-import compass.compass.EmergencyContactsAdapter;
+import compass.compass.CloseFriendAdapter;
 import compass.compass.R;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -101,7 +101,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     int originalHeight;
     ViewPager vpPager;
     ChatPagerAdapter chatPagerAdapter;
-    EmergencyContactsAdapter emergencyContactsAdapter;
+    //EmergencyContactsAdapter emergencyContactsAdapter;
+    CloseFriendAdapter closeFriendAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -110,8 +111,9 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
         markerMap = new HashMap<String, Marker>();
         rvContacts = v.findViewById(R.id.rvContacts);
-        emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
-        rvContacts.setAdapter(emergencyContactsAdapter);
+        //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
+        closeFriendAdapter = new CloseFriendAdapter(getActivity());
+        rvContacts.setAdapter(closeFriendAdapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvContacts.invalidate();
         rvContacts.setOnClickListener(new View.OnClickListener() {
