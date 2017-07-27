@@ -11,7 +11,7 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:max="5"
         android:progress="0"
         android:layout_below="@+id/tvLevel"
@@ -24,71 +24,111 @@
         android:layout_alignLeft="@+id/level"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/level"
-        android:layout_marginTop="13dp"
-        android:textSize="20sp"
-        android:text="Level" />
+        android:layout_marginTop="16dp"
+        android:text="Level"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
-    <ImageButton
-        android:id="@+id/ibAlc"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignStart="@+id/level"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/clButtons"
         android:layout_below="@+id/level"
-        android:layout_marginTop="23dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_drink" />
+        android:layout_alignParentEnd="true">
 
-    <ImageButton
-        android:id="@+id/ibSA"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignTop="@+id/ibAlc"
-        android:layout_marginLeft="25dp"
-        android:layout_toEndOf="@+id/ibAlc"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_need_help" />
+        <ImageButton
+            android:id="@+id/ibOther"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/ibHome"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_add"
+            android:layout_marginRight="32dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintLeft_toRightOf="@+id/ibHome"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.0" />
 
-    <ImageButton
-        android:id="@+id/ibOther"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="25dp"
-        app:srcCompat="@drawable/ic_add"
-        android:scaleType="fitXY"
-        android:layout_alignTop="@+id/ibHome"
-        android:layout_toEndOf="@+id/ibHome" />
+        <ImageButton
+            android:id="@+id/ibHome"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/ibSA"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_home" />
 
-    <ImageButton
-        android:id="@+id/ibHome"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="25dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_home"
-        android:layout_alignTop="@+id/ibSA"
-        android:layout_toEndOf="@+id/ibSA" />
+        <ImageButton
+            android:id="@+id/ibAlc"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_drink"
+            android:layout_marginLeft="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/ibSA"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/ibAlc"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/ic_need_help"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/ibAlc"
+            android:layout_marginLeft="7dp" />
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:layout_marginBottom="8dp"
         android:text="Call 911?"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:layout_above="@+id/callPolice"
-        android:layout_alignStart="@+id/ibAlc"
-        android:layout_marginBottom="12dp" />
+        android:layout_alignStart="@+id/tvClosestFriend" />
 
     <compass.compass.SwipeButton
         android:id="@+id/callPolice"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@color/c500"
-        android:text="@string/swipeText"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:layout_marginBottom="27dp"
+        style="@android:style/Widget.Material.Light.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvCall" />
+        android:layout_alignStart="@id/parent"
+        android:layout_marginBottom="16dp"
+        android:background="@color/c500"
+        android:fontFamily="sans-serif"
+        android:text="@string/swipeText"
+        android:textAppearance="@android:style/TextAppearance.Material.Widget.Button" />
+
+    <include
+        layout="@layout/item_emergency_contact"
+        android:id="@+id/layoutContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/level"
+        android:layout_below="@+id/tvClosestFriend"
+        android:layout_alignEnd="@+id/level" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -98,20 +138,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvCall"
+        android:layout_below="@+id/layoutContact"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvClosestFriend"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="13dp"
-        tools:context="compass.compass.MapsActivity" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        tools:context="compass.compass.MapsActivity"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/tvClosestFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ibAlc"
-        android:layout_below="@+id/ibAlc"
-        android:layout_marginTop="13dp"
+        android:layout_alignStart="@+id/tvLevel"
+        android:layout_below="@+id/clButtons"
+        android:layout_marginTop="8dp"
         android:text="Your Closest Friend:"
-        android:textSize="20sp" />
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
 </RelativeLayout>
