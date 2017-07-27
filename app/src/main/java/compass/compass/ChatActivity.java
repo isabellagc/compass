@@ -149,7 +149,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         etMessage = (EditText) findViewById(R.id.etMessage);
         btSend = (Button) findViewById(R.id.btSend);
 
-        rvChat = (RecyclerView) findViewById(R.id.rvChat);
+        rvChat = (RecyclerView) findViewById(R.id.rvContacts);
         mFirstLoad = true;
 
         mAdapter = new ChatAdapter(ChatActivity.this, eventId);
