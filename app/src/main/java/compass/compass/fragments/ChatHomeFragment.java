@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.ChatAdapter;
+import compass.compass.EmergencyContactsAdapter;
 import compass.compass.R;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -67,7 +69,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     EditText etMessage;
     Button btSend;
-    RecyclerView rvChat;
+    RecyclerView rvContacts;
     ChatAdapter mAdapter;
     Map<String, Marker> markerMap;
     // Keep track of initial load to scroll to the bottom of the ListView
@@ -99,6 +101,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     int originalHeight;
     ViewPager vpPager;
     ChatPagerAdapter chatPagerAdapter;
+    EmergencyContactsAdapter emergencyContactsAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,37 +109,22 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         eventId = getActivity().getIntent().getExtras().getString("eventId");
 
         markerMap = new HashMap<String, Marker>();
-
+        rvContacts = v.findViewById(R.id.rvContacts);
+        emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
+        rvContacts.setAdapter(emergencyContactsAdapter);
+        rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContacts.invalidate();
+        rvContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("OKAYYY", "HAKAPEJE");
+            }
+        });
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         etMessage = (EditText) v.findViewById(R.id.etMessage);
         btSend = (Button) v.findViewById(R.id.btSend);
 
-//        mFirstLoad = true;
-
-//        mAdapter = new ChatAdapter(getActivity(), eventId);
-//        rvChat.setAdapter(mAdapter);
-//
-//        chatExpanded = false;
-
-//        rvChat.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (chatExpanded){
-//                    (rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, 270);
-//                    chatExpanded = false;
-//                }
-//                else{
-//                    resizeChat(rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-//                    chatExpanded = true;
-//                }
-//                return true;
-//            }
-//        });
-        // associate the LayoutManager with the RecylcerView
-//        layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setStackFromEnd(true);
-//        rvChat.setLayoutManager(layoutManager);
         mapExpanded = false;
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);

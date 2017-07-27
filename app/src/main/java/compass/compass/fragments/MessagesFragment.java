@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.ChatAdapter;
+import compass.compass.EmergencyContactsAdapter;
 import compass.compass.R;
 import compass.compass.models.ChatMessage;
 
@@ -59,21 +59,16 @@ public class MessagesFragment extends Fragment {
     NotificationManager mNotificationManager;
     Uri linkToPic;
     public int NOTIFICATION_ID = 12;
-
-    Double myLatitude;
-    Double myLongitude;
-    LatLng myLocation;
-    String fromHere;
     boolean alarmSet = false;
-
+    EmergencyContactsAdapter emergencyContactsAdapter;
     String myStatus;
 
     String[] members;
 
-    boolean mapExpanded;
+
     boolean chatExpanded;
     SupportMapFragment mapFragment;
-    int originalHeight;
+
 
     @Nullable
     @Override
@@ -83,7 +78,7 @@ public class MessagesFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         etMessage = (EditText) v.findViewById(R.id.etMessage);
         btSend = (Button) v.findViewById(R.id.btSend);
-        rvChat = v.findViewById(R.id.rvChat);
+        rvChat = v.findViewById(R.id.rvContacts);
         mFirstLoad = true;
 
         mAdapter = new ChatAdapter(getActivity(), eventId);
