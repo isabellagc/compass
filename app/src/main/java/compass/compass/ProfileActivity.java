@@ -50,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
         emergencyContactsAdapter = new EmergencyContactsAdapter(this);
         rvEmergencyContacts.setAdapter(emergencyContactsAdapter);
         rvEmergencyContacts.setLayoutManager(new LinearLayoutManager(this));
-        rvEmergencyContacts.invalidate();
+        //rvEmergencyContacts.invalidate();
 
 //        rvGroupsProfView.setAdapter(new EventsAdapter(this));
 //        rvGroupsProfView.setLayoutManager(new LinearLayoutManager(this));

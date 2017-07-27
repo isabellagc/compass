@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.NeedHelpSwipe;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton drink;
     public ImageButton needhelp;
     public static User currentProfile;
-    public static ArrayList<User> allContacts;
+    public static HashMap<String, User> allContacts;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setHomeScreenButtons();
         setOnClickListeners();
 
+
         //***start of firebase db!!****//
 
         contacts = new ArrayList<>();
@@ -56,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
         //make users out of all items in the Users child in the database
         loadUsers();
 
+
         Intent servIntent = new Intent(this, LocationService.class);
         startService(servIntent);
 
     }
+
 
 //    private void setAlarms(){
 ////        AlarmManager alarmManager = (AlarmManager) getSystemService(getApplicationContext().ALARM_SERVICE);
@@ -212,6 +216,15 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().unsubscribeFromTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
         super.onBackPressed();
     }
+
+//    public User getUser(String memberName) {
+//        for(User user: allContacts){
+//            if(user.userId.equals(memberName)){
+//                return user;
+//            }
+//        }
+//        return null;
+//    }
 
     //    @Override
 //    protected void onStop() {

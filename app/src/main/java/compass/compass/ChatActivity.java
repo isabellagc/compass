@@ -58,8 +58,10 @@ import java.util.Set;
 import compass.compass.fragments.AlarmFragment;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
+import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
 
 /**
@@ -251,11 +253,13 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")){
                     if(!markerMap.containsKey(memberName)){
+                        User user = allContacts.get(memberName);
                         LatLng temp = new LatLng(47.628911, -122.342969);
                         int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
-                                .title(memberName + "\nDrinks: ")
+                                .title(memberName)
+                                .snippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC)
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         markerMap.put(memberName, temp2);
 
@@ -280,6 +284,37 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
                             longitude = (Double) dataSnapshot.getValue();
                             latitude = markerMap.get(memberName).getPosition().latitude;
                             markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    mDatabase.child("Drinks").child(memberName).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User user = allContacts.get(memberName);
+                            updateUserInfo(dataSnapshot, memberName, user);
+                            updateMarker(user);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            User user = allContacts.get(memberName);
+                            updateUserInfo(dataSnapshot, memberName, user);
+                            updateMarker(user);
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
                         }
 
                         @Override
@@ -348,8 +383,41 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+    }
 
+    private void updateUserInfo(DataSnapshot dataSnapshot, String memberName, User user){
+        Object o = dataSnapshot.getValue();
 
+        if(dataSnapshot.getKey().toString().equals("BAC")){
+            Object BAC = dataSnapshot.getValue();
+            //find and cast BAC
+            if(BAC instanceof Integer){
+                Integer temp = ((Integer) BAC).intValue();
+                user.currentBAC = temp.doubleValue();
+            }else if (BAC instanceof Double){
+                user.currentBAC = (double) BAC;
+            }else if (BAC instanceof Long){
+                Long x = (Long) BAC;
+                user.currentBAC = x.doubleValue();
+            }
+        }else{
+            //must be drink count then...
+            Object drinkCount = dataSnapshot.getValue();
+            //find and cast drink count
+            if(drinkCount instanceof Integer){
+                user.drinkCounter = (int) drinkCount;
+            }else if (drinkCount instanceof Double){
+                Double d = ((Double) drinkCount).doubleValue();
+                user.drinkCounter = d.intValue();
+            }else if (drinkCount instanceof Long){
+                Long x = (Long) drinkCount;
+                user.drinkCounter = x.intValue();
+            }
+        }
+    }
+
+    private void updateMarker(User user){
+        markerMap.get(user.userId).setSnippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC);
     }
 
     @Override
@@ -485,5 +553,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         mDatabase.child("notifications").push().setValue(notification);
 
     }
+
+
 
 }
