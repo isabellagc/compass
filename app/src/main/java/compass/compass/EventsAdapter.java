@@ -195,10 +195,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.tvEnd.setText(dateFormattedEnd);
 
-        if(mEvents.get(position).getMyStatus().contentEquals("null")){
+        if(mEvents.get(position).getMyStatus().equals("null")){
             holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.c50));
-
         }
+        else{
+            holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_fill_color));
+        }
+
     }
 
     @Override
@@ -210,7 +213,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public TextView tvEventName;
         public TextView tvStart;
         public TextView tvEnd;
-        public static ConstraintLayout rlEvent;
+        public ConstraintLayout rlEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -4,7 +4,7 @@
     android:id="@+id/custom_marker_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/button_border">
+    android:background="@drawable/button_border_red">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
@@ -12,7 +12,7 @@
         android:layout_height="35dp"
         android:layout_below="@+id/view"
         android:layout_centerHorizontal="true"
-        app:border_color="@color/c500"
+        app:border_color="@color/Red"
         app:border_width="2dp" />
 
 </FrameLayout>

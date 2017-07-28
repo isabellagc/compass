@@ -94,6 +94,11 @@ public class ContactsAdapter extends
         tvContactName.setText(user.name);
         cbAddContact.setChecked(user.added.get(eventID));
         //TODO: set profile image usign glide library
+        if (mContacts != null){
+            int drawableResourceId = mContext.getResources().getIdentifier(mContacts.get(position).name.replaceAll(" ", ""), "drawable", mContext.getPackageName());
+            holder.ivProfileImage.setImageResource(drawableResourceId);
+        }
+
     }
 
 

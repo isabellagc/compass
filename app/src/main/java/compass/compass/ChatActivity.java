@@ -85,7 +85,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
-    String eventId;
+    public static String eventId;
 
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;

@@ -16,10 +16,12 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -51,6 +53,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import compass.compass.fragments.CancelFragment;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -95,6 +98,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_need_help);
 
         level = (SeekBar) findViewById(R.id.level);
@@ -254,6 +258,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
+                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -273,6 +278,8 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
+                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -292,6 +299,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
+                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -312,7 +320,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
 
-
     private void onSwiped() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:7325168820"));
@@ -329,7 +336,14 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cancel, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void backHome(MenuItem menuItem){
+        FragmentManager fm = getSupportFragmentManager();
+        CancelFragment cancelFragment = CancelFragment.newInstance();
+        cancelFragment.show(fm, "idk_what_goes_here");
     }
 
     public void sendMessages (String [] members, final ChatMessage message){
