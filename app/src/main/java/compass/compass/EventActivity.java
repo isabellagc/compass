@@ -2,11 +2,13 @@ package compass.compass;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+
 
 import java.util.ArrayList;
 
@@ -21,21 +23,32 @@ public class EventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_page);
+        setContentView(R.layout.activity_events_page_back_up);
 
-        rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
+        rvEvents = (RecyclerView) findViewById(R.id.rvEvents1);
         eventList = new ArrayList<>();
         eventAdapter = new EventsAdapter(this);
         rvEvents.setAdapter(eventAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.invalidate();
+        initToolbar();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.locations_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        //getMenuInflater().inflate(R.menu.locations_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+private void initToolbar() {
+    final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    final ActionBar actionBar = getSupportActionBar();
+
+    if (actionBar != null) {
+        actionBar.setHomeAsUpIndicator(R.drawable.bsp_ic_add_circle_24dp);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
+}
 
     //launch the profile activity
     public void launchNewEvent (MenuItem miNewEvent) {

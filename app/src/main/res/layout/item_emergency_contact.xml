@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     tools:context="compass.compass.ProfileActivity">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
