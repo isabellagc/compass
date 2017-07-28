@@ -192,10 +192,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                 public void onMapLongClick(LatLng latLng) {
                     if(mapExpanded){
                         resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
+                        rvContacts.setVisibility(View.VISIBLE);
                         mapExpanded = false;
                     }
                     else{
                         resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                        rvContacts.setVisibility(View.GONE);
                         mapExpanded = true;
                     }
 
