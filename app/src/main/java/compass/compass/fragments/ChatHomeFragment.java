@@ -313,10 +313,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             boolean help = (boolean) dataSnapshot.getValue();
                             if(help){
-                                //setMarkerBounce(markerMap.get(memberName));
+                                allContacts.get(memberName).status = true;
+                                setMarkerBounce(markerMap.get(memberName), memberName);
                                 markerMap.get(memberName).setZIndex(2);
                             }
                             else{
+                                allContacts.get(memberName).status = false;
                                 //markerMap.get(memberName).setAnchor(0.2f, 1.0f);
 
                             }
@@ -425,7 +427,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    public void setMarkerBounce(final Marker marker){
+    public void setMarkerBounce(final Marker marker, final String name){
         final Handler handler = new Handler();
         final long startTime = SystemClock.uptimeMillis();
         final long duration = 2000;
@@ -439,16 +441,16 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
                 if (t > 0.0) {
                     handler.postDelayed(this, 16);
-                } else {
-                    setMarkerBounce(marker);
+                }
+                else if (allContacts.get(name).status) {
+                    setMarkerBounce(marker, name);
+                }
+                else{
+                    return;
                 }
             }
         });
 
-
-    }
-
-    public void stopMarkerBounce(final Marker marker){
 
     }
 
