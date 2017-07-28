@@ -140,7 +140,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d("wow", "here");
+                final String eventKey = dataSnapshot.getKey();
+                //keys.add(eventKey);
+                if(eventKey != null) {
+                    Map info = (Map) dataSnapshot.getValue();
+                    Map users = (Map) info.get("Members");
+
+                    if (users.containsKey(name) && mEvents.indexOf(name) != -1) {
+                        mEvents.get(mEvents.indexOf(name)).setMyStatus((String) users.get(name));
+
+                        notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override

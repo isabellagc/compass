@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,22 +58,73 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     }
 
     public void getCloseFriends() {
-        mDatabase.child("Events").child(ChatActivity.eventId).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("Events").child(ChatActivity.eventId).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Object key = ds.getKey();
-                    Object value = ds.getValue();
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Object key = dataSnapshot.getKey();
+                Object value = dataSnapshot.getValue();
+                final String name = key.toString();
+
+                if(!(name.contentEquals(currentProfile.userId)))
+                {
                     mCloseFriendsNames.add(key.toString());
-                    if (value.toString().equals("true")) {
-                        //get the stuff from allcontacts
-                        User user = allContacts.get(key.toString());
-                        mCloseFriends.put(user.userId, user.phoneNumber);
-                    } else {
-                        mCloseFriends.put(key.toString(), value.toString());
-                    }
-                    mCloseFriendsNames.remove(currentProfile.userId);
+
+                    User user = allContacts.get(key.toString());
+                    mCloseFriends.put(user.userId, user.phoneNumber);
+                    mCloseFriends.put(user.userId + " status", value.toString());
+
+                    mDatabase.child("Users").child(name).child("need help").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(mCloseFriends.containsKey(name + " need help")){
+                                mCloseFriends.remove(name + " need help");
+                            }
+                            mCloseFriends.put(name + " need help", dataSnapshot.getValue().toString());
+
+                            if(dataSnapshot.getValue().toString().equals("true")){
+                                mCloseFriendsNames.remove(name);
+                                mCloseFriendsNames.add(0, name);
+                            }
+
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Object key = dataSnapshot.getKey();
+                Object value = dataSnapshot.getValue();
+
+                mCloseFriends.remove(key + " status");
+                mCloseFriends.put(key + " status", value.toString());
+
+                notifyItemChanged(mCloseFriendsNames.indexOf(key));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Object key = dataSnapshot.getKey();
+                Object value = dataSnapshot.getValue();
+
+                mCloseFriends.remove(key);
+                mCloseFriends.remove(key + " status");
+
+                mCloseFriendsNames.remove(key);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -81,6 +133,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
             }
         });
     }
+
 
     @Override
     public CloseFriendAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -94,9 +147,23 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
 
     @Override
     public void onBindViewHolder(CloseFriendAdapter.ViewHolder holder, int position) {
-        holder.tvNameContact.setText(mCloseFriendsNames.get(position));
-        int drawableResourceId = mContext.getResources().getIdentifier(mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
+        String name = mCloseFriendsNames.get(position);
+
+        holder.tvNameContact.setText(name);
+        int drawableResourceId = mContext.getResources().getIdentifier(name.replaceAll(" ",""), "drawable", mContext.getPackageName());
         holder.ivProfileImage.setImageResource(drawableResourceId);
+        if(mCloseFriends.get(name + " status").contentEquals("null")){
+            holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.bsp_done_text_color_disabled, null));
+            holder.btCallContact.setEnabled(false);
+        }
+        else{
+            holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.Black, null));
+            holder.btCallContact.setEnabled(true);
+        }
+        if(mCloseFriends.containsKey(name + " need help") && mCloseFriends.get(name + " need help").contentEquals("true")){
+            holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.Red, null));
+            //holder.clContact.setBackgroundResource(R.color.bsp_red);
+        }
     }
 
     @Override
@@ -109,7 +176,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         public TextView tvNameContact;
         public Button btCallContact;
         public ImageView ivProfileImage;
-        public static ConstraintLayout clContact;
+        public ConstraintLayout clContact;
 
         public ViewHolder(View itemView) {
             super(itemView);
