@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.models.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
@@ -108,14 +108,14 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameContact;
         public Button btCallContact;
-        public ImageView ivProfileImage;
+        public CircleImageView ivProfileImage;
         public static ConstraintLayout clContact;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImage);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
