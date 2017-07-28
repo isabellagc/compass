@@ -1,4 +1,5 @@
 package compass.compass;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -79,7 +81,6 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
     @Override
     public EmergencyContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         View emergencyContactView = inflater.inflate(R.layout.item_emergency_contact, parent, false);
@@ -90,6 +91,10 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvNameContact.setText(mEmergencyContactNames.get(position));
+        if(mEmergencyContactNames != null){
+            int drawableResourceId = mContext.getResources().getIdentifier(mEmergencyContactNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
+            holder.ivProfileImage.setImageResource(drawableResourceId);
+        }
     }
 
     @Override
@@ -100,6 +105,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvNameContact;
         public Button btCallContact;
+        public ImageView ivProfileImage;
         //USE THIS TO SET AN ONCLICKLISTENER FOR THE CONTACT THAT BRINGS YOU TO A VIEW OF THAT PERSON
         //OR THEM ON THE MAP!!!
         public static ConstraintLayout clContact;
@@ -109,6 +115,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
             btCallContact.setOnClickListener(new View.OnClickListener() {

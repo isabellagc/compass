@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -42,7 +43,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public static HashMap<String, String> mCloseFriends;
     public static ArrayList<String> mCloseFriendsNames;
     public Map userContacts;
-    String eventId;
+
 
     public CloseFriendAdapter(Context context) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -94,6 +95,8 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     @Override
     public void onBindViewHolder(CloseFriendAdapter.ViewHolder holder, int position) {
         holder.tvNameContact.setText(mCloseFriendsNames.get(position));
+        int drawableResourceId = mContext.getResources().getIdentifier(mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
+        holder.ivProfileImage.setImageResource(drawableResourceId);
     }
 
     @Override
@@ -105,14 +108,17 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameContact;
         public Button btCallContact;
+        public ImageView ivProfileImage;
         public static ConstraintLayout clContact;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
+
 
             btCallContact.setOnClickListener(new View.OnClickListener() {
                 @Override
