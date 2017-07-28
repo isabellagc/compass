@@ -307,6 +307,7 @@ public class LoginActivity extends AppCompatActivity{
                     user.school = (String) userData.get("school");
                     user.weight = ((Long)userData.get("weight")).intValue();
                     user.status = ((boolean) userData.get("need help"));
+                    user.address = (String ) userData.get("address");
                     user.phoneNumber = Long.toString((Long) userData.get("phone"));
                     Map userHealthData = (Map) userData.get("health info");
                     String allergyInfo = (String) userHealthData.get(User.KEY_ALLERGIES_INFO);

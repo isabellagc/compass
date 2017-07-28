@@ -22,6 +22,7 @@ public class User {
     public String gender;
     public String school;
     public String userId;
+    public String address;
     public int drinkCounter;
     public int weight;
     public HashMap<String, Long> alarms;

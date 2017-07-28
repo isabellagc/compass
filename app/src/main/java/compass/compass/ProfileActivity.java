@@ -42,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
         tvName.setText(capitalize(currentProfile.name));
         tvSchool.setText(capitalize(currentProfile.school));
+        tvAddress.setText(currentProfile.address);
         tvAllergyInfo.setText(currentProfile.healthInfo.get(User.KEY_ALLERGIES_INFO));
         tvAsthmaInfo.setText(currentProfile.healthInfo.get(User.KEY_ASTHMA_INFO));
         tvDiabetesInfo.setText(currentProfile.healthInfo.get(User.KEY_DIABETES_INFO));
