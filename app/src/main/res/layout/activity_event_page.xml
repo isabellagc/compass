@@ -5,15 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="compass.compass.EventActivity">
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:id="@+id/flBlue"-->
+        <!--android:background="@color/c500"-->
+        <!--android:layout_above="@id/frameNewEvent"></FrameLayout>-->
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvEvents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <FrameLayout
         android:id="@+id/frameNewEvent"
