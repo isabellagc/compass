@@ -79,6 +79,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     String[] members;
     Button btCallContact;
     TextView tvNameContact;
+    CircleImageView ivProfileImage;
 
     LocationManager locationManager;
     Location myLocation;
@@ -110,6 +111,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         mDatabase = FirebaseDatabase.getInstance().getReference();
         btCallContact = (Button) findViewById(R.id.btCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImage);
 
         btCallContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,6 +221,10 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                                             }
                                             closestFriendName = finalS;
                                             tvNameContact.setText(closestFriendName);
+                                            //mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", getPackageName()
+
+                                            int drawableResource_Id = getResources().getIdentifier(closestFriendName, "drawable", getPackageName());
+                                            ivProfileImage.setImageResource(drawableResource_Id);
                                             closestFriend = mMap.addMarker(new MarkerOptions()
                                                     .position(latLng)
                                                     .title(finalS)
@@ -259,6 +265,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -279,7 +286,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -300,6 +307,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");

@@ -56,6 +56,7 @@ public class CancelFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                currentProfile.status = false;
                 dismiss();
                 getActivity().finish();
             }
