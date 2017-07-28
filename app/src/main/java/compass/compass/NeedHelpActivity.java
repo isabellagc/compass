@@ -265,6 +265,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -285,7 +286,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -306,6 +307,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");

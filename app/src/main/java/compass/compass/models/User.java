@@ -17,6 +17,7 @@ public class User {
 
     public static final long KEY_NULL_VALUE = -1;
     public String name;
+    public boolean status;
     public String email;
     public String gender;
     public String school;
