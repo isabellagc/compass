@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +54,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.ChatAdapter;
+import compass.compass.CloseFriendAdapter;
 import compass.compass.R;
 import compass.compass.models.ChatMessage;
+import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
 
 /**
@@ -68,7 +72,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     EditText etMessage;
     Button btSend;
-    RecyclerView rvChat;
+    RecyclerView rvContacts;
     ChatAdapter mAdapter;
     Map<String, Marker> markerMap;
     // Keep track of initial load to scroll to the bottom of the ListView
@@ -100,6 +104,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     int originalHeight;
     ViewPager vpPager;
     ChatPagerAdapter chatPagerAdapter;
+    //EmergencyContactsAdapter emergencyContactsAdapter;
+    CloseFriendAdapter closeFriendAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -107,37 +113,23 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         eventId = getActivity().getIntent().getExtras().getString("eventId");
 
         markerMap = new HashMap<String, Marker>();
-
+        rvContacts = v.findViewById(R.id.rvContacts);
+        //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
+        closeFriendAdapter = new CloseFriendAdapter(getActivity());
+        rvContacts.setAdapter(closeFriendAdapter);
+        rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContacts.invalidate();
+        rvContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("OKAYYY", "HAKAPEJE");
+            }
+        });
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         etMessage = (EditText) v.findViewById(R.id.etMessage);
         btSend = (Button) v.findViewById(R.id.btSend);
 
-//        mFirstLoad = true;
-
-//        mAdapter = new ChatAdapter(getActivity(), eventId);
-//        rvChat.setAdapter(mAdapter);
-//
-//        chatExpanded = false;
-
-//        rvChat.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                if (chatExpanded){
-//                    (rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, 270);
-//                    chatExpanded = false;
-//                }
-//                else{
-//                    resizeChat(rvChat, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-//                    chatExpanded = true;
-//                }
-//                return true;
-//            }
-//        });
-        // associate the LayoutManager with the RecylcerView
-//        layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setStackFromEnd(true);
-//        rvChat.setLayoutManager(layoutManager);
         mapExpanded = false;
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fMap);
         mapFragment.getMapAsync(this);
@@ -266,19 +258,22 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void populateMap(){
+    private void populateMap() {
         mDatabase.child("Events").child(eventId).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final String memberName = dataSnapshot.getKey();
 
-                if(!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")){
-                    if(!markerMap.containsKey(memberName)){
+                if (!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")) {
+                    if (!markerMap.containsKey(memberName)) {
+                        User user = allContacts.get(memberName);
                         LatLng temp = new LatLng(47.628911, -122.342969);
-                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ", ""), "drawable", getActivity().getPackageName());
                         Marker temp2 = mMap.addMarker(new MarkerOptions()
                                 .position(temp)
-                                .title(memberName + "\nDrinks: "));
+                                .title(memberName)
+                                .snippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC));
+
                         markerMap.put(memberName, temp2);
 
                     }
@@ -290,6 +285,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                             longitude = markerMap.get(memberName).getPosition().longitude;
                             markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
@@ -335,13 +331,43 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                         }
                     });
 
-                }
-                else if (memberName.equals(currentProfile.userId)){
+                    mDatabase.child("Drinks").child(memberName).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User user = allContacts.get(memberName);
+                            updateUserInfo(dataSnapshot, memberName, user);
+                            updateMarker(user);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            User user = allContacts.get(memberName);
+                            updateUserInfo(dataSnapshot, memberName, user);
+                            updateMarker(user);
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else if (memberName.equals(currentProfile.userId)) {
                     mDatabase.child("Users").child(memberName).child("latitude").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             myLatitude = (Double) dataSnapshot.getValue();
-                            if(myLatitude != null && myLongitude != null){
+                            if (myLatitude != null && myLongitude != null) {
                                 myLocation = new LatLng(myLatitude, myLongitude);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
@@ -358,7 +384,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             myLongitude = (Double) dataSnapshot.getValue();
-                            if(myLatitude != null && myLongitude != null){
+                            if (myLatitude != null && myLongitude != null) {
                                 myLocation = new LatLng(myLatitude, myLongitude);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
@@ -424,6 +450,40 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    private void updateUserInfo(DataSnapshot dataSnapshot, String memberName, User user){
+        Object o = dataSnapshot.getValue();
+
+        if(dataSnapshot.getKey().toString().equals("BAC")){
+            Object BAC = dataSnapshot.getValue();
+            //find and cast BAC
+            if(BAC instanceof Integer){
+                Integer temp = ((Integer) BAC).intValue();
+                user.currentBAC = temp.doubleValue();
+            }else if (BAC instanceof Double){
+                user.currentBAC = (double) BAC;
+            }else if (BAC instanceof Long){
+                Long x = (Long) BAC;
+                user.currentBAC = x.doubleValue();
+            }
+        }else{
+            //must be drink count then...
+            Object drinkCount = dataSnapshot.getValue();
+            //find and cast drink count
+            if(drinkCount instanceof Integer){
+                user.drinkCounter = (int) drinkCount;
+            }else if (drinkCount instanceof Double){
+                Double d = ((Double) drinkCount).doubleValue();
+                user.drinkCounter = d.intValue();
+            }else if (drinkCount instanceof Long){
+                Long x = (Long) drinkCount;
+                user.drinkCounter = x.intValue();
+            }
+        }
+    }
+
+    private void updateMarker(User user){
+        markerMap.get(user.userId).setSnippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC);
+    }
 
 
 }

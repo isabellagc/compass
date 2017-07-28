@@ -35,7 +35,7 @@ public class ChatFragment extends Fragment {
     String eventId;
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
-
+    RecyclerView rvContacts;
     Context context;
 
     public ChatFragment() {
@@ -58,7 +58,7 @@ public class ChatFragment extends Fragment {
         etMessage = (EditText) v.findViewById(R.id.etMessage);
         btSend = (Button) v.findViewById(R.id.btSend);
 
-        rvChat = (RecyclerView) v.findViewById(R.id.rvChat);
+        rvChat = (RecyclerView) v.findViewById(R.id.rvContacts);
         mFirstLoad = true;
 
         mAdapter = new ChatAdapter(context, eventId);

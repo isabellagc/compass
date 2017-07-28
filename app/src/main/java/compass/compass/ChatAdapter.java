@@ -95,7 +95,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     private void scrollView(){
-        RecyclerView rvChat = (RecyclerView) ((ChatActivity) this.mContext).findViewById(R.id.rvChat);
+        RecyclerView rvChat = (RecyclerView) ((ChatActivity) this.mContext).findViewById(R.id.rvContacts);
         rvChat.smoothScrollToPosition(mMessages.size());
     }
 
