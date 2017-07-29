@@ -15,10 +15,13 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+
 import compass.compass.ChatActivity;
 import compass.compass.EventActivity;
 import compass.compass.EventsAdapter;
 import compass.compass.R;
+import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
 
@@ -85,6 +88,7 @@ public class StatusFragment extends DialogFragment {
                 }else if (rbLeave.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).removeValue();
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).removeValue();
+                    sendJoinMessage("leave");
                     dismiss();
 
                     EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
@@ -93,6 +97,7 @@ public class StatusFragment extends DialogFragment {
                 }else if (rbOut.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("out");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("out");
+                    sendJoinMessage("out");
                     dismiss();
 
                     EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
@@ -107,6 +112,7 @@ public class StatusFragment extends DialogFragment {
                 }else if (rbOnCall.isChecked()){
                     mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventId).setValue("on call");
                     mDatabase.child("Events").child(eventId).child("Members").child(currentProfile.userId).setValue("on call");
+                    sendJoinMessage("on call");
                     dismiss();
 
                     EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
@@ -120,6 +126,26 @@ public class StatusFragment extends DialogFragment {
             }
         });
 
+    }
+
+    public void sendJoinMessage(String joinAs){
+
+        String data;
+        if(joinAs.contentEquals("leave")){
+            data = currentProfile.name + " did not join the event.";
+        }
+        else if(joinAs.contentEquals("out")){
+            data = currentProfile.name + " joined the event as going out.";
+        }
+        else{
+            data = currentProfile.name + " joined the event as on call.";
+        }
+
+        ChatMessage message = new ChatMessage();
+        message.setText(data);
+        message.setSender("JOINED");
+        message.setTime((new Date().getTime()));
+        mDatabase.child("messages").child(eventId).push().setValue(message);
 
     }
 

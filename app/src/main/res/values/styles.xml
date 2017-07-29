@@ -7,9 +7,20 @@
         <item name="colorPrimaryDark">@color/c900</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionBarSize">72dp</item>
-        <!--<item name="android:actionBarTheme"=-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
 
+    </style>
 
+    <style name="FabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="android:src">@drawable/ic_add</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
+        <item name="pressedTranslationZ">12dp</item>
+        <item name="rippleColor">#FFFFFF</item>
     </style>
 
     <style name="AppThemeNoBar" parent="AppTheme">

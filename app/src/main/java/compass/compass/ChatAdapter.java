@@ -114,6 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         ChatMessage message = mMessages.get(position);
         final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
+        final boolean isJOIN = message.getSender() != null && message.getSender().equals("JOINED");
 
         if (isMe) {
 //            holder.imageMe.setVisibility(View.VISIBLE);
@@ -136,6 +137,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.body.setVisibility(View.GONE);
             holder.tvBot.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
            // holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
+            holder.tvBot.setText(message.getText()+ '\n');
+            holder.tvBot.setTextColor(mContext.getResources().getColor(R.color.Red, null));
+        } else if (isJOIN){
+            holder.imageOther.setVisibility(View.GONE);
+            // holder.imageMe.setVisibility(View.GONE);
+            holder.tvUserName.setVisibility(View.GONE);
+            holder.tvMeChatText.setVisibility(View.GONE);
+            holder.tvBot.setVisibility(View.VISIBLE);
+            holder.body.setVisibility(View.GONE);
+            holder.tvBot.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
+            // holder.imageOther.setImageResource(mContext.getResources().getIdentifier(message.getSender().replaceAll(" ",""), "drawable", mContext.getPackageName()));
             holder.tvBot.setText(message.getText()+ '\n');
         } else {
             holder.body.setVisibility(View.VISIBLE);
