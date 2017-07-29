@@ -6,8 +6,9 @@
         <item name="colorPrimary">@color/c500</item>
         <item name="colorPrimaryDark">@color/c900</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="actionBarSize">72dp</item>
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
 
     </style>
 
@@ -22,4 +23,12 @@
         <item name="rippleColor">#FFFFFF</item>
     </style>
 
+    <style name="AppThemeNoBar" parent="AppTheme">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

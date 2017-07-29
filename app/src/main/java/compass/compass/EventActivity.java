@@ -34,7 +34,7 @@ public class EventActivity extends AppCompatActivity {
         rvEvents.setAdapter(eventAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.invalidate();
-        initToolbar();
+        //initToolbar();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

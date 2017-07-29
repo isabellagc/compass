@@ -51,24 +51,54 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_need_help)
-                .setContentTitle("New Message from " + sender + " to " + eventName)
-                .setContentText(message)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setSound(notificationSound)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent);
-        mBuilder.setAutoCancel(true);
-        mBuilder.setLocalOnly(false);
+        if(sender.contentEquals("BOT")){
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_need_help)
+//                    .setContentTitle("New Message from " + sender + " to " + eventName)
+                    .setContentTitle(message)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setSound(notificationSound)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent);
+            mBuilder.setAutoCancel(true);
+            mBuilder.setLocalOnly(false);
 
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, mBuilder.build());
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(0, mBuilder.build());
 
-        openFragment();
+            openFragment();
+        }
+        else{
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_need_help)
+                    .setContentTitle("New Message from " + sender + " to " + eventName)
+                    .setContentText(message)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setSound(notificationSound)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent);
+            mBuilder.setAutoCancel(true);
+            mBuilder.setLocalOnly(false);
+
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(0, mBuilder.build());
+        }
+
     }
 
     public void openFragment(){
+        Intent i = new Intent(this, LaunchFragmentActivity.class);
+        i.putExtra("message", message);
+        i.putExtra("eventId", eventName);
+        startActivity(i);
+
+//        AlertDialog alertDialog = new AlertDialog.Builder(this)
+//                .setTitle("Title")
+//                .setMessage("Are you sure?")
+//                .create();
+//
+//        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+//        alertDialog.show();
     }
 
     @Override

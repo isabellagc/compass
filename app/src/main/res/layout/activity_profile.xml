@@ -33,7 +33,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        app:border_color="@color/c500"
+        app:border_color="@color/colorPrimary"
         app:border_width="1dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -48,11 +48,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_toRightOf="@id/ivProfileImage"
+        android:layout_toRightOf="@id/ivProfileImageMain"
         android:text="Name"
         android:textAppearance="@android:style/TextAppearance.Material.Display1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImage" />
 
     <TextView

@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,20 +20,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
 public class MainActivity extends AppCompatActivity {
-    public ImageButton location;
-    public ImageButton drink;
-    public ImageButton needhelp;
+//    public ImageButton location;
+//    public ImageButton drink;
+//    public ImageButton needhelp;
+    public CardView cvFindFriends;
+    public CardView cvGetHelp;
+    public CardView cvDrinkCounter;
+    public TextView tvNameBox;
+    ImageView ivProfileImage;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
 
@@ -43,21 +51,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setHomeScreenButtons();
-        setOnClickListeners();
+        if (currentProfile == null) {
+            Intent i = new Intent(this, LoginActivity.class);
+            i.putExtra("usernames", contacts);
+            startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
+        }else{
+            //setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main_android_style);
+            setHomeScreenButtons();
+            setOnClickListeners();
+
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
+
+            //***start of firebase db!!****//
+
+            contacts = new ArrayList<>();
+
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            //make users out of all items in the Users child in the database
+            loadUsers();
 
 
-        //***start of firebase db!!****//
-
-        contacts = new ArrayList<>();
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //make users out of all items in the Users child in the database
-        loadUsers();
-
+        }
 
         Intent servIntent = new Intent(this, LocationService.class);
         startService(servIntent);
@@ -92,11 +109,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (currentProfile == null) {
-            Intent i = new Intent(this, LoginActivity.class);
-            i.putExtra("usernames", contacts);
-            startActivityForResult(i, OPEN_LOGIN_ACTIVITY);
-        }
+        //setContentView(R.layout.activity_main_pretty);
+
     }
 
     private void loadUsers() {
@@ -145,9 +159,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setHomeScreenButtons() {
-        location = (ImageButton) findViewById(R.id.location);
-        drink = (ImageButton) findViewById(R.id.drink);
-        needhelp = (ImageButton) findViewById(R.id.needHelp);
+//        location = (ImageButton) findViewById(R.id.location);
+//        drink = (ImageButton) findViewById(R.id.drink);
+//        needhelp = (ImageButton) findViewById(R.id.needHelp);
+        tvNameBox = (TextView) findViewById(R.id.tvNameBox);
+        String name = WordUtils.capitalize(currentProfile.userId);
+        tvNameBox.setText(name);
+
+        cvFindFriends = (CardView) findViewById(R.id.cvFindFriends);
+        cvGetHelp = (CardView) findViewById(R.id.cvGetHelp);
+        cvDrinkCounter = (CardView) findViewById(R.id.cvDrinkCounter);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
+        ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
     }
 
     private void setOnClickListeners() {
@@ -157,16 +180,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     //Launch the location activity
     public void launchLocation() {
-
-        location.setOnClickListener(new View.OnClickListener() {
+//        location.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, EventActivity.class);
+//                startActivity(i);
+//
+//            }
+//        });
+        cvFindFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, EventActivity.class);
@@ -178,7 +208,14 @@ public class MainActivity extends AppCompatActivity {
 
     //Launch the drink activity
     public void launchDrinkActivity() {
-        drink.setOnClickListener(new View.OnClickListener() {
+//        drink.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
+//                startActivity(i);
+//            }
+//        });
+        cvDrinkCounter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
@@ -189,7 +226,15 @@ public class MainActivity extends AppCompatActivity {
 
     //launch the needhelp button
     public void launchNeedHelp() {
-        needhelp.setOnClickListener(new View.OnClickListener() {
+//        needhelp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentManager fm = getSupportFragmentManager();
+//                NeedHelpSwipe needHelpSwipe = NeedHelpSwipe.newInstance();
+//                needHelpSwipe.show(fm, "idk_what_goes_here");
+//            }
+//        }
+        cvGetHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();

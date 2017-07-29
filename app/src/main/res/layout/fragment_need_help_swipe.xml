@@ -8,7 +8,7 @@
         android:id="@+id/swipeHelp"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:background="@color/c500"
+        android:background="@color/colorPrimary"
         android:text="@string/swipeText"
         android:textAlignment="center"
         android:textColor="#000000" />

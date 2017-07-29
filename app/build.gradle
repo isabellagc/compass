@@ -36,6 +36,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'gridlayout-v7'
     }
+
+    compile 'com.android.support:design:26.+'
+    compile 'com.android.support:gridlayout-v7:26.+'
+    compile 'org.apache.commons:commons-lang3:3.5'
+
     //    //maybe take this out
     //    compile 'com.github.philliphsu:BottomSheetPickers:v2.4.1'
     //other time picker
@@ -70,7 +75,13 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.3.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
+    compile 'com.android.support:design:[Library version code]'
     compile 'com.android.support:cardview-v7:26.+'
+
+//    compile 'com.android.support:support-v4:24.0.0'
+//    compile 'com.android.support:cardview-v7:24.0.0'
+//    compile 'com.android.support:recyclerview-v7:24.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

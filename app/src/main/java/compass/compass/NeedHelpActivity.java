@@ -77,6 +77,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     ChatAdapter mAdapter;
     String [] event_n0;
     String[] members;
+    String[] eventIds;
     Button btCallContact;
     TextView tvNameContact;
     CircleImageView ivProfileImage;
@@ -111,7 +112,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         mDatabase = FirebaseDatabase.getInstance().getReference();
         btCallContact = (Button) findViewById(R.id.btCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
-        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImage);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
 
         btCallContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +179,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-        final Set<String> people= new HashSet<String>();
+        final Map<String, String> people= new HashMap<String, String>();
 
         mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -186,19 +187,20 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 Map Events = (Map) dataSnapshot.getValue();
                 Set<String> events = new HashSet<String>();
                 for (Object e : Events.keySet()){
-                    String temp = e.toString();
-                    mDatabase.child("Events").child(temp).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                    final String tempEvent = e.toString();
+                    mDatabase.child("Events").child(tempEvent).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Map otherPeople = (Map) dataSnapshot.getValue();
                             for(Object s : otherPeople.keySet()) {
                                 String temp = s.toString().replaceAll(" ", "");
                                 if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
-                                    people.add(temp);
+                                    people.put(temp, tempEvent);
                                 }
                             }
                             people.remove(currentProfile.name.replaceAll(" ", ""));
-                            members = (String[]) people.toArray(new String[people.size()]);
+                            members = (String[]) people.keySet().toArray(new String[people.size()]);
+                            eventIds = (String[]) people.values().toArray(new String[people.size()]);
 
                             for(String s: members){
                                 if(s.equals("testperson")){
@@ -283,7 +285,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                     mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
                     mAdapter.notifyDataSetChanged();
                 }
-                sendNotificationToUser(members, message);
+                sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -291,7 +293,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         alc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted :-(");
+                String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
@@ -304,7 +306,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                     mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
                     mAdapter.notifyDataSetChanged();
                 }
-                sendNotificationToUser(members, message);
+                sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -325,15 +327,13 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                     mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
                     mAdapter.notifyDataSetChanged();
                 }
-                sendNotificationToUser(members, message);
+                sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
             }
 
         });
 
-
     }
-
 
     private void onSwiped() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -365,14 +365,21 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-    public void sendNotificationToUser(String[] user, final ChatMessage message) {
+    public void sendNotificationToUser(String[] user, String[] events, final ChatMessage message) {
 
         ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
+        ArrayList<String> eventIds= new ArrayList<>(Arrays.asList(events));
 
         Map notification = new HashMap<>();
-        notification.put("recipients", recipients);
-        notification.put("message", message.getSender().replaceAll(" ", "") + ":" + " anything " + ":" + message.getText());
-        mDatabase.child("notifications").push().setValue(notification);
+        for(int i = 0; i < recipients.size(); i++)
+        {
+            ArrayList<String> tempRecipient = new ArrayList<String>();
+            tempRecipient.add(recipients.get(i));
+
+            notification.put("recipients", tempRecipient);
+            notification.put("message", message.getSender().replaceAll(" ", "") + ":" + eventIds.get(i) + ":" + message.getText());
+            mDatabase.child("notifications").push().setValue(notification);
+        }
 
     }
 

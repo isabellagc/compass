@@ -18,6 +18,7 @@
     <uses-permission android:name="com.google.providers.gsf.permissions.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature
         android:glEsVersion="0x0020000"
@@ -47,7 +48,8 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/common_google_signin_btn_text_light_default" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -95,8 +97,9 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-        <meta-data
+        <meta-data xmlns:tools="http://schemas.android.com/tools"
             android:name="com.google.android.geo.API_KEY"
+            tools:replace="android:value"
             android:value="@string/google_maps_key" />
         <!-- <meta-data -->
         <!-- android:name="com.google.android.gms.version" -->
@@ -105,6 +108,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+        <activity android:name=".testing_layouts" />
 
         <service
             android:name=".LocationService"
@@ -141,7 +145,9 @@
         </service>
 
         <activity android:name=".EventDetailsActivity" />
-        <activity android:name=".LaunchFragmentActivity"></activity>
+        <activity android:name=".LaunchFragmentActivity"
+            android:theme="@style/dialog">
+        </activity>
     </application>
 
 </manifest>

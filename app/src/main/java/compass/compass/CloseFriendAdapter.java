@@ -182,7 +182,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
             super(itemView);
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
-            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImage);
+            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 

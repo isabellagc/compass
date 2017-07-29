@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity{
 //                    setDrinksToZero();
                     setDrinkListeners();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
+                    //Intent i  = new Intent(getBaseContext(), testing_layouts.class);
                     i.putExtra("userToCheck", name);
                     startActivity(i);
                 }
