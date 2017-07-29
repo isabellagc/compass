@@ -16,12 +16,13 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.providers.gsf.permissions.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature
         android:glEsVersion="0x0020000"
         android:required="true" />
+
 
     <!-- <permission android:name="compass.compass.permission.MAPS_RECEIVE" -->
     <!-- android:protectionLevel="signature"/> -->
@@ -34,16 +35,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-        <!--<receiver android:process=":remote" android:name=".Alarm"></receiver>-->
-        <receiver android:name=".Alarm"
-            android:enabled="true" >
-        </receiver>
+        <!-- <receiver android:process=":remote" android:name=".Alarm"></receiver> -->
+        <receiver
+            android:name=".Alarm"
+            android:enabled="true" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_need_help" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/common_google_signin_btn_text_light_default" />
@@ -56,34 +55,38 @@
             </intent-filter>
         </activity>
         <activity android:name=".ChatActivity" />
-        <activity android:name=".NeedHelpActivity"
+        <activity
+            android:name=".NeedHelpActivity"
             android:label="HelpFinder">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".ResourcesActivity"
-            android:label="Resources"/>
+        <activity
+            android:name=".ResourcesActivity"
+            android:label="Resources" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".DrinkActivityReal"
-            android:label="DrinkCounter"/>
+        <activity
+            android:name=".DrinkActivityReal"
+            android:label="DrinkCounter" />
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
      See README(https://goo.gl/l4GJaQ) for more.
         -->
 
+
         <!--
              Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
 
-
         <activity android:name=".NewEventActivity" />
-        <activity android:name=".EventActivity"
-            android:label="Events"
-            android:icon="@drawable/ic_add"/>
+        <activity
+            android:name=".EventActivity"
+            android:icon="@drawable/ic_add"
+            android:label="Events" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -112,33 +115,33 @@
             </intent-filter>
         </service>
 
-        <!--<service android:name=".NotificationService">-->
-            <!--android:name=".NotificationService"-->
-            <!--android:label="@string/app_name"-->
-        <!--<intent-filter>-->
-            <!--<action android:name="your.app.domain.NotificationService" />-->
+        <!-- <service android:name=".NotificationService"> -->
+        <!-- android:name=".NotificationService" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="your.app.domain.NotificationService" /> -->
 
-            <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--</intent-filter>-->
-    <!--</service>-->
 
-        <!--Messanging functionality for push notifications-->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
 
-        <service
-            android:name=".MyFirebaseMessagingService">
+
+        <!-- Messanging functionality for push notifications -->
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".FirebaseIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-
-        <activity android:name=".EventDetailsActivity"></activity>
+        <activity android:name=".EventDetailsActivity" />
+        <activity android:name=".LaunchFragmentActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,15 @@
+package compass.compass;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class LaunchFragmentActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_launch_fragment);
+
+
+    }
+}

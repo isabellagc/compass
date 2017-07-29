@@ -64,6 +64,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, mBuilder.build());
+
+        openFragment();
+    }
+
+    public void openFragment(){
     }
 
     @Override
