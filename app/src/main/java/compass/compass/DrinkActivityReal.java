@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +50,9 @@ public class DrinkActivityReal extends AppCompatActivity{
     private double alcoholContent;
     private double percentageOfMax;
     private WaveView waveView;
+    TextView tvBAC;
+    int leftMargin;
+    int topMargin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,8 +61,13 @@ public class DrinkActivityReal extends AppCompatActivity{
         setContentView(R.layout.activity_drink_real);
         btAddDrink = (ImageButton) findViewById(R.id.btDrinkCounter);
         tvDrinkNumber = (TextView) findViewById(R.id.tvDrinkNumber);
+        tvBAC = (TextView) findViewById(R.id.tvBAC);
         drinks = currentProfile.drinkCounter;
         tvDrinkNumber.setText(String.valueOf(drinks));
+
+        FrameLayout.MarginLayoutParams mLayout = (FrameLayout.MarginLayoutParams) tvBAC.getLayoutParams();
+        leftMargin = mLayout.leftMargin;
+        topMargin = mLayout.topMargin - 30;
 
         weight = currentProfile.weight;
 
@@ -98,9 +107,18 @@ public class DrinkActivityReal extends AppCompatActivity{
 
     private void setProgress(){
         BAC = calculateBAC();
+
         percentageOfMax = (BAC / MAX_BAC)  * 100;
         waveView.setProgress((int) percentageOfMax);
+
+        tvBAC.setText("BAC: " + String.format("%.2f", BAC));
+        FrameLayout.MarginLayoutParams mLayout = (FrameLayout.MarginLayoutParams) tvBAC.getLayoutParams();
+        int top = (int) (topMargin - (percentageOfMax * (topMargin) / 100)) + 30;
+        mLayout.setMargins(leftMargin, top, 0, 0);
+        tvBAC.setLayoutParams(mLayout);
     }
+
+
 
     private double calculateBAC(){
         double total = 0.0;
