@@ -143,6 +143,11 @@ public class LocationService extends Service implements LocationListener{
         }
         Log.i("NEW LOCATION", "Latitude: " + latitude + "- Longitude: " + longitude);
         checkTimers();
+
+        if(currentProfile != null){
+            currentProfile.latitude = latitude;
+            currentProfile.longitude = longitude;
+        }
     }
 
     private void checkTimers(){

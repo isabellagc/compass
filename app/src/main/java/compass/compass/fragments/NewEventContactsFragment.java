@@ -18,12 +18,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import compass.compass.ChatActivity;
 import compass.compass.ContactsAdapter;
+import compass.compass.EventActivity;
+import compass.compass.EventsAdapter;
 import compass.compass.MainActivity;
 import compass.compass.R;
+import compass.compass.models.ChatMessage;
 import compass.compass.models.Event;
 import compass.compass.models.Group;
 import compass.compass.models.User;
@@ -176,6 +180,20 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         //creates new event child
         infoToAdd.put(eventName, true);
         mDatabase.child("messages").updateChildren(infoToAdd);
+
+        String data = currentProfile.name + " created the event.";
+        ChatMessage message = new ChatMessage();
+        message.setText(data);
+        message.setSender("JOINED");
+        message.setTime((new Date().getTime()));
+        mDatabase.child("messages").child(eventName).push().setValue(message);
+
+        String newData = currentProfile.name + " joined the event as going out.";
+        ChatMessage newMessage = new ChatMessage();
+        newMessage.setText(newData);
+        newMessage.setSender("JOINED");
+        newMessage.setTime((new Date().getTime()));
+        mDatabase.child("messages").child(eventName).push().setValue(newMessage);
     }
 
     private void notifyUsersOfNewEvent(ArrayList<User> usersAdded){
@@ -188,6 +206,12 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         HashMap<String, Object> infoToAdd = new HashMap<>();
         infoToAdd.put(eventName, "out");
         mDatabase.child("Users").child(currentProfile.userId).child("events").updateChildren(infoToAdd);
+
+        mDatabase.child("Users").child(currentProfile.userId).child("events").child(eventName).setValue("out");
+        mDatabase.child("Events").child(eventName).child("Members").child(currentProfile.userId).setValue("out");
+
+        ((EventActivity) getActivity()).rvEvents.getAdapter().notifyDataSetChanged();
+
     }
 
 
@@ -196,7 +220,18 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         i.putExtra("eventId", eventName);
         i.putExtra("fromHere", "newEventFragment");
         startActivity(i);
+
+//        String fromHere = "newEventFragment";
+//
+//        FragmentManager fm = getActivity().getSupportFragmentManager();
+//        StatusFragment statusFragment = StatusFragment.newInstance(eventName, fromHere);
+//        statusFragment.show(fm, "tag");
+
+        EventsAdapter eventAdapter = new EventsAdapter(getActivity().getApplicationContext());
+        ((EventActivity) getActivity()).rvEvents.setAdapter(eventAdapter);
+
         getFragmentManager().beginTransaction().remove(this).commitAllowingStateLoss();
+
     }
 
 

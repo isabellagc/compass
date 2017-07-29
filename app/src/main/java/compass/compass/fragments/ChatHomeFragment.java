@@ -267,104 +267,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                 final String memberName = dataSnapshot.getKey();
 
                 if (!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")) {
-                    if (!markerMap.containsKey(memberName)) {
-                        User user = allContacts.get(memberName);
-                        LatLng temp = new LatLng(47.628911, -122.342969);
-                        int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ", ""), "drawable", getActivity().getPackageName());
-                        Marker temp2 = mMap.addMarker(new MarkerOptions()
-                                .position(temp)
-                                .title(memberName)
-                                .snippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC));
-
-                        markerMap.put(memberName, temp2);
-
-                    }
-
-                    mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            latitude = (Double) dataSnapshot.getValue();
-                            longitude = markerMap.get(memberName).getPosition().longitude;
-                            markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    mDatabase.child("Users").child(memberName).child("longitude").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            longitude = (Double) dataSnapshot.getValue();
-                            latitude = markerMap.get(memberName).getPosition().latitude;
-                            markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    mDatabase.child("Users").child(memberName).child("need help").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            boolean help = (boolean) dataSnapshot.getValue();
-                            if(help){
-                                allContacts.get(memberName).status = true;
-                                setMarkerBounce(markerMap.get(memberName), memberName);
-                                markerMap.get(memberName).setZIndex(2);
-                            }
-                            else{
-                                allContacts.get(memberName).status = false;
-                                //markerMap.get(memberName).setAnchor(0.2f, 1.0f);
-
-                            }
-                            if(isAdded()){
-                                int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
-                                markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help)));
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    mDatabase.child("Drinks").child(memberName).addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            User user = allContacts.get(memberName);
-                            updateUserInfo(dataSnapshot, memberName, user);
-                            updateMarker(user);
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            User user = allContacts.get(memberName);
-                            updateUserInfo(dataSnapshot, memberName, user);
-                            updateMarker(user);
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    addMarkerInfo(memberName);
 
                 } else if (memberName.equals(currentProfile.userId)) {
                     mDatabase.child("Users").child(memberName).child("latitude").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -407,7 +310,116 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String memberName = dataSnapshot.getKey();
+                if (!memberName.equals(currentProfile.userId) && !dataSnapshot.getValue().toString().contentEquals("null")) {
+                    addMarkerInfo(memberName);
+                }
+            }
 
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String memberName = dataSnapshot.getKey();
+                if (markerMap.containsKey(memberName)){
+                    markerMap.get(memberName).remove();
+                    markerMap.remove(memberName);
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void addMarkerInfo(final String memberName){
+        if (!markerMap.containsKey(memberName)) {
+            User user = allContacts.get(memberName);
+            LatLng temp = new LatLng(47.628911, -122.342969);
+            int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ", ""), "drawable", getActivity().getPackageName());
+            Marker temp2 = mMap.addMarker(new MarkerOptions()
+                    .position(temp)
+                    .title(memberName)
+                    .snippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC));
+
+            markerMap.put(memberName, temp2);
+
+        }
+
+        mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                latitude = (Double) dataSnapshot.getValue();
+                longitude = markerMap.get(memberName).getPosition().longitude;
+                markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("Users").child(memberName).child("longitude").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                longitude = (Double) dataSnapshot.getValue();
+                latitude = markerMap.get(memberName).getPosition().latitude;
+                markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("Users").child(memberName).child("need help").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean help = (boolean) dataSnapshot.getValue();
+                if(help){
+                    allContacts.get(memberName).status = true;
+                    setMarkerBounce(markerMap.get(memberName), memberName);
+                    markerMap.get(memberName).setZIndex(2);
+                }
+                else{
+                    allContacts.get(memberName).status = false;
+                    //markerMap.get(memberName).setAnchor(0.2f, 1.0f);
+
+                }
+                if(isAdded()){
+                    int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+                    markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help)));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("Drinks").child(memberName).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User user = allContacts.get(memberName);
+                updateUserInfo(dataSnapshot, memberName, user);
+                updateMarker(user);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                User user = allContacts.get(memberName);
+                updateUserInfo(dataSnapshot, memberName, user);
+                updateMarker(user);
             }
 
             @Override

@@ -30,6 +30,9 @@ public class User {
     public String phoneNumber;
     public double currentBAC;
 
+    public double latitude;
+    public double longitude;
+
     //this is stored as a string  our firebase database
     public Event currentEvent;
 //    public int height;

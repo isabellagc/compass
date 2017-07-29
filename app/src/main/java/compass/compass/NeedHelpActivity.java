@@ -139,8 +139,14 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         locationManager = (LocationManager) getBaseContext().getSystemService(LOCATION_SERVICE);
         myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        myLocation = new Location(LocationManager.GPS_PROVIDER);
+        myLocation.setLatitude(currentProfile.latitude);
+        myLocation.setLongitude(currentProfile.longitude);
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -426,6 +432,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         customMarkerView.draw(canvas);
         return returnedBitmap;
     }
+
 
 
 }
