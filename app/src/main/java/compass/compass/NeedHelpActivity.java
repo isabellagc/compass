@@ -139,6 +139,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        locationManager = (LocationManager) getBaseContext().getSystemService(LOCATION_SERVICE);
         myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

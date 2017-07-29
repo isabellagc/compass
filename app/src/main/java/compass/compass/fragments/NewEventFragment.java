@@ -70,6 +70,7 @@ public class NewEventFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
 
@@ -258,31 +259,10 @@ public class NewEventFragment extends android.support.v4.app.Fragment {
         newEventContactsFragment.setArguments(b);
 
         //make changes
-        ft.replace(R.id.frameNewEvent, newEventContactsFragment);
+        ft.replace(R.id.frameNewEvent_1, newEventContactsFragment);
 
         //commit transaction
         ft.commit();
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//

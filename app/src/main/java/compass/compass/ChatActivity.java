@@ -456,7 +456,7 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         //make changes
-        ft.replace(R.id.frameNewEvent, newEventFragment);
+        ft.replace(R.id.frameNewEvent_1, newEventFragment);
 
         //commit transaction
         ft.commit();
