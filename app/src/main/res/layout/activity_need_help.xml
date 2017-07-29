@@ -116,7 +116,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@id/parent"
         android:layout_marginBottom="16dp"
-        android:background="@color/c500"
+        android:background="@color/colorPrimary"
         android:fontFamily="sans-serif"
         android:text="@string/swipeText"
         android:textAppearance="@android:style/TextAppearance.Material.Widget.Button" />

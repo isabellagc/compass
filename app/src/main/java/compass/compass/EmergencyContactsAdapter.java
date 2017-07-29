@@ -115,7 +115,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImageMain);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
             btCallContact.setOnClickListener(new View.OnClickListener() {

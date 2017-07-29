@@ -111,7 +111,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         mDatabase = FirebaseDatabase.getInstance().getReference();
         btCallContact = (Button) findViewById(R.id.btCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
-        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImage);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
 
         btCallContact.setOnClickListener(new View.OnClickListener() {
             @Override

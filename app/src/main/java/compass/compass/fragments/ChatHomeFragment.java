@@ -75,6 +75,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     RecyclerView rvContacts;
     ChatAdapter mAdapter;
     Map<String, Marker> markerMap;
+    Map<String, Marker> flagMap;
     // Keep track of initial load to scroll to the bottom of the ListView
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
@@ -113,6 +114,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         eventId = getActivity().getIntent().getExtras().getString("eventId");
 
         markerMap = new HashMap<String, Marker>();
+        flagMap = new HashMap<>();
         rvContacts = v.findViewById(R.id.rvContacts);
         //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
         closeFriendAdapter = new CloseFriendAdapter(getActivity());
@@ -186,6 +188,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
             mMap = googleMap;
 
             populateMap();
+            populateMapFlags();
 
             mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
@@ -237,6 +240,59 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
 
+    }
+
+    private void populateMapFlags() {
+        mDatabase.child("Flagged Locations").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Double lat, longi;
+                String title, user;
+
+                title = dataSnapshot.getKey();
+                Map<String, Object> info = (Map<String, Object>) dataSnapshot.getValue();
+                lat = (Double) info.get("latitude");
+                longi = (Double) info.get("longitude");
+                user = (String) info.get("user");
+
+                LatLng pos = new LatLng(lat, longi);
+                Marker flag = mMap.addMarker(new MarkerOptions()
+                        .position(pos)
+                        .title(user)
+                );
+                flagMap.put(title, flag);
+//                for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                    String key = ds.getKey();
+//                    if(key.equals("latitude")){
+//                        lat = (Double) ds.getValue();
+//                    }else if(key.equals("longitude")){
+//                        longi = (Double) ds.getValue();
+//                    }else if(key.equals("user")){
+//                        user = (String) ds.getValue();
+//                    }
+//                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void sendNotificationToUser(String[] user, final ChatMessage message) {

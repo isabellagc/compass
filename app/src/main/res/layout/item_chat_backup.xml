@@ -45,5 +45,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="12dp"
-        app:srcCompat="@color/c600" />
+        app:srcCompat="@color/colorPrimaryLight" />
 </RelativeLayout>
