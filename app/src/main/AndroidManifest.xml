@@ -87,8 +87,8 @@
         <activity android:name=".NewEventActivity" />
         <activity
             android:name=".EventActivity"
-            android:icon="@drawable/ic_add"
-            android:label="Events" />
+            android:label="Events"
+            android:theme="@style/AppTheme.noTitleBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -34,7 +34,7 @@ public class EventActivity extends AppCompatActivity {
         rvEvents.setAdapter(eventAdapter);
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.invalidate();
-        //initToolbar();
+        initToolbar();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +43,8 @@ public class EventActivity extends AppCompatActivity {
             }
         });
         fab.show();
+
+
     }
 
 //    @Override
@@ -54,11 +56,6 @@ private void initToolbar() {
     final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     final ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar != null) {
-        actionBar.setHomeAsUpIndicator(R.drawable.bsp_ic_add_circle_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-    }
 }
 
     //launch the profile activity
@@ -85,9 +82,10 @@ private void initToolbar() {
     public void launchEvent(){
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameNewEvent_1, NewEventFragment.newInstance());
+        transaction.replace(R.id.frameNewEvent, NewEventFragment.newInstance());
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 
 }
