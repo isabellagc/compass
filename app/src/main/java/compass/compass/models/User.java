@@ -32,6 +32,7 @@ public class User {
 
     public double latitude;
     public double longitude;
+    public double homeLat, homeLong;
 
     //this is stored as a string  our firebase database
     public Event currentEvent;
