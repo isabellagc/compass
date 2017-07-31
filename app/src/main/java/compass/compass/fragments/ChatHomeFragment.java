@@ -35,6 +35,7 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -74,7 +75,7 @@ import static compass.compass.MainActivity.currentProfile;
 
 public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     StorageReference storage;
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     EditText etMessage;
     Button btSend;
     RecyclerView rvContacts;
@@ -106,6 +107,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     String myStatus;
 
     String[] members;
+    public TextView tvNameContact;
 
     boolean newFlag = false;
     boolean mapExpanded;
@@ -140,10 +142,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        etMessage = (EditText) v.findViewById(R.id.etMessage);
-        btSend = (Button) v.findViewById(R.id.btSend);
-
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
