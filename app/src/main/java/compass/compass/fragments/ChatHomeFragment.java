@@ -73,7 +73,7 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/26/17.
  */
 
-public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
+public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, CloseFriendAdapter.AdapterListenerSpecial{
     public static final int REQUEST_CODE = 0;
     StorageReference storage;
     private GoogleMap mMap;
@@ -131,7 +131,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
         flagMap = new HashMap<>();
         rvContacts = v.findViewById(R.id.rvContacts);
         //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
-        closeFriendAdapter = new CloseFriendAdapter(getActivity());
+        closeFriendAdapter = new CloseFriendAdapter(getActivity(), this);
         rvContacts.setAdapter(closeFriendAdapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvContacts.invalidate();
@@ -702,6 +702,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
     public Bitmap resizeFlagIcon(Bitmap imageBitmap, int width, int height){
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
         return resizedBitmap;
+    }
+
+
+    @Override
+    public void mapZoomIn(User user) {
+
     }
 
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {

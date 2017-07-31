@@ -55,6 +55,7 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
     LocationManager locationManager;
     Location myLocation;
     Location temp;
+    String policePhone, counselPhone, hospitalPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

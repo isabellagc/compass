@@ -45,8 +45,9 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public static ArrayList<String> mCloseFriendsNames;
     public Map userContacts;
 
+    public static AdapterListenerSpecial listenerSpecial;
 
-    public CloseFriendAdapter(Context context) {
+    public CloseFriendAdapter(Context context, AdapterListenerSpecial special) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         userContacts = new HashMap();
         //keys = new ArrayList();
@@ -54,6 +55,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         mCloseFriendsNames = new ArrayList<>();
         mContext = context;
 
+        listenerSpecial =  special;
         getCloseFriends();
     }
 
@@ -181,6 +183,12 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listenerSpecial.mapZoomIn(allContacts.get(mCloseFriendsNames.get(getAdapterPosition())));
+                }
+            });
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
             ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain);
             btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
@@ -200,5 +208,9 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
                 }
             });
         }
+    }
+
+    public interface AdapterListenerSpecial{
+        public void mapZoomIn(User user);
     }
 }
