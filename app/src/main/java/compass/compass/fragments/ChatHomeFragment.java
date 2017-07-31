@@ -7,7 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -16,8 +18,11 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,6 +85,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     boolean mFirstLoad;
     static final int POLL_INTERVAL = 1000; // milliseconds
     String eventId;
+    FloatingActionButton fabMarkLocation;
 
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
@@ -88,6 +94,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     NotificationManager mNotificationManager;
     Uri linkToPic;
     public int NOTIFICATION_ID = 12;
+    Bitmap flagIcon;
 
     Double myLatitude;
     Double myLongitude;
@@ -99,6 +106,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
     String[] members;
 
+    boolean newFlag = false;
     boolean mapExpanded;
     boolean chatExpanded;
     SupportMapFragment mapFragment;
@@ -112,6 +120,9 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=  inflater.inflate(R.layout.activity_chat_back_up, container, false);
         eventId = getActivity().getIntent().getExtras().getString("eventId");
+
+        flagIcon = getBitmap(getContext(), R.drawable.ic_flag_location_unsafe);
+        flagIcon = resizeFlagIcon(flagIcon, 72 , 72);
 
         markerMap = new HashMap<String, Marker>();
         flagMap = new HashMap<>();
@@ -131,6 +142,23 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
         etMessage = (EditText) v.findViewById(R.id.etMessage);
         btSend = (Button) v.findViewById(R.id.btSend);
+
+        fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
+        fabMarkLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //make a fragment to ask
+                //update the database
+                Map<String, Object> infoToPush = new HashMap<>();
+                infoToPush.put("latitude", currentProfile.latitude);
+                infoToPush.put("longitude", currentProfile.longitude);
+                infoToPush.put("user", currentProfile.userId);
+                newFlag = true;
+                mDatabase.child("Flagged Locations").push().setValue(infoToPush);
+                //make a snackbar
+                Snackbar.make(getView(), "Location marked as unsafe.", Snackbar.LENGTH_LONG).show();
+            }
+        });
 
         mapExpanded = false;
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fMap);
@@ -256,21 +284,17 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                 user = (String) info.get("user");
 
                 LatLng pos = new LatLng(lat, longi);
-                Marker flag = mMap.addMarker(new MarkerOptions()
+//                Marker flag = mMap.addMarker(new MarkerOptions()
+//                        .icon(BitmapDescriptorFactory.fromBitmap(flagIcon))
+//                        .position(pos)
+//                        .title(user)
+//                );
+                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(flagIcon))
                         .position(pos)
-                        .title(user)
-                );
+                        .title(user);
+                Marker flag = mMap.addMarker(markerOptions);
                 flagMap.put(title, flag);
-//                for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                    String key = ds.getKey();
-//                    if(key.equals("latitude")){
-//                        lat = (Double) ds.getValue();
-//                    }else if(key.equals("longitude")){
-//                        longi = (Double) ds.getValue();
-//                    }else if(key.equals("user")){
-//                        user = (String) ds.getValue();
-//                    }
-//                }
+                startDropMarkerAnimation(flag);
             }
 
             @Override
@@ -294,6 +318,90 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    private void startDropMarkerAnimation(final Marker marker) {
+//        //Make the marker bounce
+//        final Handler handler = new Handler();
+//
+//        final long startTime = SystemClock.uptimeMillis();
+//        final long duration = 2000;
+//
+//        Projection proj = mMap.getProjection();
+//        final LatLng markerLatLng = marker.getPosition();
+//        Point startPoint = proj.toScreenLocation(markerLatLng);
+//        startPoint.offset(0, -100);
+//        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+//
+//        final Interpolator interpolator = new BounceInterpolator();
+//
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                long elapsed = SystemClock.uptimeMillis() - startTime;
+//                float t = interpolator.getInterpolation((float) elapsed / duration);
+//                double lng = t * markerLatLng.longitude + (1 - t) * startLatLng.longitude;
+//                double lat = t * markerLatLng.latitude + (1 - t) * startLatLng.latitude;
+//                marker.setPosition(new LatLng(lat, lng));
+//
+//                if (t < 1.0) {
+//                    // Post again 16ms later.
+//                    handler.postDelayed(this, 16);
+//                }
+//            }
+//        });
+
+
+
+//        final LatLng target = marker.getPosition();
+//        final Handler handler = new Handler();
+//        final long start = SystemClock.uptimeMillis();
+//        Projection proj = mMap.getProjection();
+//        Point targetPoint = proj.toScreenLocation(target);
+//        final long duration = (long) (200 + (targetPoint.y * 0.6));
+//        Point startPoint = proj.toScreenLocation(marker.getPosition());
+//        startPoint.y = 0;
+//        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+//        final Interpolator interpolator = new LinearOutSlowInInterpolator();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                long elapsed = SystemClock.uptimeMillis() - start;
+//                float t = interpolator.getInterpolation((float) elapsed / duration);
+//                double lng = t * target.longitude + (1 - t) * startLatLng.longitude;
+//                double lat = t * target.latitude + (1 - t) * startLatLng.latitude;
+//                marker.setPosition(new LatLng(lat, lng));
+//                if (t < 1.0) {
+//                    // Post again 16ms later == 60 frames per second
+//                    handler.postDelayed(this, 16);
+//                }
+//            }
+//        });
+
+        final Handler handler = new Handler();
+        final long startTime = SystemClock.uptimeMillis();
+        final long duration = 2000;
+        final Interpolator interpolator = new BounceInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - startTime;
+                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/(duration)), 0);
+                marker.setAnchor(0.2f, 1.0f +  t);
+
+                if (t > 0.0) {
+                    handler.postDelayed(this, 16);
+                }
+                else{
+                    return;
+                }
+            }
+        });
+    }
+
+
+
+
 
     public void sendNotificationToUser(String[] user, final ChatMessage message) {
 
@@ -556,6 +664,32 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     private void updateMarker(User user){
         markerMap.get(user.userId).setSnippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC);
     }
+
+    private static Bitmap getBitmap(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawable) {
+            return getBitmap((VectorDrawable) drawable);
+        } else {
+            throw new IllegalArgumentException("unsupported drawable type");
+        }
+    }
+
+    private static Bitmap getBitmap(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+
+    public Bitmap resizeFlagIcon(Bitmap imageBitmap, int width, int height){
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
+    }
+
 
 
 }
