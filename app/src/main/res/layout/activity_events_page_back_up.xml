@@ -62,7 +62,7 @@
            android:layout_height="match_parent"
            android:id="@+id/rvEvents1"/>
        <FrameLayout
-           android:id="@+id/frameNewEvent_1"
+           android:id="@+id/fNewEvent_1"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:layout_alignParentBottom="true"
@@ -76,9 +76,19 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        app:layout_anchor="@id/frameNewEvent_1"
+        app:layout_anchor="@id/fNewEvent_1"
         android:layout_gravity="bottom|right|"
         app:layout_anchorGravity="bottom|right|end"
         style="@style/FabStyle"
-        android:clickable="true" />
+        android:clickable="true"
+        android:onClick="launchNewEvent"/>
+    <FrameLayout
+        android:id="@+id/frameNewEvent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+    </FrameLayout>
  </android.support.design.widget.CoordinatorLayout>
