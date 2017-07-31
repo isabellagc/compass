@@ -186,7 +186,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         if(help){
             customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
         }
-        else if (BAC > 0.07){
+        else if (BAC > 0.07 ){
             customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_yellow, null);
         }else{
             customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
@@ -544,9 +544,10 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         mDatabase.child("Users").child(memberName).child("need help").addValueEventListener(new ValueEventListener() {
+            boolean help;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean help = (boolean) dataSnapshot.getValue();
+                help = (boolean) dataSnapshot.getValue();
                 if(help){
                     allContacts.get(memberName).status = true;
                     setMarkerBounce(markerMap.get(memberName), memberName);
@@ -558,7 +559,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
                 }
                 if(isAdded()){
-                    mDatabase.child("Drinks").child(memberName).child("BAC").addListenerForSingleValueEvent(new ValueEventListener() {
+                    mDatabase.child("Drinks").child(memberName).child("BAC").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             double BAC;
@@ -569,7 +570,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
                                 BAC =  (double) dataSnapshot.getValue();
                             }
                             int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
-                            markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, false, BAC)));
+                            markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help, BAC)));
                         }
 
                         @Override
