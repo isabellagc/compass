@@ -2,6 +2,7 @@ package compass.compass;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -20,6 +21,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,7 +74,7 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/11/17.
  */
 
-public class ChatActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ChatActivity extends FragmentActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener {
 
     StorageReference storage;
     private GoogleMap mMap;
@@ -116,6 +118,14 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(currentProfile.status){
+            getTheme().applyStyle(R.style.AppThemeInverted, true);
+        }
+        else{
+            getTheme().applyStyle(R.style.AppTheme, true);
+        }
+
         setContentView(R.layout.activity_chat);
 
         Bundle args = getIntent().getExtras();
@@ -443,8 +453,45 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.locations_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_cancel, menu);
+        MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
+
+        if(!currentProfile.status) {
+            menuItem.setVisible(false);
+        }
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void markSafe(final MenuItem menuItem){
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("Mark Yourself Safe");
+        alertDialog.setMessage("Are you sure you would like to mark yourself as safe?");
+        alertDialog.setIcon(R.drawable.ic_need_help);
+
+        DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                currentProfile.status = false;
+
+                recreate();
+
+                alertDialog.dismiss();
+            }
+        };
+
+        DialogInterface.OnClickListener no = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", no);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", yes);
+
+        alertDialog.show();
     }
 
     //launch the profile activity
@@ -576,5 +623,12 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
+    @Override
+    public void onContinueClicked() {
+        Map<String, Object> infoToPush = new HashMap<>();
+        infoToPush.put("latitude", currentProfile.latitude);
+        infoToPush.put("longitude", currentProfile.longitude);
+        infoToPush.put("user", currentProfile.userId);
+        mDatabase.child("Flagged Locations").push().setValue(infoToPush);
+    }
 }
