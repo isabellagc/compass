@@ -755,25 +755,16 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 
     @Override
     public void mapZoomIn(User user) {
-
+       LatLng userLocation = new LatLng(user.latitude, user.longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(userLocation)
+                .zoom(15)
+                .bearing(0)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // Make sure fragment codes match up
-//        if (requestCode == REQUEST_CODE) {
-//            boolean setFlag = data.getBooleanExtra("boolSend", false);
-//            if(setFlag){
-//                //update the database
-//                Map<String, Object> infoToPush = new HashMap<>();
-//                infoToPush.put("latitude", currentProfile.latitude);
-//                infoToPush.put("longitude", currentProfile.longitude);
-//                infoToPush.put("user", currentProfile.userId);
-//                newFlag = true;
-//                mDatabase.child("Flagged Locations").push().setValue(infoToPush);
-//                //make a snackbar
-//                Snackbar.make(getView(), "Location marked as unsafe.", Snackbar.LENGTH_LONG).show();
-//            }
-//        }
-//    }
 
 }
