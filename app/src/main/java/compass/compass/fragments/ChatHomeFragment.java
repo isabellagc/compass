@@ -401,8 +401,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-
-
     public void sendNotificationToUser(String[] user, final ChatMessage message) {
 
         ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
