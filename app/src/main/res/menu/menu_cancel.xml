@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:icon="@drawable/ic_close_black_24dp"
+        android:id="@+id/markSafe"
+        android:icon="@drawable/ic_cancel_black_24dp"
+        android:onClick="markSafe"
         android:title="Item"
-        android:onClick="backHome"
         app:showAsAction="always" />
 </menu>

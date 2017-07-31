@@ -92,13 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         i.putExtra("eventId", eventName);
         startActivity(i);
 
-//        AlertDialog alertDialog = new AlertDialog.Builder(this)
-//                .setTitle("Title")
-//                .setMessage("Are you sure?")
-//                .create();
-//
-//        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-//        alertDialog.show();
+
     }
 
     @Override

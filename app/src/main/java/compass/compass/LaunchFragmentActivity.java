@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 
 public class LaunchFragmentActivity extends Activity {
 
@@ -24,7 +23,6 @@ public class LaunchFragmentActivity extends Activity {
         DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(LaunchFragmentActivity.this, "ok", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
         };
@@ -32,12 +30,12 @@ public class LaunchFragmentActivity extends Activity {
         DialogInterface.OnClickListener goToEvent = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                alertDialog.dismiss();
-
                 Intent intent = new Intent(LaunchFragmentActivity.this, ChatActivity.class);
                 intent.putExtra("eventId", eventId);
                 intent.putExtra("fromHere", "eventActivity");
                 startActivity(intent);
+
+                alertDialog.dismiss();
             }
         };
 

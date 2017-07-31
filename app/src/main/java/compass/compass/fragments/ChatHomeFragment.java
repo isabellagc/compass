@@ -2,6 +2,7 @@ package compass.compass.fragments;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,10 +25,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
@@ -118,6 +123,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         View v=  inflater.inflate(R.layout.activity_chat_back_up, container, false);
         eventId = getActivity().getIntent().getExtras().getString("eventId");
 
@@ -172,6 +179,49 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_cancel, menu);
+        MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
+
+        if(!currentProfile.status) {
+            menuItem.setVisible(false);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public void markSafe(final MenuItem menuItem){
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("Mark Yourself Safe");
+        alertDialog.setMessage("Are you sure you would like to mark yourself as safe?");
+        alertDialog.setIcon(R.drawable.ic_need_help);
+
+        DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                currentProfile.status = false;
+
+                getActivity().recreate();
+
+                alertDialog.dismiss();
+            }
+        };
+
+        DialogInterface.OnClickListener no = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", no);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", yes);
+
+        alertDialog.show();
     }
 
     @Override

@@ -1,13 +1,18 @@
 package compass.compass;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,6 +31,14 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(currentProfile.status){
+            getTheme().applyStyle(R.style.AppThemeInverted, true);
+        }
+        else{
+            getTheme().applyStyle(R.style.AppTheme, true);
+        }
+
         setContentView(R.layout.activity_profile);
 
         tvName = (TextView) findViewById(R.id.tvName);
@@ -59,7 +72,45 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cancel, menu);
+        MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
+
+        if(!currentProfile.status) {
+            menuItem.setVisible(false);
+        }
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void markSafe(final MenuItem menuItem){
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("Mark Yourself Safe");
+        alertDialog.setMessage("Are you sure you would like to mark yourself as safe?");
+        alertDialog.setIcon(R.drawable.ic_need_help);
+
+        DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                currentProfile.status = false;
+
+                recreate();
+
+                alertDialog.dismiss();
+            }
+        };
+
+        DialogInterface.OnClickListener no = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", no);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", yes);
+
+        alertDialog.show();
     }
 
     public static String capitalize(String str) {
