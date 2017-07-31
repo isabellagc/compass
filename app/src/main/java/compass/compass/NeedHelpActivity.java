@@ -2,6 +2,7 @@ package compass.compass;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -16,7 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +57,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import compass.compass.fragments.CancelFragment;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -103,6 +103,13 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(currentProfile.status){
+            getTheme().applyStyle(R.style.AppThemeInverted, true);
+        }
+        else{
+            getTheme().applyStyle(R.style.AppTheme, true);
+        }
 
         setContentView(R.layout.activity_need_help);
 
@@ -291,17 +298,9 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
 
-                RideParameters rideParams = new RideParameters.Builder()
-                        // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
-                        .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
-                        // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location
-                        .setPickupLocation(currentProfile.latitude, currentProfile.longitude, null, null)
-                        .build();
+                recreate();
 
-                RequestDeeplink deeplink = new RequestDeeplink.Builder(NeedHelpActivity.this)
-                        .setSessionConfiguration(UberSdk.getDefaultSessionConfiguration())
-                        .setRideParameters(rideParams).build();
-                deeplink.execute();
+                callUber();
             }
         });
 
@@ -323,6 +322,8 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+
+                recreate();
             }
         });
 
@@ -344,6 +345,8 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+
+                recreate();
             }
 
         });
@@ -367,17 +370,44 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cancel, menu);
+        MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
+
+        if(!currentProfile.status) {
+            menuItem.setVisible(false);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void backHome(MenuItem menuItem){
-        FragmentManager fm = getSupportFragmentManager();
-        CancelFragment cancelFragment = CancelFragment.newInstance();
-        cancelFragment.show(fm, "idk_what_goes_here");
-    }
+    public void markSafe(final MenuItem menuItem){
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("Mark Yourself Safe");
+        alertDialog.setMessage("Are you sure you would like to mark yourself as safe?");
+        alertDialog.setIcon(R.drawable.ic_need_help);
 
-    public void sendMessages (String [] members, final ChatMessage message){
+        DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                currentProfile.status = false;
 
+                recreate();
+
+                alertDialog.dismiss();
+            }
+        };
+
+        DialogInterface.OnClickListener no = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", no);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", yes);
+
+        alertDialog.show();
     }
 
     public void sendNotificationToUser(String[] user, String[] events, final ChatMessage message) {
@@ -455,6 +485,45 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         return returnedBitmap;
     }
 
+    public void callUber(){
 
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("Call an Uber");
+        alertDialog.setMessage("Would you like to request an Uber to go home?");
+        alertDialog.setIcon(R.drawable.ic_need_help);
+
+        DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                RideParameters rideParams = new RideParameters.Builder()
+                        // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
+                        .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
+                        // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location
+                        //.setPickupLocation(currentProfile.latitude, currentProfile.longitude, "My Location", null)
+                        .setPickupToMyLocation()
+                        .setDropoffLocation(currentProfile.homeLat, currentProfile.homeLong, "Home", null)
+                        .build();
+
+                RequestDeeplink deeplink = new RequestDeeplink.Builder(NeedHelpActivity.this)
+                        .setSessionConfiguration(UberSdk.getDefaultSessionConfiguration())
+                        .setRideParameters(rideParams).build();
+                deeplink.execute();
+
+                alertDialog.dismiss();
+            }
+        };
+
+        DialogInterface.OnClickListener no = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", no);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", yes);
+
+        alertDialog.show();
+    }
 
 }

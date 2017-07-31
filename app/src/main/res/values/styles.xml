@@ -11,6 +11,18 @@
         <!--<item name="windowNoTitle">true</item>-->
 
     </style>
+
+    <style name="AppThemeInverted" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/c900</item>
+        <item name="colorPrimaryDark">@color/c500</item>
+        <item name="colorAccent">@color/c500</item>
+        <item name="actionBarSize">72dp</item>
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+
+    </style>
+
     <style name="AppTheme.noTitleBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/c500</item>
         <item name="colorPrimaryDark">@color/c900</item>

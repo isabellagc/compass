@@ -6,28 +6,6 @@
     android:layout_height="match_parent"
     tools:context="compass.compass.NeedHelpActivity">
 
-    <SeekBar
-        android:id="@+id/level"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:max="5"
-        android:progress="0"
-        android:layout_below="@+id/tvLevel"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/tvLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/level"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/level"
-        android:layout_marginTop="16dp"
-        android:text="Level"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
