@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -38,48 +37,21 @@ public class EventActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchEvent();
-                Toast.makeText(EventActivity.this, "Fab Pressed", Toast.LENGTH_SHORT).show();
+                launchNewEvent();
+                fab.hide();
             }
         });
-        fab.show();
-
-
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.locations_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 private void initToolbar() {
     final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     final ActionBar actionBar = getSupportActionBar();
 }
 
-    //launch the profile activity
-    public void launchNewEvent () {
-        //EventsAdapter.ViewHolder.rlEvent.setClickable(false);
-        //create the user fragment
-        android.support.v4.app.Fragment newEventFragment = (android.support.v4.app.Fragment) NewEventFragment.newInstance();
+    //launch the new activity
 
-        //display the user timeline fragment inside the container (dynamically)
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-//        ft.setCustomAnimations(android.R.anim.slide_in_left, 0);
-
-//        View newEventContainer = findViewById(R.id.frameNewEvent);
-//        View oldEventContainer = view;
-//        CustomAnimator.slide(oldEventContainer, newEventContainer, CustomAnimator.DIRECTION_LEFT, 400);
-        //make changes
-        ft.replace(R.id.frameNewEvent_1, newEventFragment);
-
-        //commit transaction
-        ft.commit();
-    }
-
-    public void launchEvent(){
+    public void launchNewEvent(){
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frameNewEvent, NewEventFragment.newInstance());
