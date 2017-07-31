@@ -44,6 +44,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.android.rides.RequestDeeplink;
+import com.uber.sdk.android.rides.RideParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -287,6 +290,18 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+
+                RideParameters rideParams = new RideParameters.Builder()
+                        // Optional product_id from /v1/products endpoint (e.g. UberX). If not provided, most cost-efficient product will be used
+                        .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
+                        // Required for price estimates; lat (Double), lng (Double), nickname (String), formatted address (String) of dropoff location
+                        .setPickupLocation(currentProfile.latitude, currentProfile.longitude, null, null)
+                        .build();
+
+                RequestDeeplink deeplink = new RequestDeeplink.Builder(NeedHelpActivity.this)
+                        .setSessionConfiguration(UberSdk.getDefaultSessionConfiguration())
+                        .setRideParameters(rideParams).build();
+                deeplink.execute();
             }
         });
 

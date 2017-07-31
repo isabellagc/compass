@@ -19,10 +19,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.core.auth.Scope;
+import com.uber.sdk.rides.client.SessionConfiguration;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +82,21 @@ public class MainActivity extends AppCompatActivity {
 
         Intent servIntent = new Intent(this, LocationService.class);
         startService(servIntent);
+
+        SessionConfiguration config = new SessionConfiguration.Builder()
+                // mandatory
+                .setClientId("qzgZk0HDAofYbSO_lKWE5D4Law9icADO")
+                // required for enhanced button features
+                .setServerToken("ZviX9nLG1vN8CC8xmWFxOsIGU2tCCKibo2cjJRV9")
+                // required for implicit grant authentication
+                .setRedirectUri("<REDIRECT_URI>")
+                // required scope for Ride Request Widget features
+                .setScopes(Arrays.asList(Scope.RIDE_WIDGETS))
+                // optional: set Sandbox as operating environment
+                .setEnvironment(SessionConfiguration.Environment.SANDBOX)
+                .build();
+
+        UberSdk.initialize(config);
 
     }
 

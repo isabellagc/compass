@@ -321,6 +321,12 @@ public class LoginActivity extends AppCompatActivity{
                     healthInfo.put(User.KEY_DIABETES_INFO, diabeticInfo);
                     healthInfo.put(User.KEY_OTHER_INFO, otherInfo);
                     user.healthInfo = healthInfo;
+                    user.latitude = (Double) userData.get("latitude");
+                    user.longitude = (Double) userData.get("longitude");
+                    Map<String, Object> userLatLongHome = (Map) userData.get("home");
+                    user.homeLat = (Double) userLatLongHome.get("lat");
+                    user.homeLong = (Double) userLatLongHome.get("long");
+
 
                     contacts.add(user);
                     //SET THE DRINKS ON DB TO 0: WE ARE ALL STARTING WITH 0 DRINKS WHEN WE LOGIN TO APP
