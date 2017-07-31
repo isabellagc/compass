@@ -2,99 +2,84 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
+    <ImageView
+        android:id="@+id/ivEmergencyOutline"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_error_outline_black_24px" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tvTitleFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Mark current location as unsafe?"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmergencyOutline" />
 
-            <ImageView
-                android:id="@+id/ivEmergencyOutline"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_error_outline_black_24px" />
+    <ImageView
+        android:id="@+id/ivContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleFragment"
+        app:srcCompat="@drawable/bsp_ic_chevron_end" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Mark current location as unsafe?"
-                android:textAppearance="@android:style/TextAppearance.Material.Large"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivEmergencyOutline"
-                app:layout_constraintHorizontal_bias="0.571" />
+    <ImageView
+        android:id="@+id/ivCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleFragment"
+        app:srcCompat="@drawable/bsp_ic_chevron_start" />
 
-            <ImageView
-                android:id="@+id/ivContinue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:srcCompat="@drawable/bsp_ic_chevron_end" />
+    <TextView
+        android:id="@+id/tvContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="-1dp"
+        android:layout_marginTop="0dp"
+        android:text="Continue"
+        android:textAllCaps="true"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/ivContinue"
+        app:layout_constraintRight_toLeftOf="@+id/ivContinue"
+        app:layout_constraintTop_toTopOf="@+id/ivContinue"
+        app:layout_constraintVertical_bias="0.5" />
 
-            <ImageView
-                android:id="@+id/ivCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:srcCompat="@drawable/bsp_ic_chevron_start" />
-
-            <TextView
-                android:id="@+id/tvContinue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginRight="-1dp"
-                android:layout_marginTop="8dp"
-                android:text="Continue"
-                android:textAllCaps="true"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/ivContinue"
-                app:layout_constraintRight_toLeftOf="@+id/ivContinue"
-                app:layout_constraintTop_toTopOf="@+id/ivContinue"
-                app:layout_constraintVertical_bias="0.5" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
-                android:text="CANCEL"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                app:layout_constraintBottom_toBottomOf="@+id/ivCancel"
-                app:layout_constraintLeft_toRightOf="@+id/ivCancel"
-                app:layout_constraintTop_toTopOf="@+id/ivCancel"
-                app:layout_constraintVertical_bias="0.5" />
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="CANCEL"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCancel"
+        app:layout_constraintLeft_toRightOf="@+id/ivCancel"
+        app:layout_constraintTop_toTopOf="@+id/ivCancel"
+        app:layout_constraintVertical_bias="0.5" />
 
 </android.support.constraint.ConstraintLayout>

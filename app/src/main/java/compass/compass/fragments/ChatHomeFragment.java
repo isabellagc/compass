@@ -19,8 +19,8 @@ import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -60,6 +60,7 @@ import java.util.Map;
 
 import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
+import compass.compass.LaunchFlagLocationActivity;
 import compass.compass.R;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -72,7 +73,8 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/26/17.
  */
 
-public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
+public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
+    public static final int REQUEST_CODE = 0;
     StorageReference storage;
     private GoogleMap mMap;
     EditText etMessage;
@@ -147,16 +149,13 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //make a fragment to ask
-                //update the database
-                Map<String, Object> infoToPush = new HashMap<>();
-                infoToPush.put("latitude", currentProfile.latitude);
-                infoToPush.put("longitude", currentProfile.longitude);
-                infoToPush.put("user", currentProfile.userId);
-                newFlag = true;
-                mDatabase.child("Flagged Locations").push().setValue(infoToPush);
-                //make a snackbar
-                Snackbar.make(getView(), "Location marked as unsafe.", Snackbar.LENGTH_LONG).show();
+                //make a fragment to ask --> LAUNCH ALERT
+//                FragmentManager fm = getActivity().getSupportFragmentManager();
+//                MarkUnsafeFragment markUnsafeFragment = new MarkUnsafeFragment();
+//                markUnsafeFragment.setTargetFragment(getParentFragment(), REQUEST_CODE);
+//                markUnsafeFragment.show(fm, "tag");
+                DialogFragment dialogFragment = new LaunchFlagLocationActivity();
+                dialogFragment.show(getFragmentManager(), "MyDialog");
             }
         });
 
@@ -177,9 +176,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
     }
+
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId, boolean help) {
 
@@ -688,6 +686,22 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
         return resizedBitmap;
     }
 
-
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // Make sure fragment codes match up
+//        if (requestCode == REQUEST_CODE) {
+//            boolean setFlag = data.getBooleanExtra("boolSend", false);
+//            if(setFlag){
+//                //update the database
+//                Map<String, Object> infoToPush = new HashMap<>();
+//                infoToPush.put("latitude", currentProfile.latitude);
+//                infoToPush.put("longitude", currentProfile.longitude);
+//                infoToPush.put("user", currentProfile.userId);
+//                newFlag = true;
+//                mDatabase.child("Flagged Locations").push().setValue(infoToPush);
+//                //make a snackbar
+//                Snackbar.make(getView(), "Location marked as unsafe.", Snackbar.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 
 }

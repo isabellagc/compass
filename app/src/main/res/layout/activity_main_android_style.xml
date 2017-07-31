@@ -8,10 +8,9 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:id="@+id/ivProfileBox"
+        android:layout_width="0dp"
         android:layout_height="127dp"
-        android:layout_marginTop="-7dp"
         android:elevation="4dp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,9 +32,9 @@
         app:border_color="@color/colorSecondaryLight"
         app:border_width="2dp"
         android:elevation="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileBox"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileBox"
         app:srcCompat="@android:color/background_dark" />
 
     <TextView
@@ -43,31 +42,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:elevation="4dp"
         android:text="Name"
-        android:textAppearance="@android:style/TextAppearance.Material.Display1"
 
+        android:textAppearance="@android:style/TextAppearance.Material.Display1"
+        android:textColor="@color/uber_white"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/ivProfileImageMain"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain"
-        app:layout_constraintRight_toLeftOf="@+id/floatingActionButton"
+        app:layout_constraintRight_toLeftOf="@+id/fabResources"
         app:layout_constraintTop_toTopOf="@+id/ivProfileImageMain" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvFindFriends"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="140dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileBox"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -85,7 +88,8 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/imageView10"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="32dp" />
 
             <ImageView
                 android:id="@+id/imageView10"
@@ -97,7 +101,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_navigation_black_24dp" />
+                app:srcCompat="@drawable/ic_navigation_black_24dp"
+                android:layout_marginStart="16dp" />
 
             <ImageView
                 android:id="@+id/ivArrow1"
@@ -110,25 +115,25 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_right_arrow"
-                tools:layout_editor_absoluteX="304dp"
-                tools:layout_editor_absoluteY="34dp" />
+                android:layout_marginEnd="8dp" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvGetHelp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="140dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/cvDrinkCounter"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cvFindFriends">
+        app:layout_constraintTop_toBottomOf="@+id/cvFindFriends"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -146,7 +151,8 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/ivHelpIcon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="32dp" />
 
             <ImageView
                 android:id="@+id/ivHelpIcon"
@@ -160,7 +166,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_need_help_blue" />
+                app:srcCompat="@drawable/ic_need_help_blue"
+                android:layout_marginStart="16dp" />
 
             <ImageView
                 android:id="@+id/ivArrow2"
@@ -173,15 +180,14 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_right_arrow"
-                tools:layout_editor_absoluteX="304dp"
-                tools:layout_editor_absoluteY="34dp" />
+                android:layout_marginEnd="8dp" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvDrinkCounter"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="140dp"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="8dp"
@@ -189,7 +195,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -207,7 +215,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_drink_blue" />
+                app:srcCompat="@drawable/ic_drink_blue"
+                android:layout_marginStart="16dp" />
 
             <ImageView
                 android:id="@+id/ivArrow3"
@@ -220,8 +229,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_right_arrow"
-                tools:layout_editor_absoluteX="304dp"
-                tools:layout_editor_absoluteY="34dp" />
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -234,16 +242,16 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/ivDrinkIcon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="32dp" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/fabResources"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
@@ -251,7 +259,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/tvNameBox"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvNameBox"
-        app:srcCompat="@drawable/ic_school_black_24dp" />
+        app:srcCompat="@drawable/ic_school_black_24dp"
+        android:layout_marginEnd="24dp" />
 
 
 </android.support.constraint.ConstraintLayout>

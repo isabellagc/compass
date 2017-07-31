@@ -72,7 +72,7 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/11/17.
  */
 
-public class ChatActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ChatActivity extends FragmentActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener {
 
     StorageReference storage;
     private GoogleMap mMap;
@@ -576,5 +576,12 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
+    @Override
+    public void onContinueClicked() {
+        Map<String, Object> infoToPush = new HashMap<>();
+        infoToPush.put("latitude", currentProfile.latitude);
+        infoToPush.put("longitude", currentProfile.longitude);
+        infoToPush.put("user", currentProfile.userId);
+        mDatabase.child("Flagged Locations").push().setValue(infoToPush);
+    }
 }

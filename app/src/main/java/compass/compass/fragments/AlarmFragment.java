@@ -86,7 +86,7 @@ public class AlarmFragment extends DialogFragment {
                 alarmTime = singleDateAndTimePicker.getDate();
                 HashMap<String, Object> infoToAdd = new HashMap<>();
                 infoToAdd.put(eventId.toString(), alarmTime.getTime());
-                initAlarm();
+                //initAlarm();
                 mDatabase.child("Users").child(currentProfile.userId).child("alarms").updateChildren(infoToAdd);
                 dismiss();
 //                Intent i = new Intent(getActivity(), ChatActivity.class);
