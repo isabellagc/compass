@@ -94,11 +94,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     LatLng myLocation;
     String fromHere;
     boolean alarmSet = false;
-
-    String myStatus;
-
-    String[] members;
-
     boolean mapExpanded;
     boolean chatExpanded;
     SupportMapFragment mapFragment;
@@ -150,16 +145,16 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
     }
 
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId, boolean help) {
-
+    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId, boolean help, double BAC) {
         View customMarkerView;
         if(help){
             customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
         }
-        else{
+        else if (BAC > 0.07){
+            customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_yellow, null);
+        }else{
             customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
         }
 
@@ -451,8 +446,25 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback {
 
                 }
                 if(isAdded()){
-                    int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
-                    markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help)));
+                    mDatabase.child("Drinks").child(memberName).child("BAC").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            double BAC;
+                            if (dataSnapshot.getValue() instanceof Long){
+                                BAC = (double) ((Long) dataSnapshot.getValue()).doubleValue();
+                            }
+                            else{
+                                BAC =  (double) dataSnapshot.getValue();
+                            }
+                            int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+                            markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, false, BAC)));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
             }
