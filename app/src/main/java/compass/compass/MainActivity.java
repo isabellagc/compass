@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView ivProfileImage;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
+    public FloatingActionButton fabResources;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -222,11 +224,28 @@ public class MainActivity extends AppCompatActivity {
         String name = WordUtils.capitalize(currentProfile.userId);
         tvNameBox.setText(name);
 
+        fabResources = (FloatingActionButton) findViewById(R.id.fabResources);
+        fabResources.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchResources();
+            }
+        });
         cvFindFriends = (CardView) findViewById(R.id.cvFindFriends);
         cvGetHelp = (CardView) findViewById(R.id.cvGetHelp);
         cvDrinkCounter = (CardView) findViewById(R.id.cvDrinkCounter);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
+
+        View.OnClickListener onClickListenerProf = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchProfile();
+            }
+        };
+
+        ivProfileImage.setOnClickListener(onClickListenerProf);
+        tvNameBox.setOnClickListener(onClickListenerProf);
     }
 
     private void setOnClickListeners() {
@@ -337,13 +356,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //launch the profile activity
-    public void launchProfile(MenuItem miProfile) {
+    public void launchProfile() {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }
 
-    //launch the resourches activity
-    public void launchResources(MenuItem miResources) {
+    //launch the resources activity
+    public void launchResources() {
         Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
         startActivity(i);
     }
