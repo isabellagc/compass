@@ -49,7 +49,7 @@
 
     <FrameLayout
         android:id="@+id/flDrink"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="8dp"
@@ -77,11 +77,11 @@
             android:foregroundGravity="left"
             app:above_wave_color="@color/c500"
             app:blow_wave_color="@color/c50"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             wave:progress="0"
             wave:wave_height="little"
             wave:wave_hz="normal"
