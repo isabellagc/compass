@@ -23,11 +23,11 @@
 
     </style>
 
-    <style name="AppTheme.noTitleBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.noTitleBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/c500</item>
         <item name="colorPrimaryDark">@color/c900</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionBarSize">72dp</item>
+        <!--<item name="actionBarSize">72dp</item>-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -43,7 +43,7 @@
         <item name="rippleColor">#FFFFFF</item>
     </style>
 
-    <style name="AppThemeNoBar" parent="AppTheme">
+    <style name="AppThemeNoBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
