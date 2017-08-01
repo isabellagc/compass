@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +35,6 @@ import static compass.compass.MainActivity.currentProfile;
  */
 
 
-
 public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.ViewHolder> {
 
     public DatabaseReference mDatabase;
@@ -43,6 +43,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public static HashMap<String, String> mCloseFriends;
     public static ArrayList<String> mCloseFriendsNames;
     public Map userContacts;
+    public GoogleMap mMap;
 
     public static AdapterListenerSpecial listenerSpecial;
 
@@ -59,6 +60,27 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     }
 
     public void getCloseFriends() {
+        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
         mDatabase.child("Events").child(ChatActivity.eventId).child("Members").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -165,6 +187,20 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
             holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.Red, null));
             //holder.clContact.setBackgroundResource(R.color.bsp_red);
         }
+        //get location on click
+        holder.tvNameContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //do something on the map
+            }
+        });
+        holder.tvNameContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               //make something on the map
+
+            }
+        });
     }
 
     @Override
