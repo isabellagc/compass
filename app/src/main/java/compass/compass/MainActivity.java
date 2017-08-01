@@ -247,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        tvPeopleNeedHelp = (TextView) findViewById(R.id.tvPeopleNeedHelp);
         tvContext = (TextView) findViewById(R.id.tvContext);
 
         mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
@@ -262,9 +261,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 long numberNeedHelp =  needHelpFriends.size();
-                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
                 if (numberNeedHelp > 0){
-                    tvPeopleNeedHelp.setTextColor(Color.RED);
                     tvContext.setTextColor(Color.RED);
                 }
             }
@@ -280,9 +277,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 long numberNeedHelp =  needHelpFriends.size();
-                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
                 if (numberNeedHelp > 0){
-                    tvPeopleNeedHelp.setTextColor(Color.RED);
                     tvContext.setTextColor(Color.RED);
                 }
 
