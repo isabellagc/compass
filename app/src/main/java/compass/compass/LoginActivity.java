@@ -69,6 +69,11 @@ public class LoginActivity extends AppCompatActivity{
                     setAllContacts();
                     FirebaseMessaging.getInstance().subscribeToTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
                     allContacts.remove(user.userId);
+
+                    for(String contactName : allContacts.keySet()){
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + contactName.replaceAll(" ", ""));
+                    }
+
 //                    setDrinksToZero();
                     setDrinkListeners();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);

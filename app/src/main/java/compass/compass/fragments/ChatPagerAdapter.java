@@ -21,8 +21,8 @@ public class ChatPagerAdapter extends FragmentPagerAdapter {
         chatHomeFragment = new ChatHomeFragment();
         messagesFragment = new MessagesFragment();
 
-
     }
+
 
     @Override
     public Fragment getItem(int position) {

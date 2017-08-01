@@ -130,6 +130,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
 
         View v=  inflater.inflate(R.layout.activity_chat_back_up, container, false);
         eventId = getActivity().getIntent().getExtras().getString("eventId");
@@ -184,15 +185,18 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+
         inflater.inflate(R.menu.menu_cancel, menu);
         MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
 
         if(!currentProfile.status) {
             menuItem.setVisible(false);
         }
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
+
 
     public void markSafe(final MenuItem menuItem){
         final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), R.style.Theme_AppCompat_Light_Dialog).create();
