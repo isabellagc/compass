@@ -290,6 +290,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 currentProfile.status = true;
+                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -344,6 +345,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 currentProfile.status = false;
                 alertDialog.dismiss();
