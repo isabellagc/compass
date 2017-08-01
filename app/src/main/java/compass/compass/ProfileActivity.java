@@ -151,4 +151,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onRestart() {
+        recreate();
+        super.onRestart();
+    }
 }

@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         UberSdk.initialize(config);
+        getIntent().setAction("Already created");
 
     }
 
@@ -148,27 +149,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        if(currentProfile != null){
-            if(currentProfile.status){
-                getTheme().applyStyle(R.style.AppThemeInverted, true);
-            }
-            else{
-                getTheme().applyStyle(R.style.AppTheme, true);
-            }
-
-            //setContentView(R.layout.activity_main);
-            setContentView(R.layout.activity_main_android_style);
-            setHomeScreenButtons();
-            setOnClickListeners();
-
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-        }
-
-        invalidateOptionsMenu();
-
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
     }
 
     private void loadUsers() {
@@ -337,14 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
     //launch the needhelp button
     public void launchNeedHelp() {
-//        needhelp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fm = getSupportFragmentManager();
-//                NeedHelpSwipe needHelpSwipe = NeedHelpSwipe.newInstance();
-//                needHelpSwipe.show(fm, "idk_what_goes_here");
-//            }
-//        }
+
         cvGetHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -353,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 needHelpSwipe.show(fm, "idk_what_goes_here");
             }
         });
+
     }
 
     //launch the profile activity

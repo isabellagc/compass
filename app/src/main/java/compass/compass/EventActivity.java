@@ -118,5 +118,11 @@ private void initToolbar() {
         alertDialog.show();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
+    }
+
 
 }

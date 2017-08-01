@@ -17,11 +17,11 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,7 +74,7 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/11/17.
  */
 
-public class ChatActivity extends FragmentActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener {
+public class ChatActivity extends AppCompatActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener {
 
     StorageReference storage;
     private GoogleMap mMap;
@@ -132,12 +132,12 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         storage = FirebaseStorage.getInstance().getReference();
         eventId = getIntent().getStringExtra("eventId");
         fromHere = getIntent().getStringExtra("fromHere");
-        vpPager = findViewById(R.id.viewpager);
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
         chatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager(), this);
         vpPager.setAdapter(chatPagerAdapter);
 
         //add the sliding_tab
-        TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(vpPager);
 
 
@@ -460,6 +460,8 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
             menuItem.setVisible(false);
         }
 
+        setTitle(eventId);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -630,5 +632,11 @@ public class ChatActivity extends FragmentActivity implements OnMapReadyCallback
         infoToPush.put("longitude", currentProfile.longitude);
         infoToPush.put("user", currentProfile.userId);
         mDatabase.child("Flagged Locations").push().setValue(infoToPush);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
     }
 }
