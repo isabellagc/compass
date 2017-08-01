@@ -55,6 +55,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import compass.compass.fragments.NotifyFriendsMessage;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,7 +67,7 @@ import static compass.compass.R.id.friendMap;
  * Created by brucegatete on 7/11/17.
  */
 
-public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback, NotifyFriendsMessage.NotifyFriendsMessageListener {
 
     CardView cvNotifyFriends, cvGoHome;
     SwipeButton callPolice;
@@ -134,7 +135,9 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         cvNotifyFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //launch fragment to ask what kind of help
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                NotifyFriendsMessage notifyFriendsMessage = NotifyFriendsMessage.newInstance();
+                notifyFriendsMessage.show(fm, "tag");
             }
         });
 
@@ -484,5 +487,10 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
