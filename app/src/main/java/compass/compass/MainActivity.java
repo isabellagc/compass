@@ -2,6 +2,7 @@ package compass.compass;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -48,10 +49,13 @@ public class MainActivity extends AppCompatActivity {
     public CardView cvGetHelp;
     public CardView cvDrinkCounter;
     public TextView tvNameBox;
+    public TextView tvPeopleNeedHelp;
+    public  TextView tvContext;
     ImageView ivProfileImage;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabResources;
+    public HashMap<String, User> needHelpFriends;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //setContentView(R.layout.activity_main);
+            needHelpFriends = new HashMap();
             setContentView(R.layout.activity_main_android_style);
             setHomeScreenButtons();
             setOnClickListeners();
@@ -219,7 +224,8 @@ public class MainActivity extends AppCompatActivity {
     private void setHomeScreenButtons() {
 //        location = (ImageButton) findViewById(R.id.location);
 //        drink = (ImageButton) findViewById(R.id.drink);
-//        needhelp = (ImageButton) findViewById(R.id.needHelp);
+//        needhelp = (ImageButton) findVie
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         tvNameBox = (TextView) findViewById(R.id.tvNameBox);
         String name = WordUtils.capitalize(currentProfile.userId);
         tvNameBox.setText(name);
@@ -246,6 +252,62 @@ public class MainActivity extends AppCompatActivity {
 
         ivProfileImage.setOnClickListener(onClickListenerProf);
         tvNameBox.setOnClickListener(onClickListenerProf);
+        tvPeopleNeedHelp = (TextView) findViewById(R.id.tvPeopleNeedHelp);
+        tvContext = (TextView) findViewById(R.id.tvContext);
+
+        mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String userName = dataSnapshot.getKey();
+                if(!userName.equals(currentProfile.userId)){
+                    Object value =  dataSnapshot.getValue();
+                    if(value.equals("help")){
+                        needHelpFriends.put(userName, allContacts.get(userName));
+                    }
+                }
+
+                long numberNeedHelp =  needHelpFriends.size();
+                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
+                if (numberNeedHelp > 0){
+                    tvPeopleNeedHelp.setTextColor(Color.RED);
+                    tvContext.setTextColor(Color.RED);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String userName = dataSnapshot.getKey();
+                if(!userName.equals(currentProfile.userId)){
+                    Object value =  dataSnapshot.getValue();
+                    if(value.equals("help")){
+                        needHelpFriends.put(userName, allContacts.get(userName));
+                    }
+
+                }
+                long numberNeedHelp =  needHelpFriends.size();
+                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
+                if (numberNeedHelp > 0){
+                    tvPeopleNeedHelp.setTextColor(Color.RED);
+                    tvContext.setTextColor(Color.RED);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setOnClickListeners() {
