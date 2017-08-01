@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.models.ChatMessage;
+import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
@@ -113,21 +114,29 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         //vCallContact = (TextView) findViewById(R.id.tvCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
+        tvCallContact = (TextView) findViewById(R.id.tvCallContact);
 
-//        tvCallContact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                User closestUser = MainActivity.allContacts.get(closestFriendName);
-//                callIntent.setData(Uri.parse("tel:" + closestUser.phoneNumber));
-//                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
-//                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                    Log.d("YIKES", "lol u don't have permission to call");
-//                    return;
-//                }
-//                getApplicationContext().startActivity(callIntent);
-//            }
-//        });
+        tvCallContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                User closestUser = MainActivity.allContacts.get(closestFriendName);
+                callIntent.setData(Uri.parse("tel:" + closestUser.phoneNumber));
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("YIKES", "lol u don't have permission to call");
+                    return;
+                }
+                getApplicationContext().startActivity(callIntent);
+            }
+        });
+
+        cvNotifyFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //launch fragment to ask what kind of help
+            }
+        });
 
         locationManager = (LocationManager) getBaseContext().getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -432,7 +441,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void callUber(){
-
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
         alertDialog.setTitle("Call an Uber");
         alertDialog.setMessage("Would you like to request an Uber to go home?");
