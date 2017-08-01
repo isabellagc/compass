@@ -19,14 +19,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +56,7 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.models.ChatMessage;
+import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
@@ -68,11 +68,7 @@ import static compass.compass.R.id.friendMap;
 
 public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    SeekBar level;
-    ImageButton alc;
-    ImageButton home;
-    ImageButton sa;
-    ImageButton other;
+    CardView cvNotifyFriends, cvGoHome;
     SwipeButton callPolice;
     public DatabaseReference mDatabase;
     ChatAdapter mAdapter;
@@ -111,31 +107,36 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
         setContentView(R.layout.activity_need_help);
 
-        level = (SeekBar) findViewById(R.id.level);
-        alc = (ImageButton) findViewById(R.id.ibAlc);
-        home = (ImageButton) findViewById(R.id.ibHome);
-        sa = (ImageButton) findViewById(R.id.ibSA);
-        other = (ImageButton) findViewById(R.id.ibOther);
+        cvNotifyFriends = (CardView) findViewById(R.id.cvNotifyFriends);
+        cvGoHome = (CardView) findViewById(R.id.cvGoHome);
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //vCallContact = (TextView) findViewById(R.id.tvCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
+        tvCallContact = (TextView) findViewById(R.id.tvCallContact);
 
-//        tvCallContact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                User closestUser = MainActivity.allContacts.get(closestFriendName);
-//                callIntent.setData(Uri.parse("tel:" + closestUser.phoneNumber));
-//                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
-//                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//                    Log.d("YIKES", "lol u don't have permission to call");
-//                    return;
-//                }
-//                getApplicationContext().startActivity(callIntent);
-//            }
-//        });
+        tvCallContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                User closestUser = MainActivity.allContacts.get(closestFriendName);
+                callIntent.setData(Uri.parse("tel:" + closestUser.phoneNumber));
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("YIKES", "lol u don't have permission to call");
+                    return;
+                }
+                getApplicationContext().startActivity(callIntent);
+            }
+        });
+
+        cvNotifyFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //launch fragment to ask what kind of help
+            }
+        });
 
         locationManager = (LocationManager) getBaseContext().getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -283,7 +284,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         });
 
             //Send the message to the event
-        home.setOnClickListener(new View.OnClickListener() {
+        cvGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
@@ -306,54 +307,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
             }
         });
-
-        alc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                //change the database and notify the adapter
-                for (int i = 0; i < event_n0.length; i ++) {
-                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
-                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
-                    mAdapter.notifyDataSetChanged();
-                }
-                sendNotificationToUser(members, eventIds, message);
-                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
-                recreate();
-            }
-        });
-
-        sa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                //change the database and notify the adapter
-                for (int i = 0; i < event_n0.length; i ++) {
-                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
-                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
-                    mAdapter.notifyDataSetChanged();
-                }
-                sendNotificationToUser(members, eventIds, message);
-                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
-                recreate();
-            }
-
-        });
-
     }
 
     private void onSwiped() {
@@ -489,7 +442,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void callUber(){
-
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
         alertDialog.setTitle("Call an Uber");
         alertDialog.setMessage("Would you like to request an Uber to go home?");
