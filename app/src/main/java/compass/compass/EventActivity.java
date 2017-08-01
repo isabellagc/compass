@@ -1,10 +1,8 @@
 package compass.compass;
 
 import android.app.FragmentManager;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.TileOverlay;
-import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
@@ -30,13 +21,8 @@ import java.util.Map;
 
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.Event;
-import compass.compass.models.User;
 
-import static compass.compass.MainActivity.allContacts;
-import static compass.compass.MainActivity.currentProfile;
-import static compass.compass.R.id.heatMap;
-
-public class EventActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class EventActivity extends AppCompatActivity {
     public static RecyclerView rvEvents;
     ArrayList<Event> eventList;
     EventsAdapter eventAdapter;
@@ -78,14 +64,14 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(heatMap);
-        mapFragment.getMapAsync(this);
-
-        for (User user : allContacts.values()) {
-            contactLocations.put(user.name, new WeightedLatLng(new LatLng(user.latitude, user.longitude), 100));
-        }
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(heatMap);
+//        mapFragment.getMapAsync(this);
+//
+//        for (User user : allContacts.values()) {
+//            contactLocations.put(user.name, new WeightedLatLng(new LatLng(user.latitude, user.longitude), 100));
+//        }
 
 //        for(final String name: allContacts.keySet()){
 //            contactLocations.put(name, new LatLng(0,0));
@@ -201,27 +187,27 @@ public class EventActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentProfile.latitude, currentProfile.longitude), 15));
-
-
-        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
-                .weightedData(contactLocations.values())
-                .build();
-        // Add a tile overlay to the map, using the heat map tile provider.
-        TileOverlay mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-    }
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        mMap = googleMap;
+//
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentProfile.latitude, currentProfile.longitude), 15));
+//
+//
+//        HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()
+//                .weightedData(contactLocations.values())
+//                .build();
+//        // Add a tile overlay to the map, using the heat map tile provider.
+//        TileOverlay mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+//    }
 }
