@@ -67,6 +67,7 @@ import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
 import compass.compass.LaunchFlagLocationActivity;
 import compass.compass.R;
+import compass.compass.SimpleDividerItemDecoration;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -139,6 +140,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         rvContacts = v.findViewById(R.id.rvContacts);
         //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
         closeFriendAdapter = new CloseFriendAdapter(getActivity(), this);
+        rvContacts.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         rvContacts.setAdapter(closeFriendAdapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvContacts.invalidate();

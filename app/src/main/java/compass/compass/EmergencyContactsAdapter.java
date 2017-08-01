@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -104,7 +103,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvNameContact;
-        public Button btCallContact;
+        public TextView tvCallContact;
         public ImageView ivProfileImage;
         //USE THIS TO SET AN ONCLICKLISTENER FOR THE CONTACT THAT BRINGS YOU TO A VIEW OF THAT PERSON
         //OR THEM ON THE MAP!!!
@@ -114,11 +113,11 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
             super(itemView);
 
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
-            btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
+            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImageMain);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
-            btCallContact.setOnClickListener(new View.OnClickListener() {
+            tvCallContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);

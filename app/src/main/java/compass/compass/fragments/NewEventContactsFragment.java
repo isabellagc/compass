@@ -27,6 +27,7 @@ import compass.compass.EventActivity;
 import compass.compass.EventsAdapter;
 import compass.compass.MainActivity;
 import compass.compass.R;
+import compass.compass.SimpleDividerItemDecoration;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.Event;
 import compass.compass.models.Group;
@@ -103,6 +104,7 @@ public class NewEventContactsFragment extends android.support.v4.app.Fragment {
         adapter = new ContactsAdapter(context, contacts, eventName);
         //attatch adapter to recyclerview to populate items
         rvContacts.setAdapter(adapter);
+        rvContacts.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         //set layout manager to position the items
         rvContacts.setLayoutManager(new LinearLayoutManager(context));
 
