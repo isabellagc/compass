@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -178,11 +177,11 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         holder.ivProfileImage.setImageResource(drawableResourceId);
         if(mCloseFriends.get(name + " status").contentEquals("null")){
             holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.bsp_done_text_color_disabled, null));
-            holder.btCallContact.setEnabled(false);
+            holder.tvCallContact.setEnabled(false);
         }
         else{
             holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.Black, null));
-            holder.btCallContact.setEnabled(true);
+            holder.tvCallContact.setEnabled(true);
         }
         if(mCloseFriends.containsKey(name + " need help") && mCloseFriends.get(name + " need help").contentEquals("true")){
             holder.tvNameContact.setTextColor(mContext.getResources().getColor(R.color.Red, null));
@@ -212,7 +211,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameContact;
-        public Button btCallContact;
+        public TextView tvCallContact;
         public CircleImageView ivProfileImage;
         public ConstraintLayout clContact;
 
@@ -227,11 +226,11 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
             });
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
             ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain);
-            btCallContact = (Button) itemView.findViewById(R.id.btCallContact);
+            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
 
-            btCallContact.setOnClickListener(new View.OnClickListener() {
+            tvCallContact.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
