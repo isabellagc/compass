@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
     public CardView cvGetHelp;
     public CardView cvDrinkCounter;
     public TextView tvNameBox;
+    public ImageView ivProfileBox;
+    public CircleImageView ivProfileImage;
     public TextView tvPeopleNeedHelp;
     public  TextView tvContext;
-    ImageView ivProfileImage;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabResources;
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         cvFindFriends = (CardView) findViewById(R.id.cvFindFriends);
         cvGetHelp = (CardView) findViewById(R.id.cvGetHelp);
         cvDrinkCounter = (CardView) findViewById(R.id.cvDrinkCounter);
+        ivProfileBox = (ImageView) findViewById(R.id.ivProfileBox);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
 
@@ -235,6 +237,16 @@ public class MainActivity extends AppCompatActivity {
 
         ivProfileImage.setOnClickListener(onClickListenerProf);
         tvNameBox.setOnClickListener(onClickListenerProf);
+
+        if(currentProfile.status){
+            ivProfileBox.setImageResource(R.color.colorSecondaryLight);
+            ivProfileImage.setBorderColorResource(R.color.colorPrimaryLight);
+        }
+        else {
+            ivProfileBox.setImageResource(R.color.colorPrimaryLight);
+            ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
+        }
+
         tvPeopleNeedHelp = (TextView) findViewById(R.id.tvPeopleNeedHelp);
         tvContext = (TextView) findViewById(R.id.tvContext);
 
@@ -291,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void setOnClickListeners() {
@@ -322,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
+                FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
 
                 recreate();

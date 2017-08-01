@@ -82,6 +82,7 @@ dependencies {
     compile 'com.android.support:design:[Library version code]'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.uber.sdk:rides-android:0.5.3'
+    compile 'com.google.maps.android:android-maps-utils:0.5+'
 
 //    compile 'com.android.support:support-v4:24.0.0'
 //    compile 'com.android.support:cardview-v7:24.0.0'

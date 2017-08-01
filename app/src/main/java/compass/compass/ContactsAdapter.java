@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 import compass.compass.models.User;
 
+import static compass.compass.MainActivity.allContacts;
+
 /**
  * Created by icamargo on 7/13/17.
  */
@@ -93,10 +95,15 @@ public class ContactsAdapter extends
 
         tvContactName.setText(user.name);
         cbAddContact.setChecked(user.added.get(eventID));
-        //TODO: set profile image usign glide library
+
         if (mContacts != null){
-            int drawableResourceId = mContext.getResources().getIdentifier(mContacts.get(position).name.replaceAll(" ", ""), "drawable", mContext.getPackageName());
-            holder.ivProfileImage.setImageResource(drawableResourceId);
+            if(allContacts.containsKey(user.name)){
+                int drawableResourceId = mContext.getResources().getIdentifier(mContacts.get(position).name.replaceAll(" ", ""), "drawable", mContext.getPackageName());
+                holder.ivProfileImage.setImageResource(drawableResourceId);
+            }
+            else{
+                holder.ivProfileImage.setImageResource(R.drawable.ic_person);
+            }
         }
 
     }

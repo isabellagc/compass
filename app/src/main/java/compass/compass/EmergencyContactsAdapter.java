@@ -91,8 +91,13 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvNameContact.setText(mEmergencyContactNames.get(position));
         if(mEmergencyContactNames != null){
-            int drawableResourceId = mContext.getResources().getIdentifier(mEmergencyContactNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
-            holder.ivProfileImage.setImageResource(drawableResourceId);
+            if(allContacts.containsKey(mEmergencyContactNames.get(position))){
+                int drawableResourceId = mContext.getResources().getIdentifier(mEmergencyContactNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
+                holder.ivProfileImage.setImageResource(drawableResourceId);
+            }
+            else{
+                holder.ivProfileImage.setImageResource(R.drawable.ic_person);
+            }
         }
     }
 
