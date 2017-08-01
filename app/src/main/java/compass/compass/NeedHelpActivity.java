@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -81,7 +80,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     String [] event_n0;
     String[] members;
     String[] eventIds;
-    Button btCallContact;
+    TextView tvCallContact;
     TextView tvNameContact;
     CircleImageView ivProfileImage;
 
@@ -120,11 +119,11 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         other = (ImageButton) findViewById(R.id.ibOther);
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        btCallContact = (Button) findViewById(R.id.btCallContact);
+        tvCallContact = (TextView) findViewById(R.id.tvCallContact);
         tvNameContact = (TextView) findViewById(R.id.tvNameContact);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
 
-        btCallContact.setOnClickListener(new View.OnClickListener() {
+        tvCallContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);

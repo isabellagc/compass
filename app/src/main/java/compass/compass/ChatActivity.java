@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -135,6 +136,23 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         chatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager(), this);
         vpPager.setAdapter(chatPagerAdapter);
+
+        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                final InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(vpPager.getWindowToken(), 0);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float offset, int offsetPixels) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         //add the sliding_tab
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -414,6 +432,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+
     }
 
     private void updateUserInfo(DataSnapshot dataSnapshot, String memberName, User user){
@@ -639,4 +658,5 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onRestart();
         recreate();
     }
+
 }

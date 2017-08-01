@@ -1,6 +1,8 @@
 package compass.compass.fragments;
 
+import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -172,6 +175,9 @@ public class MessagesFragment extends Fragment {
         mDatabase.child("notifications").push().setValue(notification);
 
     }
+
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

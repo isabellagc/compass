@@ -40,6 +40,7 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,6 +68,7 @@ import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
 import compass.compass.LaunchFlagLocationActivity;
 import compass.compass.R;
+import compass.compass.SimpleDividerItemDecoration;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -78,10 +80,10 @@ import static compass.compass.MainActivity.currentProfile;
  * Created by brucegatete on 7/26/17.
  */
 
-public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
+public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, CloseFriendAdapter.AdapterListenerSpecial{
     public static final int REQUEST_CODE = 0;
     StorageReference storage;
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     EditText etMessage;
     Button btSend;
     RecyclerView rvContacts;
@@ -113,6 +115,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
     String myStatus;
 
     String[] members;
+    public TextView tvNameContact;
 
     boolean newFlag = false;
     boolean mapExpanded;
@@ -139,7 +142,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
         flagMap = new HashMap<>();
         rvContacts = v.findViewById(R.id.rvContacts);
         //emergencyContactsAdapter = new EmergencyContactsAdapter(getActivity());
-        closeFriendAdapter = new CloseFriendAdapter(getActivity());
+        closeFriendAdapter = new CloseFriendAdapter(getActivity(), this);
+        rvContacts.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         rvContacts.setAdapter(closeFriendAdapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvContacts.invalidate();
@@ -150,10 +154,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
             }
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        etMessage = (EditText) v.findViewById(R.id.etMessage);
-        btSend = (Button) v.findViewById(R.id.btSend);
-
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +179,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
                 originalHeight = view.getHeight();
             }
         });
+
         return v;
     }
 
@@ -321,6 +322,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
             }
 
     }
+
 
     private void populateMapFlags() {
         mDatabase.child("Flagged Locations").addChildEventListener(new ChildEventListener() {
@@ -758,22 +760,19 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback{
         return resizedBitmap;
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // Make sure fragment codes match up
-//        if (requestCode == REQUEST_CODE) {
-//            boolean setFlag = data.getBooleanExtra("boolSend", false);
-//            if(setFlag){
-//                //update the database
-//                Map<String, Object> infoToPush = new HashMap<>();
-//                infoToPush.put("latitude", currentProfile.latitude);
-//                infoToPush.put("longitude", currentProfile.longitude);
-//                infoToPush.put("user", currentProfile.userId);
-//                newFlag = true;
-//                mDatabase.child("Flagged Locations").push().setValue(infoToPush);
-//                //make a snackbar
-//                Snackbar.make(getView(), "Location marked as unsafe.", Snackbar.LENGTH_LONG).show();
-//            }
-//        }
-//    }
+
+    @Override
+    public void mapZoomIn(User user) {
+       LatLng userLocation = new LatLng(user.latitude, user.longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(userLocation)
+                .zoom(15)
+                .bearing(0)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
 
 }

@@ -62,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvOtherInfo.setText(currentProfile.healthInfo.get(User.KEY_OTHER_INFO));
 
         emergencyContactsAdapter = new EmergencyContactsAdapter(this);
+        rvEmergencyContacts.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
         rvEmergencyContacts.setAdapter(emergencyContactsAdapter);
         rvEmergencyContacts.setLayoutManager(new LinearLayoutManager(this));
         //rvEmergencyContacts.invalidate();
