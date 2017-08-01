@@ -2,8 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -102,11 +102,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:text="Your friends have been notified."
-        android:textAppearance="@android:style/TextAppearance.Material.Notification.Emphasis"
+        android:textAppearance="@android:style/TextAppearance.Material.Notification.Title"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintLeft_toRightOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.5" />
 
     <ImageView
         android:id="@+id/imageView"

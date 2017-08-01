@@ -2,8 +2,8 @@ package compass.compass.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.CardView;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import compass.compass.MainActivity;
 import compass.compass.R;
 
 
@@ -20,6 +21,7 @@ public class NotifyFriendsMessage extends DialogFragment {
     public CardView cvIntoxication, cvInjury, cvSexualAssault, cvOther;
     public TextView tvCancelMessageFriends, tvContinueMessageFriends;
     boolean injury, intoxication, sexualAssault, other;
+    String currentUserProfile = (MainActivity.currentProfile.name);
 
     private NotifyFriendsMessageListener mListener;
 
@@ -78,7 +80,8 @@ public class NotifyFriendsMessage extends DialogFragment {
         tvContinueMessageFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //do something with highlighted items ie booleans that correspond
+                String message = makeStringMessage();
+                mListener.writeMessageToUsers(message);
                 dismiss();
             }
         });
@@ -89,6 +92,68 @@ public class NotifyFriendsMessage extends DialogFragment {
                 dismiss();
             }
         });
+    }
+
+    private String makeStringMessage(){
+        String message = "Please help " + changeStringCase(currentUserProfile) + "! They have just marked themselves as";
+        if(sexualAssault){
+            message += " in danger of SEXUAL ASSAULT";
+            if(intoxication){
+                message += " and OVER INTOXICATION";
+                if(injury){
+                    message += " and INJURED";
+                    if(other){
+                        message += " and may require further aid";
+                    }
+                }else if(other){
+                    message += " and may require further aid";
+                }
+            }else if(injury){
+                message += " and INJURED";
+                if(other){
+                    message += " and may require further aid";
+                }
+            }else if(other){
+                message += " and may require further aid";
+            }
+        }else if(intoxication){
+            message += " OVERLY INTOXICATED";
+            if(injury){
+                message += " and INJURED";
+                if(other){
+                    message += " and may require further aid";
+                }
+            }else if(other){
+                message += " and may require further aid";
+            }
+        }else if(injury){
+            message += " INJURED";
+            if(other){
+                message += " and may require further aid";
+            }
+        }else if(other){
+            message += " requiring aid";
+        }else{
+            message += " in need of help";
+        }
+        message += "!";
+        return message;
+    }
+
+    @NonNull
+    public static String changeStringCase(String s) {
+        final String DELIMITERS = " '-/";
+        StringBuilder sb = new StringBuilder();
+        boolean capNext = true;
+
+        for (char c : s.toCharArray()) {
+            c = (capNext)
+                    ? Character.toUpperCase(c)
+                    : Character.toLowerCase(c);
+            sb.append(c);
+            capNext = (DELIMITERS.indexOf((int) c) >= 0);
+        }
+        return sb.toString();
     }
 
     @Override
@@ -135,7 +200,6 @@ public class NotifyFriendsMessage extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface NotifyFriendsMessageListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void writeMessageToUsers(String messageInfo);
     }
 }

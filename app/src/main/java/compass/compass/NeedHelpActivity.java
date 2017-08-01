@@ -286,11 +286,11 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-            //Send the message to the event
+        //Send the message to the event
         cvGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
+                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 currentProfile.status = true;
                 ChatMessage message = new ChatMessage();
@@ -305,7 +305,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
                 callUber();
 
             }
@@ -491,7 +490,20 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void writeMessageToUsers(String messageInfo) {
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        ChatMessage message = new ChatMessage();
+        message.setText(messageInfo);
+        message.setSender("BOT");
+        message.setTime((new Date().getTime()));
+        //change the database and notify the adapter
+        for (int i = 0; i < event_n0.length; i ++) {
+            mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
+            mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
+            mAdapter.notifyDataSetChanged();
+        }
+        sendNotificationToUser(members, eventIds, message);
+        Toast.makeText(NeedHelpActivity.this, messageInfo, Toast.LENGTH_LONG).show();
     }
 }
