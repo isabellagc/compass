@@ -176,6 +176,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 originalHeight = view.getHeight();
             }
         });
+
         return v;
     }
 
@@ -315,6 +316,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             }
 
     }
+
 
     private void populateMapFlags() {
         mDatabase.child("Flagged Locations").addChildEventListener(new ChildEventListener() {

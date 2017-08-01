@@ -44,4 +44,5 @@ public class ChatPagerAdapter extends FragmentPagerAdapter {
         //generate title based on position
         return tabTitles [position];
     }
+
 }
