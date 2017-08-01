@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivProfileBox"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivProfileBox"
-        app:srcCompat="@android:color/background_dark" />
+        app:srcCompat="@android:color/background_dark"/>
 
     <TextView
         android:id="@+id/tvNameBox"
@@ -261,6 +261,32 @@
         app:layout_constraintTop_toTopOf="@+id/tvNameBox"
         app:srcCompat="@drawable/ic_school_black_24dp"
         android:layout_marginEnd="24dp" />
+
+    <TextView
+        android:id="@+id/tvPeopleNeedHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="24dp"
+        android:text="0"
+        app:layout_constraintLeft_toLeftOf="@+id/ivProfileBox"
+        app:layout_constraintRight_toRightOf="@+id/ivProfileBox"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileBox"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tvContext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="24dp"
+        android:text="People Need Help!"
+        android:visibility="visible"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tvNameBox"
+        app:layout_constraintRight_toRightOf="@+id/ivProfileBox"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileBox"
+        tools:layout_editor_absoluteX="219dp"
+        tools:layout_editor_absoluteY="16dp" />
 
 
 </android.support.constraint.ConstraintLayout>
