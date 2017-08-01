@@ -19,14 +19,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,11 +68,7 @@ import static compass.compass.R.id.friendMap;
 
 public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    SeekBar level;
-    ImageButton alc;
-    ImageButton home;
-    ImageButton sa;
-    ImageButton other;
+    CardView cvNotifyFriends, cvGoHome;
     SwipeButton callPolice;
     public DatabaseReference mDatabase;
     ChatAdapter mAdapter;
@@ -112,11 +107,8 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
         setContentView(R.layout.activity_need_help);
 
-        level = (SeekBar) findViewById(R.id.level);
-        alc = (ImageButton) findViewById(R.id.ibAlc);
-        home = (ImageButton) findViewById(R.id.ibHome);
-        sa = (ImageButton) findViewById(R.id.ibSA);
-        other = (ImageButton) findViewById(R.id.ibOther);
+        cvNotifyFriends = (CardView) findViewById(R.id.cvNotifyFriends);
+        cvGoHome = (CardView) findViewById(R.id.cvGoHome);
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         tvCallContact = (TextView) findViewById(R.id.tvCallContact);
@@ -284,7 +276,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         });
 
             //Send the message to the event
-        home.setOnClickListener(new View.OnClickListener() {
+        cvGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
@@ -308,54 +300,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 callUber();
             }
         });
-
-        alc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help. getting wasted");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                //change the database and notify the adapter
-                for (int i = 0; i < event_n0.length; i ++) {
-                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
-                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
-                    mAdapter.notifyDataSetChanged();
-                }
-                sendNotificationToUser(members, eventIds, message);
-                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
-                recreate();
-            }
-        });
-
-        sa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting safe from Sexual Assault!");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                //change the database and notify the adapter
-                for (int i = 0; i < event_n0.length; i ++) {
-                    mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
-                    mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
-                    mAdapter.notifyDataSetChanged();
-                }
-                sendNotificationToUser(members, eventIds, message);
-                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
-                recreate();
-            }
-
-        });
-
     }
 
     private void onSwiped() {
