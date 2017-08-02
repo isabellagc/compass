@@ -55,6 +55,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import compass.compass.fragments.NotifyFriendsMessage;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,7 +67,7 @@ import static compass.compass.R.id.friendMap;
  * Created by brucegatete on 7/11/17.
  */
 
-public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback, NotifyFriendsMessage.NotifyFriendsMessageListener {
 
     CardView cvNotifyFriends, cvGoHome;
     SwipeButton callPolice;
@@ -134,7 +135,9 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         cvNotifyFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //launch fragment to ask what kind of help
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                NotifyFriendsMessage notifyFriendsMessage = NotifyFriendsMessage.newInstance();
+                notifyFriendsMessage.show(fm, "tag");
             }
         });
 
@@ -283,13 +286,14 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-            //Send the message to the event
+        //Send the message to the event
         cvGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Alert_message = ("Please help, " + currentProfile.name + " needs your help getting home");
+                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 currentProfile.status = true;
+                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
                 ChatMessage message = new ChatMessage();
                 message.setText(Alert_message);
                 message.setSender("BOT");
@@ -302,7 +306,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 }
                 sendNotificationToUser(members, eventIds, message);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
-
                 callUber();
 
             }
@@ -344,6 +347,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         DialogInterface.OnClickListener yes = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
@@ -485,5 +489,23 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    public void writeMessageToUsers(String messageInfo) {
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        ChatMessage message = new ChatMessage();
+        message.setText(messageInfo);
+        message.setSender("BOT");
+        message.setTime((new Date().getTime()));
+        //change the database and notify the adapter
+        for (int i = 0; i < event_n0.length; i ++) {
+            mDatabase.child("messages").child(event_n0[i]).push().setValue(message);
+            mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
+            mAdapter.notifyDataSetChanged();
+        }
+        sendNotificationToUser(members, eventIds, message);
+        Toast.makeText(NeedHelpActivity.this, messageInfo, Toast.LENGTH_LONG).show();
     }
 }
