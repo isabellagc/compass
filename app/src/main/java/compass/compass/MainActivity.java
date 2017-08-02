@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{
                         needHelpFriends.remove(userName);
+                        populateNeedHelp();
                     }
                 }
 
@@ -295,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
                         needHelpFriends.remove(userName);
+                        populateNeedHelp();
                     }
 
                 }
