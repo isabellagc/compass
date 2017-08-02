@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -235,6 +234,13 @@ public class MainActivity extends AppCompatActivity {
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
         linearLayout = (LinearLayout) findViewById(R.id.ll);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
+
+//        ImageView img1 = new ImageView(this);
+//        img1.setImageResource(R.drawable.ic_person);
+//        linearLayout.addView(img1);
+//        ImageView img2 = new ImageView(this);
+//        img2.setImageResource(R.drawable.ic_person);
+//        linearLayout.addView(img2);
 
         View.OnClickListener onClickListenerProf = new View.OnClickListener() {
             @Override
@@ -464,7 +470,7 @@ public class MainActivity extends AppCompatActivity {
             /*---------------Creating frame layout----------------------*/
 
             FrameLayout frameLayout = new FrameLayout(MainActivity.this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, getPixelsToDP(90));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, getPixelsToDP(50));
             layoutParams.rightMargin = getPixelsToDP(10);
             frameLayout.setLayoutParams(layoutParams);
 
@@ -472,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
 
             /*---------------Creating image view----------------------*/
             final CircleImageView imgView = new CircleImageView(MainActivity.this); //create imageview dynamically
-            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(130, 130);
             imgView.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getPackageName()));
             imgView.setLayoutParams(lpImage);
             // setting ID to retrieve at later time (same as its position)
@@ -480,17 +486,17 @@ public class MainActivity extends AppCompatActivity {
             /*--------------end of image view----------------------------*/
 
             /*---------------Creating Text view----------------------*/
-            TextView textView = new TextView(MainActivity.this);//create textview dynamically
-            textView.setText(user.name);
-            FrameLayout.LayoutParams lpText = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER);
-            // Note: LinearLayout.LayoutParams 's gravity was not working so I putted Framelayout as 3 paramater is gravity itself
-            textView.setTextColor(getResources().getColor(R.color.Black, null));
-            textView.setLayoutParams(lpText);
+//            TextView textView = new TextView(MainActivity.this);//create textview dynamically
+//            textView.setText(user.name);
+//            FrameLayout.LayoutParams lpText = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER);
+//            // Note: LinearLayout.LayoutParams 's gravity was not working so I putted Framelayout as 3 paramater is gravity itself
+//            textView.setTextColor(getResources().getColor(R.color.Black, null));
+//            textView.setLayoutParams(lpText);
             /*--------------end of Text view----------------------------*/
 
             //Adding views at appropriate places
             frameLayout.addView(imgView);
-            frameLayout.addView(textView);
+//            frameLayout.addView(textView);
             linearLayout.addView(frameLayout);
 
             i++;

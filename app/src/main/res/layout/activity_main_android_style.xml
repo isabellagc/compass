@@ -307,22 +307,22 @@
 
     <HorizontalScrollView
         android:id="@+id/horizontalScroll"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:elevation="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivFriendsInNeed"
-        app:layout_constraintLeft_toLeftOf="@+id/ivFriendsInNeed"
-        app:layout_constraintRight_toLeftOf="@+id/imageView3"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        app:layout_constraintLeft_toLeftOf="@+id/ivFriendsInNeed">
 
         <LinearLayout
-            android:id = "@+id/ll"
+            android:id="@+id/ll"
+            android:elevation="12dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="top|center"
             android:fillViewport="true"
-            android:visibility="visible"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:visibility="visible" />
     </HorizontalScrollView>
 
 
