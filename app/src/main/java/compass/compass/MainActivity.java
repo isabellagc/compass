@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import compass.compass.fragments.ContactFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -468,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
         linearLayout.removeAllViews();
 
-        for(User user : needHelpFriends.values()) {
+        for(final User user : needHelpFriends.values()) {
             /*---------------Creating frame layout----------------------*/
 
             FrameLayout frameLayout = new FrameLayout(MainActivity.this);
@@ -485,6 +486,14 @@ public class MainActivity extends AppCompatActivity {
             imgView.setLayoutParams(lpImage);
             // setting ID to retrieve at later time (same as its position)
             imgView.setId(i);
+            imgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
+                    contactFragment.show(fm, "idk_what_goes_here");
+                }
+            });
             /*--------------end of image view----------------------------*/
 
             /*---------------Creating Text view----------------------*/

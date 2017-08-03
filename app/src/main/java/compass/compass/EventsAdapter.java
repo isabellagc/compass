@@ -248,6 +248,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                     }
 
                     if(mEvents.get(pos).myStatus.contentEquals("null")){
+
                         FragmentActivity activity = (FragmentActivity) mContext;
                         FragmentManager fm = activity.getSupportFragmentManager();
                         StatusFragment statusFragment = StatusFragment.newInstance(eventId, fromHere);
