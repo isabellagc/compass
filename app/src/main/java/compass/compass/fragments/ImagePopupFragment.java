@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import compass.compass.R;
 import compass.compass.models.User;
@@ -21,21 +22,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static compass.compass.MainActivity.allContacts;
 
 
-public class ContactFragment extends DialogFragment {
+/**
+ * Created by brucegatete on 8/3/17.
+ */
 
-    TextView tvNameContact;
-    CircleImageView ivProfileImageMain;
-    TextView tvCallContact;
+public class ImagePopupFragment extends DialogFragment{
+    TextView tvNameContact1;
+    CircleImageView ivProfileImageMain1;
+    TextView tvCallContact1;
+    TextView tvLocation;
     User user;
 
 
-    public ContactFragment() {
+    public ImagePopupFragment() {
         // Required empty public constructor
     }
 
 
-    public static ContactFragment newInstance(String name) {
-        ContactFragment fragment = new ContactFragment();
+    public static ImagePopupFragment newInstance(String name) {
+        ImagePopupFragment fragment = new ImagePopupFragment();
         Bundle args = new Bundle();
         args.putString("name", name);
         fragment.setArguments(args);
@@ -55,20 +60,20 @@ public class ContactFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact, container, false);
+        return inflater.inflate(R.layout.fragment_image_popup, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvNameContact = view.findViewById(R.id.tvNameContact1);
-        tvCallContact = view.findViewById(R.id.tvCallContact1);
-        ivProfileImageMain = view.findViewById(R.id.ivProfileImageMain1);
+        tvNameContact1 = view.findViewById(R.id.tvNameContact1);
+        tvCallContact1 = view.findViewById(R.id.tvCallContact1);
+        ivProfileImageMain1 = view.findViewById(R.id.ivProfileImageMain1);
+        tvLocation = view.findViewById(R.id.tvLocation);
+        ivProfileImageMain1.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ", ""), "drawable", getActivity().getPackageName()));
 
-        ivProfileImageMain.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName()));
-
-        tvCallContact.setOnClickListener(new View.OnClickListener() {
+        tvCallContact1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -81,7 +86,15 @@ public class ContactFragment extends DialogFragment {
                 getActivity().getApplicationContext().startActivity(callIntent);
             }
         });
+        tvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "location pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        tvNameContact.setText(user.name);
+        tvNameContact1.setText(user.name);
     }
+
+
 }

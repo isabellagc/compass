@@ -38,9 +38,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import compass.compass.fragments.ContactFragment;
 import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.ImagePopupFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         cvGetHelp = (CardView) findViewById(R.id.cvGetHelp);
         cvDrinkCounter = (CardView) findViewById(R.id.cvDrinkCounter);
         ivProfileBox = (ImageView) findViewById(R.id.ivProfileBox);
-        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain1);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
         linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
@@ -507,8 +506,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     FragmentManager fm = getSupportFragmentManager();
-                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
-                    contactFragment.show(fm, "idk_what_goes_here");
+                    ImagePopupFragment imagePopupFragment = ImagePopupFragment.newInstance(user.name);
+                    imagePopupFragment.show(fm, "name");
+
                 }
             });
             /*--------------end of image view----------------------------*/

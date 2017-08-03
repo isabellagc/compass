@@ -224,9 +224,9 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
                     listenerSpecial.mapZoomIn(allContacts.get(mCloseFriendsNames.get(getAdapterPosition())));
                 }
             });
-            tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
-            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain);
-            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact);
+            tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact1);
+            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain1);
+            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact1);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
 

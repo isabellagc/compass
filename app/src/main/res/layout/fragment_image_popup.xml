@@ -10,21 +10,18 @@
 
     <TextView
         android:id="@+id/tvNameContact1"
-        android:layout_width="187dp"
-        android:layout_height="25dp"
+        android:layout_width="142dp"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Contact Name"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         app:layout_constraintBottom_toBottomOf="@+id/ivProfileImageMain1"
         app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain1"
-        app:layout_constraintRight_toLeftOf="@+id/tvCallContact1"
         app:layout_constraintTop_toTopOf="@+id/ivProfileImageMain1"
-        app:layout_constraintHorizontal_bias="0.19"
-        android:layout_marginRight="0dp"
-        tools:layout_editor_absoluteX="54dp" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/tvCallContact1"
@@ -43,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.516"
         android:layout_marginLeft="12dp"
-        app:layout_constraintHorizontal_bias="0.87" />
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImageMain1"
@@ -57,6 +54,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/background_dark" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintLeft_toRightOf="@+id/tvNameContact1"
+        app:layout_constraintRight_toLeftOf="@+id/tvCallContact1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="12dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.51" />
 
 
 </android.support.constraint.ConstraintLayout>
