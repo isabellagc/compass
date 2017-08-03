@@ -28,13 +28,12 @@ import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 
 import static compass.compass.MainActivity.currentProfile;
-import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 /**
  * Created by brucegatete on 7/11/17.
  */
 
-public class DrinkActivityReal extends AppCompatActivity{
+public class DrinkActivityReal extends AppCompatActivity implements Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener{
     public static final int GRAMS_IN_STANDARD_DRINK = 14;
     public static final double LBS_TO_GRAMS_CONVERSION = 453.59237;
     public static final double MALE_CONSTANT = .68;
@@ -214,23 +213,41 @@ public class DrinkActivityReal extends AppCompatActivity{
 
     public void message911(final MenuItem menuItem){
         FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == CALL_ACTIVITY_CODE){
-            Intent i = new Intent(this, NeedHelpActivity.class);
-            startActivity(i);
-        }
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
     }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
+    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == CALL_ACTIVITY_CODE){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }
+//    }
 
 }
 

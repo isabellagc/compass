@@ -44,11 +44,9 @@ import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
-
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener{
 //    public ImageButton location;
 //    public ImageButton drink;
 //    public ImageButton needhelp;
@@ -212,14 +210,14 @@ public class MainActivity extends AppCompatActivity {
 //            setCurrentUser(name);
 //        }
 //    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == CALL_ACTIVITY_CODE){
-            Intent i = new Intent(this, NeedHelpActivity.class);
-            startActivity(i);
-        }
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == CALL_ACTIVITY_CODE){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }
+//    }
 
 
     private void setHomeScreenButtons() {
@@ -463,13 +461,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void message911(final MenuItem menuItem){
         FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
 
@@ -531,6 +529,26 @@ public class MainActivity extends AppCompatActivity {
         float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
         return pixels;
+    }
+
+    @Override
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
+        startActivity(i);
+    }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
     }
 }
 
