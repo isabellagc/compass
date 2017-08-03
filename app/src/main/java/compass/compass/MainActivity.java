@@ -2,16 +2,19 @@ package compass.compass;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,9 +41,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import compass.compass.fragments.ContactFragment;
 import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.ContactFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
         linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
+        tvPeopleNeedHelp = (TextView) findViewById(R.id.tvContext);
 
 //        ImageView img1 = new ImageView(this);
 //        img1.setImageResource(R.drawable.ic_person);
@@ -486,6 +489,48 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
         linearLayout.removeAllViews();
 
+        if(needHelpFriends.size() == 0){
+            horizontalScrollView.setVisibility(View.GONE);
+            tvPeopleNeedHelp.setText("No friends need help");
+            tvPeopleNeedHelp.setTextColor(getResources().getColor(R.color.Black, null));
+
+            Resources r = getResources();
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, r.getDisplayMetrics());
+
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) cvFindFriends.getLayoutParams();
+            params.height = px;
+            cvFindFriends.setLayoutParams(params);
+
+            params = (ConstraintLayout.LayoutParams) cvGetHelp.getLayoutParams();
+            params.height = px;
+            cvGetHelp.setLayoutParams(params);
+
+            params = (ConstraintLayout.LayoutParams) cvDrinkCounter.getLayoutParams();
+            params.height = px;
+            cvDrinkCounter.setLayoutParams(params);
+        }
+        else{
+            horizontalScrollView.setVisibility(View.VISIBLE);
+            tvPeopleNeedHelp.setText("Friends in Need:");
+
+            tvPeopleNeedHelp.setTextColor(getResources().getColor(R.color.Black, null));
+
+            Resources r = getResources();
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, r.getDisplayMetrics());
+
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) cvFindFriends.getLayoutParams();
+            params.height = px;
+            cvFindFriends.setLayoutParams(params);
+
+            params = (ConstraintLayout.LayoutParams) cvGetHelp.getLayoutParams();
+            params.height = px;
+            cvGetHelp.setLayoutParams(params);
+
+            params = (ConstraintLayout.LayoutParams) cvDrinkCounter.getLayoutParams();
+            params.height = px;
+            cvDrinkCounter.setLayoutParams(params);
+        }
+
         for(final User user : needHelpFriends.values()) {
             /*---------------Creating frame layout----------------------*/
 
@@ -498,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
 
             /*---------------Creating image view----------------------*/
             final CircleImageView imgView = new CircleImageView(MainActivity.this); //create imageview dynamically
-            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(130, 130);
+            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(160, 160);
             imgView.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getPackageName()));
             imgView.setLayoutParams(lpImage);
             // setting ID to retrieve at later time (same as its position)
