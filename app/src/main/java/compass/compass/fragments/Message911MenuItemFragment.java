@@ -21,10 +21,17 @@ public class Message911MenuItemFragment extends DialogFragment {
     //private NotifyFriendsMessageListener mListener;
     public static String message = "";
     public EditText etMessage911;
+    public static String number;
     TextView tvContinueMessage911, tvCancelMessage911;
 
     public Message911MenuItemFragment() {
         // Required empty public constructor
+    }
+
+    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber) {
+        message = messageInfo;
+        number = contactNumber;
+        return new Message911MenuItemFragment();
     }
 
     public static Message911MenuItemFragment newInstance(String messageInfo) {
@@ -48,8 +55,12 @@ public class Message911MenuItemFragment extends DialogFragment {
         tvContinueMessage911 = (TextView) view.findViewById(R.id.tvContinueMessage911);
         tvCancelMessage911 = (TextView) view.findViewById(R.id.tvCancelMessage911);
 
-        if(message.length() == 0){
+        if(message.length() == 0 && number == null){
             message = "Hello my name is " + changeStringCase(MainActivity.currentProfile.name) + " I am in need of help!! My current location is (" + MainActivity.currentProfile.latitude + ", " + MainActivity.currentProfile.longitude + "). ";
+        }
+
+        if (number == null){
+            number = "4258924209";
         }
 
         etMessage911.setText(message);
@@ -67,7 +78,7 @@ public class Message911MenuItemFragment extends DialogFragment {
             public void onClick(View view) {
                 String newMessage = etMessage911.getText().toString();
                 try {
-                    SmsManager.getDefault().sendTextMessage("4258924209", null, newMessage, null, null);
+                    SmsManager.getDefault().sendTextMessage(number, null, newMessage, null, null);
                 } catch (Exception e) {
                     AlertDialog.Builder alertDialogBuilder = new
                             AlertDialog.Builder(getContext());

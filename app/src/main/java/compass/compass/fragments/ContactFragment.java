@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
-import static compass.compass.MainActivity.currentProfile;
 
 
 public class ContactFragment extends DialogFragment {
@@ -28,6 +28,7 @@ public class ContactFragment extends DialogFragment {
     CircleImageView ivProfileImageMain;
     TextView tvCallContact;
     User user;
+    TextView tvMessageContact;
 
 
     public ContactFragment() {
@@ -66,6 +67,7 @@ public class ContactFragment extends DialogFragment {
         tvNameContact = view.findViewById(R.id.tvNameContact);
         tvCallContact = view.findViewById(R.id.tvCallContact);
         ivProfileImageMain = view.findViewById(R.id.ivProfileImageMain);
+        tvMessageContact = view.findViewById(R.id.tvMessageContact);
 
         ivProfileImageMain.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName()));
 
@@ -80,6 +82,15 @@ public class ContactFragment extends DialogFragment {
                     return;
                 }
                 getActivity().getApplicationContext().startActivity(callIntent);
+            }
+        });
+
+        tvMessageContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance("", user.phoneNumber);
+                message911MenuItemFragment.show(fm, "TAG");
             }
         });
 

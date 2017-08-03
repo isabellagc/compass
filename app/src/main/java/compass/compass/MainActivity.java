@@ -278,8 +278,6 @@ public class MainActivity extends AppCompatActivity {
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        tvContext = (TextView) findViewById(R.id.tvContext);
-
         mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -587,6 +585,7 @@ public class MainActivity extends AppCompatActivity {
         int pixels = (int) (dp * scale + 0.5f);
         return pixels;
     }
+
 }
 
 
