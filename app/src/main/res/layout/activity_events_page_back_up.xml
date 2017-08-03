@@ -4,39 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme.noTitleBar"
     android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:id="@+id/app_bar_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:fitsSystemWindows="true"-->
+        <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <!--<android.support.design.widget.CollapsingToolbarLayout-->
 
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <!--android:id="@+id/collapsing_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:fitsSystemWindows="true"-->
+            <!--app:contentScrim="?attr/colorPrimary"-->
+            <!--app:expandedTitleMarginEnd="64dp"-->
+            <!--app:expandedTitleMarginStart="48dp"-->
+            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="268dp"
-                android:background="@color/Black"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="none" />
-
-            <!--<fragment-->
-                <!--android:id="@+id/heatMap"-->
-                <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+            <!--<ImageView-->
+                <!--android:id="@+id/image"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="268dp"-->
                 <!--android:background="@color/Black"-->
@@ -44,19 +33,29 @@
                 <!--android:scaleType="centerCrop"-->
                 <!--app:layout_collapseMode="none" />-->
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="none"
-                app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            <!--&lt;!&ndash;<fragment&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/heatMap"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:name="com.google.android.gms.maps.SupportMapFragment"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="268dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:background="@color/Black"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:fitsSystemWindows="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:scaleType="centerCrop"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:layout_collapseMode="none" />&ndash;&gt;-->
 
-            </android.support.v7.widget.Toolbar>
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--app:layout_collapseMode="none"-->
+                <!--app:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            <!--</android.support.v7.widget.Toolbar>-->
+
+        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
 
-    </android.support.design.widget.AppBarLayout>
+    <!--</android.support.design.widget.AppBarLayout>-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"

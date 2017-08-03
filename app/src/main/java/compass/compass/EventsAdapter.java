@@ -1,19 +1,16 @@
 package compass.compass;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -251,14 +248,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
                     if(mEvents.get(pos).myStatus.contentEquals("null")){
 
-                        if (mContext instanceof Activity){
-                            AppCompatActivity activity = (AppCompatActivity) mContext;
-                            FragmentManager fm = activity.getSupportFragmentManager();
-                            StatusFragment statusFragment = StatusFragment.newInstance(eventId, fromHere);
-                            statusFragment.show(fm, "tag");
-                        }else {
-                            Toast.makeText(mContext, "Ukhavshdjfasvgdmasdjhagsjdga", Toast.LENGTH_SHORT).show();
-                        }
+                        EventActivity activity = (EventActivity) mContext;
+                        FragmentManager fm = activity.getSupportFragmentManager();
+                        StatusFragment statusFragment = StatusFragment.newInstance(eventId, fromHere);
+                        statusFragment.show(fm, "tag");
 
                     }
                     else{

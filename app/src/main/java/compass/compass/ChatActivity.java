@@ -73,13 +73,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
-import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 /**
  * Created by brucegatete on 7/11/17.
  */
 
-public class ChatActivity extends AppCompatActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener {
+public class ChatActivity extends AppCompatActivity implements OnMapReadyCallback, LaunchFlagLocationActivity.MyDialogListener, Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener {
 
     StorageReference storage;
     private GoogleMap mMap;
@@ -489,13 +488,13 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void message911(final MenuItem menuItem){
         FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
 
@@ -676,11 +675,29 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == CALL_ACTIVITY_CODE){
-            Intent i = new Intent(this, NeedHelpActivity.class);
-            startActivity(i);
-        }
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
     }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
+    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == CALL_ACTIVITY_CODE){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }
+//    }
 
 }

@@ -22,7 +22,9 @@ import compass.compass.SwipeButtonCustomItems;
  */
 
 public class Call911MenuItemFragment extends DialogFragment {
-    public static final int CALL_ACTIVITY_CODE = 0;
+
+    public static Call911FragmentListener myListener;
+    public static final int CALL_ACTIVITY_CODE = 666;
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private SwipeButton swipeButton;
@@ -32,11 +34,9 @@ public class Call911MenuItemFragment extends DialogFragment {
     }
 
 
-    public static Call911MenuItemFragment newInstance() {
+    public static Call911MenuItemFragment newInstance(Call911FragmentListener listener) {
         Call911MenuItemFragment fragment = new Call911MenuItemFragment();
-        Bundle args = new Bundle();
-        args.putString("title", "hi");
-        fragment.setArguments(args);
+        myListener = listener;
         return fragment;
     }
 
@@ -61,7 +61,6 @@ public class Call911MenuItemFragment extends DialogFragment {
         SwipeButtonCustomItems swipeButtonSettings = new SwipeButtonCustomItems() {
             @Override
             public void onSwipeConfirm() {
-                dismiss();
                 onSwiped();
             }
         };
@@ -76,7 +75,6 @@ public class Call911MenuItemFragment extends DialogFragment {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:7325168820"));
 
-
         if (ActivityCompat.checkSelfPermission(getContext(),
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             Log.d("YIKES", "lol u dont have permission to call");
@@ -84,5 +82,17 @@ public class Call911MenuItemFragment extends DialogFragment {
         }
 
         startActivityForResult(callIntent, CALL_ACTIVITY_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == CALL_ACTIVITY_CODE){
+            myListener.launchNeedHelpFragment();
+            dismiss();
+        }
+    }
+
+    public interface Call911FragmentListener{
+        void launchNeedHelpFragment();
     }
 }

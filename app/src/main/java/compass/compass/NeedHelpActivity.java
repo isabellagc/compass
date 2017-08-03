@@ -70,7 +70,7 @@ import static compass.compass.R.id.friendMap;
  * Created by brucegatete on 7/11/17.
  */
 
-public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback, NotifyFriendsMessage.NotifyFriendsMessageListener {
+public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback, NotifyFriendsMessage.NotifyFriendsMessageListener, Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener {
 
     private static final int MESSAGE_POPUP = 111;
     CardView cvNotifyFriends, cvGoHome;
@@ -97,20 +97,42 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     Double longitude;
     public String closestFriendName;
     private GoogleMap mMap;
+    public boolean inHelpMode;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        inHelpMode = false;
 
+        //Snackbar.make(findViewById(android.R.id.content), "YOU HAVE ENTERED GET HELP MODE", Snackbar.LENGTH_INDEFINITE).show();
         if(currentProfile.status){
             getTheme().applyStyle(R.style.AppThemeInverted, true);
+            setContentView(R.layout.activity_need_help);
+            if(getIntent().getBooleanExtra("launchHelp", false)){
+                showAlertEnterHelpMode();
+
+
+                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
+                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
+                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+                ChatMessage message = new ChatMessage();
+                message.setText(Alert_message);
+                message.setSender("BOT");
+                message.setTime((new Date().getTime()));
+                sendNotificationToUser(members, eventIds, message);
+            }else if(getIntent().getBooleanExtra("fromNeedHelpButton", false)){
+                getIntent().removeExtra("fromNeedHelpButton");
+                showAlertEnterHelpMode();
+            }
         }
         else{
+            setContentView(R.layout.activity_need_help);
             getTheme().applyStyle(R.style.AppTheme, true);
         }
 
-        setContentView(R.layout.activity_need_help);
+
 
         cvNotifyFriends = (CardView) findViewById(R.id.cvNotifyFriends);
         cvGoHome = (CardView) findViewById(R.id.cvGoHome);
@@ -316,6 +338,23 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         });
     }
 
+    private void showAlertEnterHelpMode() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
+        alertDialog.setTitle("HELP MODE ACTIVATED");
+        alertDialog.setMessage("Get Help mode initiated. Your friends have been notified and your location flagged.");
+        alertDialog.setIcon(R.drawable.ic_need_help);
+
+        DialogInterface.OnClickListener okay = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog.dismiss();
+            }
+        };
+
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OKAY", okay);
+        alertDialog.show();
+    }
+
     private void onSwiped() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:7325168820"));
@@ -376,13 +415,13 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
     public void message911(final MenuItem menuItem){
         FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
     public void sendNotificationToUser(String[] user, String[] events, final ChatMessage message) {
@@ -506,18 +545,34 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         recreate();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == MESSAGE_POPUP){
-            Intent i = new Intent(this, NeedHelpActivity.class);
-            startActivity(i);
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == MESSAGE_POPUP){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }else if(resultCode == Call911MenuItemFragment.CALL_ACTIVITY_CODE){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }
+//    }
 
     @Override
     public void writeMessageToUsers(String messageInfo) {
-        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-        currentProfile.status = true;
+        if(currentProfile.status){
+            sendMessageThing(messageInfo);
+        }else{
+            mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+            currentProfile.status = true;
+            sendMessageThing(messageInfo);
+            Intent i = new Intent(this, NeedHelpActivity.class);
+            i.putExtra("fromNeedHelpButton", true);
+            startActivity(i);
+            this.overridePendingTransition(0, 0);
+            //recreate();
+        }
+    }
+
+    private void sendMessageThing(String messageInfo){
         ChatMessage message = new ChatMessage();
         message.setText(messageInfo);
         message.setSender("BOT");
@@ -529,6 +584,23 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             mAdapter.notifyDataSetChanged();
         }
         sendNotificationToUser(members, eventIds, message);
-        recreate();
+    }
+
+    @Override
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        //DO SOMETHING DIFFERENT BECAUSE NEED HELP ACTIVITY??
+    }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        //DO SOMETHING DIFFERENT BECAUSE NEED HELP ACTIVITY??
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+//        Intent i = new Intent(this, NeedHelpActivity.class);
+//        startActivity(i);
     }
 }
