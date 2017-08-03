@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     public CircleImageView ivProfileImage;
     public TextView tvPeopleNeedHelp;
     public  TextView tvContext;
+    public LinearLayout linearLayout;
+    public HorizontalScrollView horizontalScrollView;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabResources;
@@ -239,6 +244,15 @@ public class MainActivity extends AppCompatActivity {
         ivProfileBox = (ImageView) findViewById(R.id.ivProfileBox);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
+        linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
+
+//        ImageView img1 = new ImageView(this);
+//        img1.setImageResource(R.drawable.ic_person);
+//        linearLayout.addView(img1);
+//        ImageView img2 = new ImageView(this);
+//        img2.setImageResource(R.drawable.ic_person);
+//        linearLayout.addView(img2);
 
         View.OnClickListener onClickListenerProf = new View.OnClickListener() {
             @Override
@@ -259,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        tvPeopleNeedHelp = (TextView) findViewById(R.id.tvPeopleNeedHelp);
         tvContext = (TextView) findViewById(R.id.tvContext);
 
         mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
@@ -270,13 +283,16 @@ public class MainActivity extends AppCompatActivity {
                     Object value =  dataSnapshot.getValue();
                     if(value.equals("help")){
                         needHelpFriends.put(userName, allContacts.get(userName));
+                        populateNeedHelp();
+                    }
+                    else{
+                        needHelpFriends.remove(userName);
+                        populateNeedHelp();
                     }
                 }
 
                 long numberNeedHelp =  needHelpFriends.size();
-                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
                 if (numberNeedHelp > 0){
-                    tvPeopleNeedHelp.setTextColor(Color.RED);
                     tvContext.setTextColor(Color.RED);
                 }
             }
@@ -288,13 +304,16 @@ public class MainActivity extends AppCompatActivity {
                     Object value =  dataSnapshot.getValue();
                     if(value.equals("help")){
                         needHelpFriends.put(userName, allContacts.get(userName));
+                        populateNeedHelp();
+                    }
+                    else {
+                        needHelpFriends.remove(userName);
+                        populateNeedHelp();
                     }
 
                 }
                 long numberNeedHelp =  needHelpFriends.size();
-                tvPeopleNeedHelp.setText(String.valueOf(numberNeedHelp));
                 if (numberNeedHelp > 0){
-                    tvPeopleNeedHelp.setTextColor(Color.RED);
                     tvContext.setTextColor(Color.RED);
                 }
 
@@ -452,6 +471,66 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
         call911MenuItemFragment.show(fm, "TAG");
+    }
+
+    //    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        startService(new Intent(this, NotificationService.class));
+//    }
+
+    public void populateNeedHelp() {
+
+        int i = 0;
+        linearLayout.removeAllViews();
+
+        for(User user : needHelpFriends.values()) {
+            /*---------------Creating frame layout----------------------*/
+
+            FrameLayout frameLayout = new FrameLayout(MainActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, getPixelsToDP(50));
+            layoutParams.rightMargin = getPixelsToDP(10);
+            frameLayout.setLayoutParams(layoutParams);
+
+            /*--------------end of frame layout----------------------------*/
+
+            /*---------------Creating image view----------------------*/
+            final CircleImageView imgView = new CircleImageView(MainActivity.this); //create imageview dynamically
+            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(130, 130);
+            imgView.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getPackageName()));
+            imgView.setLayoutParams(lpImage);
+            // setting ID to retrieve at later time (same as its position)
+            imgView.setId(i);
+            /*--------------end of image view----------------------------*/
+
+            /*---------------Creating Text view----------------------*/
+//            TextView textView = new TextView(MainActivity.this);//create textview dynamically
+//            textView.setText(user.name);
+//            FrameLayout.LayoutParams lpText = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER);
+//            // Note: LinearLayout.LayoutParams 's gravity was not working so I putted Framelayout as 3 paramater is gravity itself
+//            textView.setTextColor(getResources().getColor(R.color.Black, null));
+//            textView.setLayoutParams(lpText);
+            /*--------------end of Text view----------------------------*/
+
+            //Adding views at appropriate places
+            frameLayout.addView(imgView);
+//            frameLayout.addView(textView);
+            linearLayout.addView(frameLayout);
+
+            i++;
+
+//            TextView tv = new TextView(getApplicationContext());
+//            tv.setText(user.name);
+//            linearLayout.addView(tv);
+
+        }
+
+    }
+
+    private int getPixelsToDP(int dp) {
+        float scale = getResources().getDisplayMetrics().density;
+        int pixels = (int) (dp * scale + 0.5f);
+        return pixels;
     }
 }
 
