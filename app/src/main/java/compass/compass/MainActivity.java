@@ -38,10 +38,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import compass.compass.fragments.ContactFragment;
+import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
@@ -210,6 +215,14 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == CALL_ACTIVITY_CODE){
+            Intent i = new Intent(this, NeedHelpActivity.class);
+            startActivity(i);
+        }
+    }
+
 
     private void setHomeScreenButtons() {
 //        location = (ImageButton) findViewById(R.id.location);
@@ -233,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         ivProfileBox = (ImageView) findViewById(R.id.ivProfileBox);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
-        linearLayout = (LinearLayout) findViewById(R.id.ll);
+        linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
 
 //        ImageView img1 = new ImageView(this);
@@ -337,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cancel, menu);
         MenuItem menuItem = (MenuItem) menu.findItem(R.id.markSafe);
+        MenuItem call911 = (MenuItem) menu.findItem(R.id.miCall911);
 
         if(!currentProfile.status) {
             menuItem.setVisible(false);
@@ -376,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
         alertDialog.show();
     }
+
     //Launch the location activity
     public void launchLocation() {
 //        location.setOnClickListener(new View.OnClickListener() {
@@ -416,7 +431,6 @@ public class MainActivity extends AppCompatActivity {
 
     //launch the needhelp button
     public void launchNeedHelp() {
-
         cvGetHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -449,14 +463,17 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-//    public User getUser(String memberName) {
-//        for(User user: allContacts){
-//            if(user.userId.equals(memberName)){
-//                return user;
-//            }
-//        }
-//        return null;
-//    }
+    public void message911(final MenuItem menuItem){
+        FragmentManager fm = getSupportFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
+
+    public void call911(final MenuItem menuItem) {
+        FragmentManager fm = getSupportFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
+    }
 
     //    @Override
 //    protected void onStop() {
@@ -525,10 +542,6 @@ public class MainActivity extends AppCompatActivity {
         int pixels = (int) (dp * scale + 0.5f);
         return pixels;
     }
-
-
-
-
 }
 
 

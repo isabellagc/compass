@@ -316,10 +316,10 @@
         app:layout_constraintLeft_toLeftOf="@+id/ivFriendsInNeed">
 
         <LinearLayout
-            android:id="@+id/ll"
-            android:elevation="12dp"
+            android:id="@+id/linlayoutfriends"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:elevation="12dp"
             android:fillViewport="true"
             android:orientation="horizontal"
             android:visibility="visible" />

@@ -15,7 +15,7 @@
             android:layout_height="60dp"
             android:background="@color/colorSecondary"
             android:fontFamily="sans-serif"
-            android:text="@string/swipeText"
+            android:text=">> GET HELP >>"
             android:textAlignment="center"
             android:textColor="#000000"
             app:layout_constraintLeft_toLeftOf="parent"

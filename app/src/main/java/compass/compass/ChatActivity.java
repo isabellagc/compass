@@ -3,6 +3,7 @@ package compass.compass;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -62,7 +63,9 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.fragments.AlarmFragment;
+import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.ChatPagerAdapter;
+import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -70,6 +73,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 /**
  * Created by brucegatete on 7/11/17.
@@ -484,6 +488,18 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void message911(final MenuItem menuItem){
+        FragmentManager fm = getSupportFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
+
+    public void call911(final MenuItem menuItem) {
+        FragmentManager fm = getSupportFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
+    }
+
     public void markSafe(final MenuItem menuItem){
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
         alertDialog.setTitle("Mark Yourself Safe");
@@ -658,6 +674,14 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == CALL_ACTIVITY_CODE){
+            Intent i = new Intent(this, NeedHelpActivity.class);
+            startActivity(i);
+        }
     }
 
 }

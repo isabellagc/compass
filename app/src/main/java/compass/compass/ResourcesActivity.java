@@ -34,6 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
+import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.Message911MenuItemFragment;
+
 import static compass.compass.MainActivity.currentProfile;
 import static compass.compass.R.id.resourcesMap;
 
@@ -236,6 +239,18 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void message911(final MenuItem menuItem){
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
+
+    public void call911(final MenuItem menuItem) {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
     }
 
     public void markSafe(final MenuItem menuItem){

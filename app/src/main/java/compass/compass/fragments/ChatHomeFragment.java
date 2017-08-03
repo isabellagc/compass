@@ -3,6 +3,7 @@ package compass.compass.fragments;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -67,6 +69,7 @@ import java.util.Map;
 import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
 import compass.compass.LaunchFlagLocationActivity;
+import compass.compass.NeedHelpActivity;
 import compass.compass.R;
 import compass.compass.SimpleDividerItemDecoration;
 import compass.compass.models.ChatMessage;
@@ -75,6 +78,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 /**
  * Created by brucegatete on 7/26/17.
@@ -774,5 +778,24 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    public void message911(final MenuItem menuItem){
+        FragmentManager fm = getFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
 
+    public void call911(final MenuItem menuItem) {
+        FragmentManager fm = getFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == CALL_ACTIVITY_CODE){
+            Intent i = new Intent(getContext(), NeedHelpActivity.class);
+            startActivity(i);
+        }
+    }
 }

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -55,6 +56,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NotifyFriendsMessage;
 import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
@@ -69,6 +72,7 @@ import static compass.compass.R.id.friendMap;
 
 public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCallback, NotifyFriendsMessage.NotifyFriendsMessageListener {
 
+    private static final int MESSAGE_POPUP = 111;
     CardView cvNotifyFriends, cvGoHome;
     SwipeButton callPolice;
     public DatabaseReference mDatabase;
@@ -370,6 +374,17 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         alertDialog.show();
     }
 
+    public void message911(final MenuItem menuItem){
+        FragmentManager fm = getSupportFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
+
+    public void call911(final MenuItem menuItem) {
+        FragmentManager fm = getSupportFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
+    }
     public void sendNotificationToUser(String[] user, String[] events, final ChatMessage message) {
 
         ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
@@ -492,6 +507,14 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == MESSAGE_POPUP){
+            Intent i = new Intent(this, NeedHelpActivity.class);
+            startActivity(i);
+        }
+    }
+
+    @Override
     public void writeMessageToUsers(String messageInfo) {
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
@@ -506,6 +529,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             mAdapter.notifyDataSetChanged();
         }
         sendNotificationToUser(members, eventIds, message);
-        Toast.makeText(NeedHelpActivity.this, messageInfo, Toast.LENGTH_LONG).show();
+        recreate();
     }
 }

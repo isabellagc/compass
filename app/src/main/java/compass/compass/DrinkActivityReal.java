@@ -1,9 +1,11 @@
 package compass.compass;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -22,7 +24,11 @@ import com.john.waveview.WaveView;
 import java.util.HashMap;
 import java.util.Map;
 
+import compass.compass.fragments.Call911MenuItemFragment;
+import compass.compass.fragments.Message911MenuItemFragment;
+
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
 
 /**
  * Created by brucegatete on 7/11/17.
@@ -205,6 +211,27 @@ public class DrinkActivityReal extends AppCompatActivity{
 
         alertDialog.show();
     }
+
+    public void message911(final MenuItem menuItem){
+        FragmentManager fm = getSupportFragmentManager();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        message911MenuItemFragment.show(fm, "tag");
+    }
+
+    public void call911(final MenuItem menuItem) {
+        FragmentManager fm = getSupportFragmentManager();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        call911MenuItemFragment.show(fm, "TAG");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == CALL_ACTIVITY_CODE){
+            Intent i = new Intent(this, NeedHelpActivity.class);
+            startActivity(i);
+        }
+    }
+
 }
 
 
