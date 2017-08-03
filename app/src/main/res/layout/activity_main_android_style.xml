@@ -18,15 +18,59 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorPrimaryLight" />
 
-    <ImageView
-        android:id="@+id/ivFriendsInNeed"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:elevation="4dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clFriendsInNeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@android:color/holo_green_light"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfileBox"
-        app:srcCompat="@android:color/holo_green_light" />
+        app:layout_constraintTop_toBottomOf="@+id/ivProfileBox">
+
+        <TextView
+            android:id="@+id/tvContext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:elevation="24dp"
+            android:text="Friends In Need:"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="8dp" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScroll"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvContext"
+            tools:layout_editor_absoluteX="12dp"
+            tools:layout_editor_absoluteY="30dp">
+
+            <LinearLayout
+                android:id="@+id/linlayoutfriends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:elevation="12dp"
+                android:fillViewport="true"
+                android:orientation="horizontal"
+                android:visibility="visible" />
+        </HorizontalScrollView>
+
+    </android.support.constraint.ConstraintLayout>
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -79,12 +123,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toTopOf="@+id/cvGetHelp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivFriendsInNeed">
+        app:layout_constraintTop_toBottomOf="@+id/clFriendsInNeed">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -139,12 +183,12 @@
         android:id="@+id/cvGetHelp"
         android:layout_width="0dp"
         android:layout_height="130dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toTopOf="@+id/cvDrinkCounter"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -206,14 +250,14 @@
         android:id="@+id/cvDrinkCounter"
         android:layout_width="0dp"
         android:layout_height="130dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvGetHelp">
@@ -280,50 +324,6 @@
         app:layout_constraintTop_toTopOf="@+id/tvNameBox"
         app:srcCompat="@drawable/ic_school_black_24dp"
         android:layout_marginEnd="24dp" />
-
-    <TextView
-        android:id="@+id/tvContext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:elevation="24dp"
-        android:text="Friends In Need:"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivFriendsInNeed"
-        android:layout_marginTop="8dp" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivFriendsInNeed"
-        app:layout_constraintRight_toRightOf="@+id/ivFriendsInNeed"
-        app:layout_constraintTop_toTopOf="@+id/ivFriendsInNeed"
-        app:srcCompat="@drawable/bsp_animated_arrow_drop_down"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScroll"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:elevation="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivFriendsInNeed"
-        app:layout_constraintLeft_toLeftOf="@+id/ivFriendsInNeed">
-
-        <LinearLayout
-            android:id="@+id/linlayoutfriends"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:elevation="12dp"
-            android:fillViewport="true"
-            android:orientation="horizontal"
-            android:visibility="visible" />
-    </HorizontalScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
