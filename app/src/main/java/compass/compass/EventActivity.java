@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import compass.compass.fragments.Call911MenuItemFragment;
-import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NewEventFragment;
 import compass.compass.models.Event;
 
@@ -157,17 +155,17 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
-    public void message911(final MenuItem menuItem){
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
-        message911MenuItemFragment.show(fm, "tag");
-    }
-
-    public void call911(final MenuItem menuItem) {
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
-        call911MenuItemFragment.show(fm, "TAG");
-    }
+//    public void message911(final MenuItem menuItem){
+//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
+//        message911MenuItemFragment.show(fm, "tag");
+//    }
+//
+//    public void call911(final MenuItem menuItem) {
+//        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+//        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
+//        call911MenuItemFragment.show(fm, "TAG");
+//    }
 
     public void markSafe(final MenuItem menuItem){
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();

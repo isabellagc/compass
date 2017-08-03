@@ -132,15 +132,15 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
 //    }
 
     public void message911(final MenuItem menuItem){
-        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
-        message911MenuItemFragment.show(fm, "tag");
+//        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+//        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
+//        message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
-        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
-        call911MenuItemFragment.show(fm, "TAG");
+//        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+//        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
+//        call911MenuItemFragment.show(fm, "TAG");
     }
 
     public void markSafe(final MenuItem menuItem){
