@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ResourcePagerAdapter extends FragmentPagerAdapter{
 
-    private String tabTitles [] = new String[] {"School Help", "Location Help"};
+    private String tabTitles [] = new String[] {"School Help", "Near You"};
     private Context context;
     public ResourceSchoolFragment resourceSchoolFragment;
     public  ResourceLocationFragment resourceLocationFragment;
