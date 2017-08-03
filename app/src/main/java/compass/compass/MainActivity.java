@@ -543,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
 
             /*---------------Creating image view----------------------*/
             final CircleImageView imgView = new CircleImageView(MainActivity.this); //create imageview dynamically
-            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(160, 160);
+            LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(130, 130);
             imgView.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getPackageName()));
             imgView.setLayoutParams(lpImage);
             // setting ID to retrieve at later time (same as its position)
