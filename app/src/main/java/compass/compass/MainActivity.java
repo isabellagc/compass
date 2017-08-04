@@ -43,10 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.Call911MenuItemFragment;
-
-import compass.compass.fragments.ImagePopupFragment;
 import compass.compass.fragments.ContactFragment;
-
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -264,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
         tvPeopleNeedHelp = (TextView) findViewById(R.id.tvContext);
+        ConstraintLayout clFriendsInNeed = (ConstraintLayout) findViewById(R.id.clFriendsInNeed);
 
 //        ImageView img1 = new ImageView(this);
 //        img1.setImageResource(R.drawable.ic_person);
@@ -285,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         if(currentProfile.status){
             ivProfileBox.setImageResource(R.color.colorSecondaryLight);
             ivProfileImage.setBorderColorResource(R.color.colorPrimaryLight);
+            clFriendsInNeed.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
         }
         else {
             ivProfileBox.setImageResource(R.color.colorPrimaryLight);
@@ -308,9 +307,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 }
 
                 long numberNeedHelp =  needHelpFriends.size();
-                if (numberNeedHelp > 0){
-                    tvPeopleNeedHelp.setTextColor(Color.RED);
-                }
             }
 
             @Override
@@ -329,9 +325,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
                 }
                 long numberNeedHelp =  needHelpFriends.size();
-                if (numberNeedHelp > 0){
-                    tvContext.setTextColor(Color.RED);
-                }
 
             }
 
@@ -507,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         }
         else{
             horizontalScrollView.setVisibility(View.VISIBLE);
-            tvPeopleNeedHelp.setText("Friends in Need:");
+            tvPeopleNeedHelp.setText("FRIENDS IN NEED:");
 
             tvPeopleNeedHelp.setTextColor(getResources().getColor(R.color.Black, null));
 
@@ -539,6 +532,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
             /*---------------Creating image view----------------------*/
             final CircleImageView imgView = new CircleImageView(MainActivity.this); //create imageview dynamically
+            imgView.setBorderColor(Color.BLACK);
+            imgView.setBorderWidth(3);
             LinearLayout.LayoutParams lpImage = new LinearLayout.LayoutParams(130, 130);
             imgView.setImageResource(getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getPackageName()));
             imgView.setLayoutParams(lpImage);

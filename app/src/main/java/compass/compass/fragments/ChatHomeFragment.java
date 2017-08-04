@@ -59,6 +59,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -267,42 +271,42 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-            mMap = googleMap;
+        mMap = googleMap;
 
-            populateMap();
-            populateMapFlags();
+        populateMap();
+        populateMapFlags();
 
-            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                @Override
-                public void onMapLongClick(LatLng latLng) {
-                    if(mapExpanded){
-                        resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
-                        rvContacts.setVisibility(View.VISIBLE);
-                        mapExpanded = false;
-                    }
-                    else{
-                        resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                        rvContacts.setVisibility(View.GONE);
-                        mapExpanded = true;
-                    }
-
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(mapExpanded){
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
+                    rvContacts.setVisibility(View.VISIBLE);
+                    mapExpanded = false;
                 }
-            });
+                else{
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    rvContacts.setVisibility(View.GONE);
+                    mapExpanded = true;
+                }
 
-            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
             }
-            mMap.setMyLocationEnabled(true);
+        });
 
-            // Add a marker in Sydney and move the camera
-            //LatLng sydney = new LatLng(47.628911, -122.342969);
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
+        // Add a marker in Sydney and move the camera
+        //LatLng sydney = new LatLng(47.628911, -122.342969);
 //        Marker something = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 
 //            if(myLocation != null) {
@@ -339,11 +343,11 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 user = (String) info.get("user");
 
                 LatLng pos = new LatLng(lat, longi);
-//                Marker flag = mMap.addMarker(new MarkerOptions()
-//                        .icon(BitmapDescriptorFactory.fromBitmap(flagIcon))
-//                        .position(pos)
-//                        .title(user)
-//                );
+                Marker flag = mMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(flagIcon))
+                        .position(pos)
+                        .title(WordUtils.capitalize(user))
+                );
 
             }
 
@@ -555,13 +559,18 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             User user = allContacts.get(memberName);
             LatLng temp = new LatLng(47.628911, -122.342969);
             int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ", ""), "drawable", getActivity().getPackageName());
+
+            DecimalFormat df = new DecimalFormat("#.####");
+            df.setRoundingMode(RoundingMode.CEILING);
+            Double BAC = user.currentBAC;
+            String formatted = df.format(BAC);
+
+
             Marker temp2 = mMap.addMarker(new MarkerOptions()
                     .position(temp)
-                    .title(memberName)
-                    .snippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC));
-
+                    .title(WordUtils.capitalize(memberName))
+                    .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
             markerMap.put(memberName, temp2);
-
         }
 
         mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
@@ -728,7 +737,11 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     }
 
     private void updateMarker(User user){
-        markerMap.get(user.userId).setSnippet("Drinks: " + user.drinkCounter + " BAC: " + user.currentBAC);
+        DecimalFormat df = new DecimalFormat("#.####");
+        df.setRoundingMode(RoundingMode.CEILING);
+        Double BAC = user.currentBAC;
+        String formatted = df.format(BAC);
+        markerMap.get(user.userId).setSnippet("Drinks: " + user.drinkCounter + " BAC: " + formatted);
     }
 
     private static Bitmap getBitmap(Context context, int drawableId) {

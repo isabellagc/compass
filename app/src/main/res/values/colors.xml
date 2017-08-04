@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#03a9f4</color>
-    <color name="c500">#03A9F4</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="c500">#009688</color>
 
-    <color name="colorPrimaryDark">#007ac1</color>
+    <color name="colorPrimaryDark">#00675b</color>
 
-    <color name="colorPrimaryLight">#67DAFF</color>
-    <color name="c300">#67DAFF</color>
-    <color name="colorAccent">#C2185B</color>
-    <color name="colorSecondary">#c2185b</color>
-    <color name="c900">#C2185B</color>
-    <color name="colorSecondaryLight">#fa5788</color>
+    <color name="colorPrimaryLight">#52c7b8</color>
+    <color name="c300">#52c7b8</color>
+    <color name="colorAccent">#d32f2f</color>
+    <color name="colorSecondary">#d32f2f</color>
+    <color name="c900">#9a0007</color>
+    <color name="colorSecondaryLight">#ff6659</color>
 
-    <color name="colorSecondaryDark">#8C0032</color>
+    <color name="colorSecondaryDark">#9a0007</color>
     <color name="colorPrimaryText">#000000</color>
     <color name="colorSecondaryText">#FFFFFF</color>
     <color name="icons">#FFFFFF</color>
@@ -24,11 +24,40 @@
     <color name="Black">#000000</color>
     <color name="Red">#ff0000</color>
     <color name="Yellow">#ffff00</color>
-
     <color name="twelvePercentOpacityBlack">#13000000</color>
 
 </resources>
 
+
+
+
+<!--OLD COLOR RESOURCES -->
+<!--<color name="colorPrimary">#03a9f4</color>-->
+<!--<color name="c500">#03A9F4</color>-->
+
+<!--<color name="colorPrimaryDark">#007ac1</color>-->
+
+<!--<color name="colorPrimaryLight">#67DAFF</color>-->
+<!--<color name="c300">#67DAFF</color>-->
+<!--<color name="colorAccent">#C2185B</color>-->
+<!--<color name="colorSecondary">#c2185b</color>-->
+
+<!--<color name="colorSecondaryLight">#fa5788</color>-->
+
+<!--<color name="colorSecondaryDark">#8C0032</color>-->
+<!--<color name="colorPrimaryText">#000000</color>-->
+<!--<color name="colorSecondaryText">#FFFFFF</color>-->
+<!--<color name="icons">#FFFFFF</color>-->
+<!--<color name="divider">#BDBDBD</color>-->
+
+<!--<color name="lightGreyDivider">#c0c0c0</color>-->
+
+<!--<color name="c50">#34e0f7fa</color>-->
+<!--<color name="Black">#000000</color>-->
+<!--<color name="Red">#ff0000</color>-->
+<!--<color name="Yellow">#ffff00</color>-->
+
+<!--<color name="twelvePercentOpacityBlack">#13000000</color>-->
 
 
 <!--<?xml version="1.0" encoding="utf-8"?>-->

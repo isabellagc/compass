@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -287,7 +286,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                     mAdapter.notifyDataSetChanged();
                 }
                 sendNotificationToUser(peopleInEvents, message, mDatabase);
-                Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
                 callUber();
 
             }
