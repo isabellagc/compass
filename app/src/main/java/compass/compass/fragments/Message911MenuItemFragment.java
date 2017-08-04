@@ -22,6 +22,8 @@ public class Message911MenuItemFragment extends DialogFragment {
     public static String message = "";
     public EditText etMessage911;
     public static String number;
+    public static String friendName;
+    public TextView tvMessage911;
     TextView tvContinueMessage911, tvCancelMessage911;
 
     static Message911FragmentListener myListener;
@@ -30,9 +32,10 @@ public class Message911MenuItemFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber) {
+    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber, String contactName) {
         message = messageInfo;
         number = contactNumber;
+        friendName = contactName;
         return new Message911MenuItemFragment();
     }
 
@@ -67,9 +70,14 @@ public class Message911MenuItemFragment extends DialogFragment {
         etMessage911 = (EditText) view.findViewById(R.id.etMessage911);
         tvContinueMessage911 = (TextView) view.findViewById(R.id.tvContinueMessage911);
         tvCancelMessage911 = (TextView) view.findViewById(R.id.tvCancelMessage911);
+        tvMessage911 = (TextView) view.findViewById(R.id.tvMessage911);
 
         if(message.length() == 0 && number == null){
             message = "Hello my name is " + changeStringCase(MainActivity.currentProfile.name) + " I am in need of help!! My current location is (" + MainActivity.currentProfile.latitude + ", " + MainActivity.currentProfile.longitude + "). ";
+            tvMessage911.setText("MESSAGE 911");
+        }
+        else{
+            tvMessage911.setText("MESSAGE " + friendName.toUpperCase());
         }
 
         if (number == null){
@@ -106,6 +114,8 @@ public class Message911MenuItemFragment extends DialogFragment {
 
         tvContinueMessage911.setOnClickListener(sendMessage);
         tvCancelMessage911.setOnClickListener(dismissAlert);
+
+        number = null;
     }
 
     @NonNull

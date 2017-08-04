@@ -40,16 +40,10 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import compass.compass.fragments.Call911MenuItemFragment;
-
-import compass.compass.fragments.ImagePopupFragment;
-
 import compass.compass.fragments.ContactFragment;
-
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -542,8 +536,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 @Override
                 public void onClick(View view) {
                     FragmentManager fm = getSupportFragmentManager();
-                    ImagePopupFragment imagePopupFragment = ImagePopupFragment.newInstance(user.name);
-                    imagePopupFragment.show(fm, "name");
+                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
+                    contactFragment.show(fm, "name");
 
                 }
             });

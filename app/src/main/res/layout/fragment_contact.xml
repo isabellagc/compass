@@ -28,16 +28,16 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="18dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498"
         app:srcCompat="@android:color/background_dark" />
 
     <fragment
-        android:id="@+id/fMap"
+        android:id="@+id/friendMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="340dp"
         android:layout_height="200dp"
@@ -59,9 +59,11 @@
         android:text="CALL"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tvMessageContact"
-        app:layout_constraintTop_toBottomOf="@+id/fMap" />
+        app:layout_constraintTop_toBottomOf="@+id/friendMap"
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/tvMessageContact"
@@ -73,7 +75,7 @@
         android:textColor="@color/colorPrimary"
         app:layout_constraintLeft_toRightOf="@+id/tvCallContact1"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fMap" />
+        app:layout_constraintTop_toBottomOf="@+id/friendMap" />
 
 
 </android.support.constraint.ConstraintLayout>

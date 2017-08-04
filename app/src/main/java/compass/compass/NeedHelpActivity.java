@@ -426,17 +426,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
-
-//        Glide.with(getApplicationContext())
-//                .load(linkToPic)
-//                .placeholder(R.color.c50)
-//                .dontAnimate()
-//                .into(markerImageView);
-//
-//        Glide.with(this)
-//                .load(R.color.Black)
-//                .into(markerImageView);
-
         markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         customMarkerView.layout(0, 0, customMarkerView.getMeasuredWidth(), customMarkerView.getMeasuredHeight());
