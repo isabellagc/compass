@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/tvNameContact1"
-        android:layout_width="187dp"
+        android:layout_width="140dp"
         android:layout_height="25dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
@@ -76,6 +76,17 @@
         app:layout_constraintLeft_toRightOf="@+id/tvCallContact1"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friendMap" />
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="@+id/tvNameContact1"
+        app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain1"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameContact1"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="47dp" />
 
 
 </android.support.constraint.ConstraintLayout>

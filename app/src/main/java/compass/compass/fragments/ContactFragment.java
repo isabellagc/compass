@@ -36,9 +36,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import compass.compass.R;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,6 +59,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     double longitude;
     Marker friendLocation;
     private static View view;
+    public TextView tvInfo;
 
 
     public ContactFragment() {
@@ -109,10 +111,17 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         tvNameContact = view.findViewById(R.id.tvNameContact1);
         tvCallContact = view.findViewById(R.id.tvCallContact1);
         ivProfileImageMain = view.findViewById(R.id.ivProfileImageMain1);
+        tvInfo = view.findViewById(R.id.tvInfo);
+        DecimalFormat df = new DecimalFormat("#.####");
+        df.setRoundingMode(RoundingMode.CEILING);
+        Double BAC = user.currentBAC;
+        String formatted = df.format(BAC);
+        tvInfo.setText("Drinks: " + user.drinkCounter + " BAC: " + formatted);
 
         final int drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
         ivProfileImageMain.setImageResource(drawableResourceId);
+        ivProfileImageMain.setBorderColor(R.color.colorPrimary);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.friendMap);
@@ -151,10 +160,17 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                 if(friendLocation != null){
                     friendLocation.remove();
                 }
+                DecimalFormat df = new DecimalFormat("#.####");
+                df.setRoundingMode(RoundingMode.CEILING);
+                Double BAC = user.currentBAC;
+                String formatted = df.format(BAC);
+
                 friendLocation = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
                         .title(user.userId)
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
+                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
             }
 
@@ -172,10 +188,17 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                 if(friendLocation != null){
                     friendLocation.remove();
                 }
+                DecimalFormat df = new DecimalFormat("#.####");
+                df.setRoundingMode(RoundingMode.CEILING);
+                Double BAC = user.currentBAC;
+                String formatted = df.format(BAC);
+
                 friendLocation = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
                         .title(user.userId)
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
+                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
 
             }

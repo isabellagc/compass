@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     protected void onResume() {
         super.onResume();
         if(fabDrinks != null) {
-            fabDrinks.animate();
+            //fabDrinks.animate();
             EventActivity.showFabWithAnimation(fabDrinks,50);
         }
     }

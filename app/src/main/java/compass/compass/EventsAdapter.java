@@ -26,6 +26,7 @@ import java.util.Map;
 
 import compass.compass.fragments.StatusFragment;
 import compass.compass.models.Event;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.currentProfile;
 
@@ -149,11 +150,26 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.tvEnd.setText(dateFormattedEnd);
 
+        switch (position % 3){
+            case 0:
+                holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
+                break;
+            case 1:
+                holder.ivCircleImage.setImageResource(R.drawable.rowing);
+                break;
+            case 2:
+                holder.ivCircleImage.setImageResource(R.drawable.robotics);
+                break;
+            default:
+                holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
+                break;
+        }
+
         if(mEvents.get(position).getMyStatus().equals("null")){
-            holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.c50));
+            holder.clEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.twelvePercentOpacityBlack));
         }
         else{
-            holder.rlEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_fill_color));
+            holder.clEvent.setBackgroundColor(ContextCompat.getColor(mContext, R.color.default_fill_color));
         }
 
     }
@@ -168,6 +184,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         public TextView tvStart;
         public TextView tvEnd;
         public ConstraintLayout rlEvent;
+        public ConstraintLayout clEvent;
+        public CircleImageView ivCircleImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -176,6 +194,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvStart = (TextView) itemView.findViewById(R.id.tvStart);
             tvEnd = (TextView) itemView.findViewById(R.id.tvEnd);
             rlEvent = (ConstraintLayout) itemView.findViewById(R.id.rlEvent);
+            clEvent = (ConstraintLayout) itemView.findViewById(R.id.clEvent);
+            ivCircleImage = itemView.findViewById(R.id.ivCircleImage);
 
             rlEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
