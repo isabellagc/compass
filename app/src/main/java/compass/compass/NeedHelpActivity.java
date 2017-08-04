@@ -141,9 +141,9 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         callPolice = (SwipeButton) findViewById(R.id.callPolice);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //vCallContact = (TextView) findViewById(R.id.tvCallContact);
-        tvNameContact = (TextView) findViewById(R.id.tvNameContact);
-        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
-        tvCallContact = (TextView) findViewById(R.id.tvCallContact);
+        tvNameContact = (TextView) findViewById(R.id.tvNameContact1);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain1);
+        tvCallContact = (TextView) findViewById(R.id.tvCallContact1);
 
         tvCallContact.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -52,7 +52,7 @@ public class ContactsAdapter extends
 
             tvContactName = (TextView) itemView.findViewById(R.id.tvContactName);
             cbAddContact = (CheckBox) itemView.findViewById(R.id.cbAddContact);
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImageMain);
+            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImageMain1);
 
             cbAddContact.setOnClickListener(new View.OnClickListener() {
                 @Override
