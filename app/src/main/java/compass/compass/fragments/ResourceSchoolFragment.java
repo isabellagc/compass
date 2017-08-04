@@ -41,7 +41,7 @@ import compass.compass.R;
 
 import static android.content.Context.LOCATION_SERVICE;
 import static compass.compass.MainActivity.currentProfile;
-import static compass.compass.R.id.resourcesMap;
+import static compass.compass.R.id.resourcesMap1;
 
 /**
  * Created by brucegatete on 8/3/17.
@@ -73,7 +73,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_resources, container, false);
+        View v = inflater.inflate(R.layout.fragment_resources_school, container, false);
 
         if(currentProfile.status){
             getActivity().getTheme().applyStyle(R.style.AppThemeInverted, true);
@@ -84,14 +84,14 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
 
 
         //set up layout
-        tvPolice = (TextView) v.findViewById(R.id.tvPolice);
-        tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance);
+        tvPolice = (TextView) v.findViewById(R.id.tvPolice1);
+        tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance1);
 
-        tvCounseling = (TextView) v.findViewById(R.id.tvCounseling);
-        tvCounselingDistance = (TextView) v.findViewById(R.id.tvCounselingDistance);
+        tvCounseling = (TextView) v.findViewById(R.id.tvCounseling1);
+        tvCounselingDistance = (TextView) v.findViewById(R.id.tvCounselingDistance1);
 
-        tvHospital = (TextView) v.findViewById(R.id.tvHospital);
-        tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance);
+        tvHospital = (TextView) v.findViewById(R.id.tvHospital1);
+        tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance1);
 
         //set up database
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -198,7 +198,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
     public void getSupportMap (){
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(resourcesMap);
+                .findFragmentById(resourcesMap1);
         mapFragment.getMapAsync(this);
 
         locationManager = (LocationManager) getActivity().getBaseContext().getSystemService(LOCATION_SERVICE);

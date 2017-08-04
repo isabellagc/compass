@@ -56,7 +56,6 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     double longitude;
     Marker friendLocation;
     private static View view;
-    public Message911MenuItemFragment message911MenuItemFragment;
 
 
     public ContactFragment() {
@@ -86,7 +85,6 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        message911MenuItemFragment = Message911MenuItemFragment.newInstance("", user.phoneNumber, user.name, this);
         // Inflate the layout for this fragment
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
@@ -136,7 +134,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getFragmentManager();
-                message911MenuItemFragment.show(fm, "TAG");
+                MessageFriendFragment messageFriendFragment = MessageFriendFragment.newInstance(user.phoneNumber, user.name);
+                messageFriendFragment.show(fm, "TAG");
             }
         });
 

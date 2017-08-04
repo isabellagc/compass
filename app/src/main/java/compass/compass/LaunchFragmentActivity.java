@@ -15,9 +15,17 @@ public class LaunchFragmentActivity extends Activity {
         String message = getIntent().getStringExtra("message");
         final String eventId = getIntent().getStringExtra("eventId");
         String sender = getIntent().getStringExtra("sender");
+        boolean help = getIntent().getBooleanExtra("help", false);
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
-        alertDialog.setTitle(sender.toUpperCase() + " NEEDS HELP");
+
+        if(!help){
+            alertDialog.setTitle(sender.toUpperCase() + " IS SAFE");
+        }
+        else{
+            alertDialog.setTitle(sender.toUpperCase() + " NEEDS HELP");
+        }
+
         alertDialog.setMessage(message);
         alertDialog.setIcon(R.drawable.ic_need_help);
 
@@ -41,10 +49,12 @@ public class LaunchFragmentActivity extends Activity {
         };
 
         alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", okListener);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Go to a common event", goToEvent);
+
+        if(help){
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Go to a common event", goToEvent);
+        }
 
         alertDialog.show();
-
 
 //
 //        FragmentManager fm = getSupportFragmentManager();

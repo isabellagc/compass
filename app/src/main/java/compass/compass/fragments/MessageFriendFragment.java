@@ -1,6 +1,7 @@
 package compass.compass.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,51 +14,29 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Date;
-
-import compass.compass.NeedHelpActivity;
 import compass.compass.R;
-import compass.compass.models.ChatMessage;
 
-import static compass.compass.MainActivity.currentProfile;
-import static compass.compass.MainActivity.peopleInEvents;
+import static compass.compass.fragments.Message911MenuItemFragment.message;
 
 
-public class Message911MenuItemFragment extends DialogFragment {
-    //private NotifyFriendsMessageListener mListener;
-    public static String message = "";
-    public EditText etMessage911;
-    public TextView tvMessage911;
-    TextView tvContinueMessage911, tvCancelMessage911;
+public class MessageFriendFragment extends DialogFragment {
 
-    static Message911FragmentListener myListener;
+    public EditText etMessage;
+    public static String number;
+    public static String friendName;
+    public TextView tvMessage;
+    TextView tvContinueMessage, tvCancelMessage;
 
-    public Message911MenuItemFragment() {
+    public MessageFriendFragment() {
         // Required empty public constructor
     }
 
-    public static Message911MenuItemFragment newInstance() {
-        return new Message911MenuItemFragment();
+    public static MessageFriendFragment newInstance(String contactNumber, String contactName) {
+        number = contactNumber;
+        friendName = contactName;
+        return new MessageFriendFragment();
     }
 
-    public static Message911MenuItemFragment newInstance(String messageInfo) {
-        message = messageInfo;
-        return new Message911MenuItemFragment();
-    }
-
-    public static Message911MenuItemFragment newInstance(String messageInfo, Message911FragmentListener listener) {
-        message = messageInfo;
-        myListener = listener;
-        return new Message911MenuItemFragment();
-    }
-
-    public static Message911MenuItemFragment newInstance(Message911FragmentListener listener) {
-        myListener = listener;
-        return new Message911MenuItemFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,18 +46,15 @@ public class Message911MenuItemFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        etMessage911 = (EditText) view.findViewById(R.id.etMessage);
-        tvContinueMessage911 = (TextView) view.findViewById(R.id.tvContinueMessage911);
-        tvCancelMessage911 = (TextView) view.findViewById(R.id.tvCancelMessage911);
-        tvMessage911 = (TextView) view.findViewById(R.id.tvMessage);
+        etMessage = (EditText) view.findViewById(R.id.etMessage);
+        tvContinueMessage = (TextView) view.findViewById(R.id.tvContinueMessage);
+        tvCancelMessage = (TextView) view.findViewById(R.id.tvCancelMessage);
+        tvMessage = (TextView) view.findViewById(R.id.tvMessage);
 
-        if(message.length() == 0){
-            message = "Hello my name is " + changeStringCase(currentProfile.name) + " I am in need of help!! My current location is (" + currentProfile.latitude + ", " + currentProfile.longitude + "). ";
-        }
+        tvMessage.setText("MESSAGE " + friendName.toUpperCase());
 
-
-        etMessage911.setText(message);
-        etMessage911.setSelection(etMessage911.getText().toString().length());
+        etMessage.setText(message);
+        etMessage.setSelection(etMessage.getText().toString().length());
 
         View.OnClickListener dismissAlert = new View.OnClickListener() {
             @Override
@@ -90,9 +66,9 @@ public class Message911MenuItemFragment extends DialogFragment {
         View.OnClickListener sendMessage = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newMessage = etMessage911.getText().toString();
+                String newMessage = etMessage.getText().toString();
                 try {
-                    SmsManager.getDefault().sendTextMessage("4258924209", null, newMessage, null, null);
+                    SmsManager.getDefault().sendTextMessage(number, null, newMessage, null, null);
                 } catch (Exception e) {
                     AlertDialog.Builder alertDialogBuilder = new
                             AlertDialog.Builder(getContext());
@@ -100,27 +76,27 @@ public class Message911MenuItemFragment extends DialogFragment {
                     dialog.setMessage(e.getMessage());
                     dialog.show();
                 }
-                myListener.launchNeedHelpFromMessage();
 
-                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                final AlertDialog alertDialog = new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog).create();
+                alertDialog.setMessage("Your message has been sent");
+                alertDialog.setIcon(R.drawable.ic_need_help);
 
-                String Alert_message = ("Please check in on " + currentProfile.name + "! They have messaged 911 and may need your help.");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
+                DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        alertDialog.dismiss();
+                    }
+                };
 
-                NeedHelpActivity.sendNotificationToUser(peopleInEvents, message, mDatabase);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", okListener);
+                alertDialog.show();
 
                 dismiss();
             }
         };
 
-        tvContinueMessage911.setOnClickListener(sendMessage);
-        tvCancelMessage911.setOnClickListener(dismissAlert);
+        tvContinueMessage.setOnClickListener(sendMessage);
+        tvCancelMessage.setOnClickListener(dismissAlert);
 
     }
 
@@ -144,7 +120,7 @@ public class Message911MenuItemFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message_911, container, false);
+        return inflater.inflate(R.layout.fragment_message_friend, container, false);
     }
 
 

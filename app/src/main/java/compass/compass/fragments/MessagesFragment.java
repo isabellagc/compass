@@ -44,6 +44,7 @@ import compass.compass.R;
 import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 /**
  * Created by brucegatete on 7/26/17.
@@ -201,6 +202,12 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
             public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 getActivity().recreate();
 

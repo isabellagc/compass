@@ -39,6 +39,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.ContactFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
+import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -324,8 +326,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                     }
 
                 }
-                long numberNeedHelp =  needHelpFriends.size();
-
             }
 
             @Override
@@ -378,6 +378,12 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 recreate();
 
