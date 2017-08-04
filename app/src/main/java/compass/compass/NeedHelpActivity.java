@@ -504,7 +504,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             sendMessageThing(messageInfo);
         }else{
             mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-            mDatabase.child("User Status").child(currentProfile.userId).child("help");
+            mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
             currentProfile.status = true;
             sendMessageThing(messageInfo);
             Intent i = new Intent(this, NeedHelpActivity.class);
