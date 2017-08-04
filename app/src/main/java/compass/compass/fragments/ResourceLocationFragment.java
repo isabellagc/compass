@@ -1,23 +1,31 @@
 package compass.compass.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,14 +34,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
@@ -62,12 +68,18 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     TextView tvHospitalDistance;
 
     //location
+    Bitmap hospitalIcon;
+    Bitmap policeIcon;
     Double latitude;
     Double longitude;
     Map location;
     LocationManager locationManager;
-    Location myLocation;
+    Location my_location_1;
+    LatLng myLocation;
     Location temp;
+    boolean mapExpanded;
+    int originalHeight;
+    SupportMapFragment mapFragment;
     String policePhone, counselPhone, hospitalPhone;
 
     @Nullable
@@ -92,10 +104,25 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
 
         tvHospital = (TextView) v.findViewById(R.id.tvHospital);
         tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance);
-
+        hospitalIcon = getBitmap(getActivity(), R.drawable.ic_hospital);
+        policeIcon = getBitmap(getActivity(), R.drawable.ic_police);
+        policeIcon = resizeIcon(policeIcon, 144, 144);
         //set up database
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getSupportMap();
+        mapExpanded = false;
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.resourcesMap);
+        mapFragment.getMapAsync(this);
+
+        final View view = mapFragment.getView();
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                originalHeight = view.getHeight();
+            }
+        });
+
         return v;
     }
 
@@ -182,6 +209,21 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        populateMap();
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(mapExpanded){
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, originalHeight);
+                    mapExpanded = false;
+                }
+                else{
+                    resizeMap(mapFragment, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    mapExpanded = true;
+                }
+
+            }
+        });
 
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -192,6 +234,28 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
+        }
+        mMap.setMyLocationEnabled(true);
+        myLocation = new LatLng(currentProfile.latitude, currentProfile.longitude);
+        // Add a marker in Sydney and move the camera
+        //LatLng sydney = new LatLng(47.628911, -122.342969);
+//        Marker something = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+
+        if(myLocation != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+
+
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 30));
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(myLocation)      // Sets the center of the map to location user
+                    .zoom(15)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east
+                    .tilt(40)                   // Sets the tilt of the camera to 40 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
 
@@ -212,90 +276,90 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        temp = new Location(LocationManager.GPS_PROVIDER);
 
-        mDatabase.child("resources").child(currentProfile.school).child("counseling").addListenerForSingleValueEvent(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                location = (Map) dataSnapshot.getValue();
-                latitude = (Double) location.get("latitude");
-                longitude = (Double) location.get("longitude");
-                LatLng counselingLatLng = new LatLng(latitude, longitude);
-                Marker counseling = mMap.addMarker(new MarkerOptions()
-                        .position(counselingLatLng)
-                        .title(currentProfile.school + " Counseling Services")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_green, null))));
-                tvCounseling.setText(currentProfile.school + " Counseling Services");
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
-                //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
-
-                temp.setLatitude(latitude);
-                temp.setLongitude(longitude);
-                Float distance = myLocation.distanceTo(temp);
-                String distanceDisplayed = metersToMiles(distance);
-                tvCounselingDistance.setText(distanceDisplayed);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mDatabase.child("resources").child(currentProfile.school).child("hospital").addListenerForSingleValueEvent(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                location = (Map) dataSnapshot.getValue();
-                latitude = (Double) location.get("latitude");
-                longitude = (Double) location.get("longitude");
-                LatLng hospitalLatLng = new LatLng(latitude, longitude);
-                Marker health = mMap.addMarker(new MarkerOptions()
-                        .position(hospitalLatLng)
-                        .title(currentProfile.school + " Health Services")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_red, null))));
-                tvHospital.setText(currentProfile.school + " Health Services");
-
-                temp.setLatitude(latitude);
-                temp.setLongitude(longitude);
-                Float distance = myLocation.distanceTo(temp);
-                String distanceDisplayed = metersToMiles(distance);
-                tvHospitalDistance.setText(distanceDisplayed);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mDatabase.child("resources").child(currentProfile.school).child("police").addListenerForSingleValueEvent(new ValueEventListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                location = (Map) dataSnapshot.getValue();
-                latitude = (Double) location.get("latitude");
-                longitude = (Double) location.get("longitude");
-                LatLng policeLatLng = new LatLng(latitude, longitude);
-                Marker police = mMap.addMarker(new MarkerOptions()
-                        .position(policeLatLng)
-                        .title(currentProfile.school + " Police")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_blue, null))));
-                tvPolice.setText(currentProfile.school + " Police");
-
-                temp.setLatitude(latitude);
-                temp.setLongitude(longitude);
-                Float distance = myLocation.distanceTo(temp);
-                String distanceDisplayed = metersToMiles(distance);
-                tvPoliceDistance.setText(distanceDisplayed);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
+    private void resizeMap(SupportMapFragment f, int newWidth, int newHeight) {
+        if (f != null) {
+            View view = f.getView();
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(newWidth, newHeight);
+            view.setLayoutParams(p);
+            view.requestLayout();
+
+        }
+    }
+    public Bitmap resizeIcon(Bitmap imageBitmap, int width, int height){
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
+    }
+
+    public void populateMap (){
+        LatLng policeLocation = new LatLng(47.620775, -122.336276);
+        LatLng hospitalLocation = new LatLng(47.625313, -122.334535);
+        LatLng counselingLocation = new LatLng(47.626496, -122.344402);
+
+        MarkerOptions markerOptions_1 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(hospitalIcon))
+                .position(hospitalLocation)
+                .title("Kaiser Permanente Hospital");
+        Marker flag_1 = mMap.addMarker(markerOptions_1);
+        startDropMarkerAnimation(flag_1);
+
+        MarkerOptions markerOptions_2 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(policeIcon))
+                .position(policeLocation)
+                .title("West Prescinct, SEA Police Dept");
+        Marker flag_2 = mMap.addMarker(markerOptions_2);
+        startDropMarkerAnimation(flag_2);
+
+        MarkerOptions markerOptions_3 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(hospitalIcon))
+                .position(counselingLocation)
+                .title("Seattle Christian Counseling");
+        Marker flag_3 = mMap.addMarker(markerOptions_3);
+        startDropMarkerAnimation(flag_3);
+
+
+
+
+    }
+
+    private static Bitmap getBitmap(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawable) {
+            return getBitmap((VectorDrawable) drawable);
+        } else {
+            throw new IllegalArgumentException("unsupported drawable type");
+
+        }
+    }
+
+    private static Bitmap getBitmap(VectorDrawable vectorDrawable) {
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        vectorDrawable.draw(canvas);
+        return bitmap;
+    }
+    private void startDropMarkerAnimation(final Marker marker) {
+    final Handler handler = new Handler();
+    final long startTime = SystemClock.uptimeMillis();
+    final long duration = 2000;
+    final Interpolator interpolator = new BounceInterpolator();
+
+        handler.post(new Runnable() {
+        @Override
+        public void run() {
+            long elapsed = SystemClock.uptimeMillis() - startTime;
+            float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/(duration)), 0);
+            marker.setAnchor(0.2f, 1.0f +  t);
+
+            if (t > 0.0) {
+                handler.postDelayed(this, 16);
+            }
+            else{
+                return;
+            }
+        }
+    });
+}
 }
