@@ -20,15 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NewEventFragment;
+import compass.compass.models.ChatMessage;
 import compass.compass.models.Event;
 
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 public class EventActivity extends AppCompatActivity implements Message911MenuItemFragment.Message911FragmentListener, Call911MenuItemFragment.Call911FragmentListener {
     public static RecyclerView rvEvents;
@@ -185,6 +188,12 @@ public class EventActivity extends AppCompatActivity implements Message911MenuIt
                 currentProfile.status = false;
 
                 recreate();
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 alertDialog.dismiss();
             }

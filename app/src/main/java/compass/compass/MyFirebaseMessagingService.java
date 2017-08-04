@@ -55,21 +55,43 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             eventName = temp.substring(temp.indexOf(":")+1,temp.lastIndexOf(":"));
             message = temp.substring(temp.lastIndexOf(":")+1, temp.length()-1);
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_need_help)
-                    .setContentTitle(personInNeed + " needs help!")
-                    .setContentTitle(message)
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                    .setSound(notificationSound)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntent);
-            mBuilder.setAutoCancel(true);
-            mBuilder.setLocalOnly(false);
+//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+//                    .setSmallIcon(R.drawable.ic_need_help)
+//                    .setContentTitle(personInNeed + " needs help!")
+//                    .setContentTitle(message)
+//                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                    .setSound(notificationSound)
+//                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                    .setContentIntent(pendingIntent);
+//            mBuilder.setAutoCancel(true);
+//            mBuilder.setLocalOnly(false);
+//
+//            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            mNotificationManager.notify(0, mBuilder.build());
 
-            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(0, mBuilder.build());
+            openFragment(personInNeed, true);
+        }
+        else if(sender.contentEquals("SAFE")){
+            String temp = total.substring(total.indexOf(":")+1);
+            String personInNeed = temp.substring(0, temp.indexOf(":"));
+            eventName = temp.substring(temp.indexOf(":")+1,temp.lastIndexOf(":"));
+            message = temp.substring(temp.lastIndexOf(":")+1, temp.length()-1);
 
-            openFragment(personInNeed);
+//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+//                    .setSmallIcon(R.drawable.ic_need_help)
+//                    .setContentTitle(personInNeed + " needs help!")
+//                    .setContentTitle(message)
+//                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                    .setSound(notificationSound)
+//                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                    .setContentIntent(pendingIntent);
+//            mBuilder.setAutoCancel(true);
+//            mBuilder.setLocalOnly(false);
+//
+//            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            mNotificationManager.notify(0, mBuilder.build());
+
+            openFragment(personInNeed, false);
         }
         else{
             eventName = total.substring(total.indexOf(":")+1,total.lastIndexOf(":"));
@@ -92,12 +114,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    public void openFragment(String personInNeed){
+    public void openFragment(String personInNeed, boolean help){
 
         Intent i = new Intent(this, LaunchFragmentActivity.class);
         i.putExtra("message", message);
         i.putExtra("eventId", eventName);
         i.putExtra("sender", personInNeed);
+        i.putExtra("help", help);
         startActivity(i);
 
     }

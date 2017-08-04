@@ -73,6 +73,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 /**
  * Created by brucegatete on 7/11/17.
@@ -510,6 +511,12 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 recreate();
 

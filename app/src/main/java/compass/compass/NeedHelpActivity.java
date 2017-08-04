@@ -349,6 +349,14 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
+
+
                 alertDialog.dismiss();
                 recreate();
             }
@@ -379,6 +387,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
+
     public static void sendNotificationToUser(HashMap<String, String> peopleInEvents, final ChatMessage message, DatabaseReference mDatabase) {
 
         for(String name : peopleInEvents.keySet())

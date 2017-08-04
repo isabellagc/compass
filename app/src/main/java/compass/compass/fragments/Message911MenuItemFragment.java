@@ -13,8 +13,17 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import compass.compass.MainActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Date;
+
+import compass.compass.NeedHelpActivity;
 import compass.compass.R;
+import compass.compass.models.ChatMessage;
+
+import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 
 public class Message911MenuItemFragment extends DialogFragment {
@@ -64,7 +73,7 @@ public class Message911MenuItemFragment extends DialogFragment {
         tvMessage911 = (TextView) view.findViewById(R.id.tvMessage);
 
         if(message.length() == 0){
-            message = "Hello my name is " + changeStringCase(MainActivity.currentProfile.name) + " I am in need of help!! My current location is (" + MainActivity.currentProfile.latitude + ", " + MainActivity.currentProfile.longitude + "). ";
+            message = "Hello my name is " + changeStringCase(currentProfile.name) + " I am in need of help!! My current location is (" + currentProfile.latitude + ", " + currentProfile.longitude + "). ";
         }
 
 
@@ -92,6 +101,20 @@ public class Message911MenuItemFragment extends DialogFragment {
                     dialog.show();
                 }
                 myListener.launchNeedHelpFromMessage();
+
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                String Alert_message = ("Please check in on " + currentProfile.name + "! They have messaged 911 and may need your help.");
+                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                currentProfile.status = true;
+                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+                ChatMessage message = new ChatMessage();
+                message.setText(Alert_message);
+                message.setSender("BOT");
+                message.setTime((new Date().getTime()));
+
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, message, mDatabase);
+
                 dismiss();
             }
         };

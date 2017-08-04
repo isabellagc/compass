@@ -27,13 +27,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
 import java.util.Map;
 
 import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.ResourcePagerAdapter;
+import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCallback, Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener {
 
@@ -284,6 +287,12 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 recreate();
 

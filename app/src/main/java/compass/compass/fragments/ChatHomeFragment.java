@@ -61,6 +61,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +77,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 /**
  * Created by brucegatete on 7/26/17.
@@ -156,6 +158,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
+
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,6 +213,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
                 currentProfile.status = false;
+
+                ChatMessage chatMessage = new ChatMessage();
+                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setSender("SAFE");
+                chatMessage.setTime((new Date().getTime()));
+                NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
                 getActivity().recreate();
 

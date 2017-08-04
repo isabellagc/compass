@@ -13,9 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Date;
+
+import compass.compass.NeedHelpActivity;
 import compass.compass.R;
 import compass.compass.SwipeButton;
 import compass.compass.SwipeButtonCustomItems;
+import compass.compass.models.ChatMessage;
+
+import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 
 /**
  * Created by icamargo on 8/1/17.
@@ -88,6 +98,20 @@ public class Call911MenuItemFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CALL_ACTIVITY_CODE){
             myListener.launchNeedHelpFragment();
+
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
+            String Alert_message = ("Please check in on " + currentProfile.name + "! They have called 911 and may need your help.");
+            mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+            currentProfile.status = true;
+            mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+            ChatMessage message = new ChatMessage();
+            message.setText(Alert_message);
+            message.setSender("BOT");
+            message.setTime((new Date().getTime()));
+
+            NeedHelpActivity.sendNotificationToUser(peopleInEvents, message, mDatabase);
+
             dismiss();
         }
     }
