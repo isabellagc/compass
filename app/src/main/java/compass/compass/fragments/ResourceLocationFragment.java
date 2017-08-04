@@ -322,10 +322,6 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
                 .title("Seattle Christian Counseling");
         Marker flag_3 = mMap.addMarker(markerOptions_3);
         startDropMarkerAnimation(flag_3);
-
-
-
-
     }
 
     private static Bitmap getBitmap(Context context, int drawableId) {

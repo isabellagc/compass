@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +32,7 @@ import java.util.Map;
 import compass.compass.models.User;
 
 import static compass.compass.MainActivity.allContacts;
+import static compass.compass.MainActivity.currentProfile;
 
 /**
  * Created by amusipatla on 7/14/17.
@@ -41,6 +46,8 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
     public DatabaseReference mDatabase;
     //public ArrayList keys;
     static Context mContext;
+    LocationManager locationManager;
+    Location myLocation;
 
     public EmergencyContactsAdapter(Context context) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -89,16 +96,48 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvNameContact.setText(mEmergencyContactNames.get(position));
+        holder.tvNameContact.setText(WordUtils.capitalize(mEmergencyContactNames.get(position)));
         if(mEmergencyContactNames != null){
             if(allContacts.containsKey(mEmergencyContactNames.get(position))){
                 int drawableResourceId = mContext.getResources().getIdentifier(mEmergencyContactNames.get(position).replaceAll(" ",""), "drawable", mContext.getPackageName());
                 holder.ivProfileImage.setImageResource(drawableResourceId);
+                setDistance(mEmergencyContactNames.get(position), holder);
             }
             else{
+                holder.tvDistance.setText("");
                 holder.ivProfileImage.setImageResource(R.drawable.ic_person);
             }
         }
+    }
+
+    private void setDistance(String user, EmergencyContactsAdapter.ViewHolder holder){
+        User friend = allContacts.get(user);
+        double friendLat = friend.latitude;
+        double friendLong = friend.longitude;
+        double myLat = currentProfile.latitude;
+        double myLong = currentProfile.longitude;
+
+        Location temp = new Location(LocationManager.GPS_PROVIDER);
+        Location tempMe = new Location(LocationManager.GPS_PROVIDER);
+        temp.setLatitude(friendLat);
+        temp.setLongitude(friendLong);
+        tempMe.setLatitude(myLat);
+        tempMe.setLongitude(myLong);
+        Float distance = tempMe.distanceTo(temp);
+        String distanceDisplayed = metersToMiles(distance);
+        holder.tvDistance.setText(distanceDisplayed);
+    }
+
+    public String metersToMiles(Float distance){
+        double miles = distance * 0.000621371 ;
+        if (miles < 0.5){
+            double feet = miles * 5280;
+//            if(feet < 10.1){
+//                return "0.0 ft";
+//            }
+            return String.format("%.2f", feet) + " ft";
+        }
+        return String.format("%.2f", miles) + " mi";
     }
 
     @Override
@@ -109,6 +148,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvNameContact;
         public TextView tvCallContact;
+        public TextView tvDistance;
         public ImageView ivProfileImage;
         //USE THIS TO SET AN ONCLICKLISTENER FOR THE CONTACT THAT BRINGS YOU TO A VIEW OF THAT PERSON
         //OR THEM ON THE MAP!!!
@@ -120,6 +160,7 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
             tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact1);
             tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact1);
             ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImageMain1);
+            tvDistance = (TextView) itemView.findViewById(R.id.tvDistance);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
             tvCallContact.setOnClickListener(new View.OnClickListener() {

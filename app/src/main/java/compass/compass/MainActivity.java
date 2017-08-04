@@ -18,6 +18,8 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -517,6 +519,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         else{
             horizontalScrollView.setVisibility(View.VISIBLE);
             tvPeopleNeedHelp.setText("FRIENDS IN NEED:");
+            Animation animation = AnimationUtils.loadAnimation(getBaseContext(), android.R.anim.fade_in);
+            animation.setStartOffset(0);
+            tvPeopleNeedHelp.startAnimation(animation);
 
             tvPeopleNeedHelp.setTextColor(getResources().getColor(R.color.Black, null));
 
@@ -577,6 +582,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
             //Adding views at appropriate places
             frameLayout.addView(imgView);
+            Animation animation = AnimationUtils.loadAnimation(getBaseContext(), android.R.anim.fade_in);
+            animation.setStartOffset(0);
+            imgView.startAnimation(animation);
 //            frameLayout.addView(textView);
             linearLayout.addView(frameLayout);
 
