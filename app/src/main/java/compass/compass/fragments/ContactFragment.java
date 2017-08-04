@@ -134,8 +134,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getFragmentManager();
-                Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance("", user.phoneNumber, user.name);
-                message911MenuItemFragment.show(fm, "TAG");
+                MessageFriendFragment messageFriendFragment = MessageFriendFragment.newInstance(user.phoneNumber, user.name);
+                messageFriendFragment.show(fm, "TAG");
             }
         });
 
