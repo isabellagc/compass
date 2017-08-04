@@ -3,6 +3,8 @@ package compass.compass;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -174,6 +176,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public void onBindViewHolder(CloseFriendAdapter.ViewHolder holder, int position) {
         String name = mCloseFriendsNames.get(position);
 
+        setDistance(name, holder);
         holder.tvNameContact.setText(WordUtils.capitalize(name));
         int drawableResourceId = mContext.getResources().getIdentifier(name.replaceAll(" ",""), "drawable", mContext.getPackageName());
         holder.ivProfileImage.setImageResource(drawableResourceId);
@@ -205,6 +208,36 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         });
     }
 
+    private void setDistance(String user, CloseFriendAdapter.ViewHolder holder){
+        User friend = allContacts.get(user);
+        double friendLat = friend.latitude;
+        double friendLong = friend.longitude;
+        double myLat = currentProfile.latitude;
+        double myLong = currentProfile.longitude;
+
+        Location temp = new Location(LocationManager.GPS_PROVIDER);
+        Location tempMe = new Location(LocationManager.GPS_PROVIDER);
+        temp.setLatitude(friendLat);
+        temp.setLongitude(friendLong);
+        tempMe.setLatitude(myLat);
+        tempMe.setLongitude(myLong);
+        Float distance = tempMe.distanceTo(temp);
+        String distanceDisplayed = metersToMiles(distance);
+        holder.tvDistance.setText(distanceDisplayed);
+    }
+
+    public String metersToMiles(Float distance){
+        double miles = distance * 0.000621371 ;
+        if (miles < 0.5){
+            double feet = miles * 5280;
+//            if(feet < 10.1){
+//                return "0.0 ft";
+//            }
+            return "(" + String.format("%.2f", feet) + " ft)";
+        }
+        return "(" + String.format("%.2f", miles) + " mi";
+    }
+
     @Override
     public int getItemCount() {
             return mCloseFriendsNames.size();
@@ -216,6 +249,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
         public TextView tvCallContact;
         public CircleImageView ivProfileImage;
         public ConstraintLayout clContact;
+        public TextView tvDistance;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -230,6 +264,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
             ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain1);
             tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact1);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
+            tvDistance = (TextView) itemView.findViewById(R.id.tvDistance);
 
 
             tvCallContact.setOnClickListener(new View.OnClickListener() {
