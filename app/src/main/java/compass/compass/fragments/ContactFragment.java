@@ -37,6 +37,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import compass.compass.R;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -139,7 +141,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
             }
         });
 
-        tvNameContact.setText(user.name);
+        tvNameContact.setText(WordUtils.capitalize(user.name));
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(user.userId).child("latitude").addValueEventListener(new ValueEventListener() {
             @Override
