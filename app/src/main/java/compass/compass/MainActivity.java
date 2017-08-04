@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
         UberSdk.initialize(config);
         getIntent().setAction("Already created");
-
     }
 
 
@@ -180,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         super.onResume();
         if(fabDrinks != null) {
             fabDrinks.animate();
+            EventActivity.showFabWithAnimation(fabDrinks,50);
         }
     }
 
