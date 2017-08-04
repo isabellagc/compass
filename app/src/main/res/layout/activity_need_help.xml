@@ -72,8 +72,7 @@
         map:layout_constraintLeft_toLeftOf="parent"
         map:layout_constraintRight_toRightOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/layoutContact"
-        map:layout_constraintVertical_bias="0.0"
-        tools:context="compass.compass.MapsActivity" />
+        map:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tvClosestFriend"

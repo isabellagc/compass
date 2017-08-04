@@ -62,7 +62,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import compass.compass.fragments.AlarmFragment;
 import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.ChatPagerAdapter;
 import compass.compass.fragments.Message911MenuItemFragment;
@@ -161,18 +160,6 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(vpPager);
 
-
-
-        if(args.containsKey("firstLogin")){
-            if(args.getString("firstLogin").equals("goingOut") && !alarmSet){
-                //ALARM FRAGMENT//
-//                FragmentActivity activity = (FragmentActivity) getApplicationContext();
-                FragmentManager fm = getSupportFragmentManager();
-                AlarmFragment alarmFragment = AlarmFragment.newInstance(eventId, fromHere);
-                alarmFragment.show(fm, "tag");
-                alarmSet = true;
-            }
-        }
 
 
         markerMap = new HashMap<String, Marker>();
@@ -546,7 +533,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         //make changes
-        ft.replace(R.id.frameNewEvent_1, newEventFragment);
+        ft.replace(R.id.frameNewEvent, newEventFragment);
 
         //commit transaction
         ft.commit();

@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public HashMap<String, User> needHelpFriends;
     public static HashMap<String, String> peopleInEvents;
 
+    ChildEventListener loadedUsers;
+    ChildEventListener friendsInNeed;
+
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
     public DatabaseReference mDatabase;
@@ -184,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     }
 
     private void loadUsers() {
-        mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
+        loadedUsers = mDatabase.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map userData = (Map) dataSnapshot.getValue();
@@ -292,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
+        friendsInNeed = mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String userName = dataSnapshot.getKey();
@@ -385,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
 
+                closeListeners();
                 recreate();
 
                 alertDialog.dismiss();
@@ -409,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         cvFindFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeListeners();
                 Intent i = new Intent(MainActivity.this, EventActivity.class);
                 startActivity(i);
 
@@ -418,6 +423,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     //Launch the drink activity
     public void launchDrinkActivity() {
+        closeListeners();
         Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
         startActivity(i);
     }
@@ -427,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         cvGetHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeListeners();
                 FragmentManager fm = getSupportFragmentManager();
                 NeedHelpSwipe needHelpSwipe = NeedHelpSwipe.newInstance();
                 needHelpSwipe.show(fm, "idk_what_goes_here");
@@ -437,6 +444,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     //launch the profile activity
     public void launchProfile() {
+        closeListeners();
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }
@@ -446,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         cvResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeListeners();
                 Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
                 startActivity(i);
             }
@@ -454,6 +463,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     @Override
     public void onBackPressed() {
+        closeListeners();
         for(String name : allContacts.keySet()){
             FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + name.replaceAll(" ", ""));
         }
@@ -588,6 +598,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     @Override
     public void launchNeedHelpFragment() {
+        closeListeners();
         mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
@@ -598,6 +609,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     @Override
     public void launchNeedHelpFromMessage() {
+        closeListeners();
         mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
@@ -610,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public void loadPeopleInEvents(){
         peopleInEvents= new HashMap<String, String>();
 
-        mDatabase.child("Users").child(currentProfile.userId).child("events").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Users").child(currentProfile.userId).child("events").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map events = (Map) dataSnapshot.getValue();
@@ -643,6 +655,11 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
             }
         });
+    }
+
+    public void closeListeners(){
+        mDatabase.removeEventListener(loadedUsers);
+        mDatabase.removeEventListener(friendsInNeed);
     }
 }
 

@@ -1,7 +1,5 @@
 package compass.compass;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -77,7 +74,6 @@ public class LoginActivity extends AppCompatActivity{
 //                    setDrinksToZero();
                     setDrinkListeners();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
-                    //Intent i  = new Intent(getBaseContext(), testing_layouts.class);
                     i.putExtra("userToCheck", name);
                     startActivity(i);
                 }
@@ -224,60 +220,60 @@ public class LoginActivity extends AppCompatActivity{
 //        }
 //    }
 
-    private void initAlarms(){
-        mDatabase.child("Users").child(currentProfile.userId).child("alarms").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
-                Object value = dataSnapshot.getValue();
-                Object key = dataSnapshot.getKey();
-
-                if(value.toString().equals("null")){
-                    currentProfile.alarms.put(key.toString(), User.KEY_NULL_VALUE);
-                }else{
-                    Long longVal = Long.valueOf(value.toString());
-                    currentProfile.alarms.put(key.toString(), longVal);
-                    Intent intent = new Intent(getApplicationContext(), Alarm.class);
-                    intent.putExtra("alarmName", key.toString());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, currentProfile.alarms.get(key), pendingIntent);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
-                Object value = dataSnapshot.getValue();
-                Object key = dataSnapshot.getKey();
-
-                if(value.toString().equals("null")){
-                    currentProfile.alarms.put(key.toString(), User.KEY_NULL_VALUE);
-                }else{
-                    Long longVal = Long.valueOf(value.toString());
-                    currentProfile.alarms.put(key.toString(), longVal);
-                    Intent intent = new Intent(getApplicationContext(), Alarm.class);
-                    intent.putExtra("alarmName", key.toString());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, currentProfile.alarms.get(key), pendingIntent);
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void initAlarms(){
+//        mDatabase.child("Users").child(currentProfile.userId).child("alarms").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+//                Object value = dataSnapshot.getValue();
+//                Object key = dataSnapshot.getKey();
+//
+//                if(value.toString().equals("null")){
+//                    currentProfile.alarms.put(key.toString(), User.KEY_NULL_VALUE);
+//                }else{
+//                    Long longVal = Long.valueOf(value.toString());
+//                    currentProfile.alarms.put(key.toString(), longVal);
+//                    Intent intent = new Intent(getApplicationContext(), Alarm.class);
+//                    intent.putExtra("alarmName", key.toString());
+//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+//                    alarmManager.set(AlarmManager.RTC_WAKEUP, currentProfile.alarms.get(key), pendingIntent);
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+//                Object value = dataSnapshot.getValue();
+//                Object key = dataSnapshot.getKey();
+//
+//                if(value.toString().equals("null")){
+//                    currentProfile.alarms.put(key.toString(), User.KEY_NULL_VALUE);
+//                }else{
+//                    Long longVal = Long.valueOf(value.toString());
+//                    currentProfile.alarms.put(key.toString(), longVal);
+//                    Intent intent = new Intent(getApplicationContext(), Alarm.class);
+//                    intent.putExtra("alarmName", key.toString());
+//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,0);
+//                    alarmManager.set(AlarmManager.RTC_WAKEUP, currentProfile.alarms.get(key), pendingIntent);
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 //    private void setUserEvents(){
 //        mDatabase.child("Users").child(currentProfile.userId).child("events").addListenerForSingleValueEvent(new ValueEventListener() {
