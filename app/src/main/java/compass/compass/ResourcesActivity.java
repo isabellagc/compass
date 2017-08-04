@@ -78,13 +78,13 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_chat);
 
         //set up layout
-        tvPolice = (TextView) findViewById(R.id.tvPolice);
-        tvPoliceDistance = (TextView) findViewById(R.id.tvPoliceDistance);
+        tvPolice = (TextView) findViewById(R.id.tvPolice1);
+        tvPoliceDistance = (TextView) findViewById(R.id.tvPoliceDistance1);
 
-        tvCounseling = (TextView) findViewById(R.id.tvCounseling);
-        tvCounselingDistance = (TextView) findViewById(R.id.tvCounselingDistance);
-        tvHospital = (TextView) findViewById(R.id.tvHospital);
-        tvHospitalDistance = (TextView) findViewById(R.id.tvHospitalDistance);
+        tvCounseling = (TextView) findViewById(R.id.tvCounseling1);
+        tvCounselingDistance = (TextView) findViewById(R.id.tvCounselingDistance1);
+        tvHospital = (TextView) findViewById(R.id.tvHospital1);
+        tvHospitalDistance = (TextView) findViewById(R.id.tvHospitalDistance1);
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         resourcePagerAdapter = new ResourcePagerAdapter(getSupportFragmentManager(), this);
         vpPager.setAdapter(resourcePagerAdapter);

@@ -67,6 +67,7 @@ import java.util.Map;
 
 import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
+import compass.compass.EventActivity;
 import compass.compass.LaunchFlagLocationActivity;
 import compass.compass.NeedHelpActivity;
 import compass.compass.R;
@@ -183,6 +184,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 originalHeight = view.getHeight();
             }
         });
+        EventActivity.showFabWithAnimation(fabMarkLocation, 1000);
 
         return v;
     }

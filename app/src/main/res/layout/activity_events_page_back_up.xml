@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -86,12 +87,16 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        app:layout_anchor="@id/fNewEvent_1"
-        android:layout_gravity="bottom|right|"
-        app:layout_anchorGravity="bottom|right|end"
         style="@style/FabStyle"
+        android:layout_gravity="bottom|right|"
+        android:alpha="0.0"
         android:clickable="true"
-        android:onClick="launchNewEvent"/>
+        android:onClick="launchNewEvent"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
+        android:visibility="invisible"
+        app:layout_anchor="@id/fNewEvent_1"
+        app:layout_anchorGravity="bottom|right|end" />
 
     <FrameLayout
         android:id="@+id/frameNewEvent"

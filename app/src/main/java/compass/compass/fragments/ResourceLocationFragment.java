@@ -70,6 +70,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     //location
     Bitmap hospitalIcon;
     Bitmap policeIcon;
+    Bitmap counsel;
     Double latitude;
     Double longitude;
     Map location;
@@ -98,15 +99,22 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         //set up layout
         tvPolice = (TextView) v.findViewById(R.id.tvPolice);
         tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance);
-
+        tvPolice.setText("West Presinct, SEA PD");
+        tvPoliceDistance.setText("0.9 mi · (206) 625-5011 ");
         tvCounseling = (TextView) v.findViewById(R.id.tvCounseling);
+        tvCounseling.setText("Seattle Christian Counseling");
         tvCounselingDistance = (TextView) v.findViewById(R.id.tvCounselingDistance);
-
+        tvCounselingDistance.setText("0.2 mi · (206) 388-3929");
         tvHospital = (TextView) v.findViewById(R.id.tvHospital);
+        tvHospital.setText("Kaiser Permanente");
         tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance);
-        hospitalIcon = getBitmap(getActivity(), R.drawable.ic_hospital);
-        policeIcon = getBitmap(getActivity(), R.drawable.ic_police);
-        policeIcon = resizeIcon(policeIcon, 144, 144);
+        tvHospitalDistance.setText("0.5 mi · (206) 448-4141");
+        counsel = getBitmap(getActivity(), R.drawable.ic_heart);
+        counsel = resizeIcon(counsel, 72, 72);
+        hospitalIcon = getBitmap(getActivity(), R.drawable.ic_local_hospital_secondary_24px);
+        hospitalIcon = resizeIcon(hospitalIcon, 72, 72);
+        policeIcon = getBitmap(getActivity(), R.drawable.ic_taxi);
+        policeIcon = resizeIcon(policeIcon, 72, 72);
         //set up database
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getSupportMap();
@@ -248,10 +256,10 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 30));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 20));
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(myLocation)      // Sets the center of the map to location user
-                    .zoom(15)                   // Sets the zoom
+                    .zoom(14)                   // Sets the zoom
                     .bearing(0)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 40 degrees
                     .build();                   // Creates a CameraPosition from the builder
@@ -309,7 +317,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         Marker flag_2 = mMap.addMarker(markerOptions_2);
         startDropMarkerAnimation(flag_2);
 
-        MarkerOptions markerOptions_3 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(hospitalIcon))
+        MarkerOptions markerOptions_3 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(counsel))
                 .position(counselingLocation)
                 .title("Seattle Christian Counseling");
         Marker flag_3 = mMap.addMarker(markerOptions_3);
