@@ -82,12 +82,45 @@
     <TextView
         android:id="@+id/tvInfo"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_height="19dp"
+        android:layout_marginLeft="-140dp"
+        android:layout_marginTop="0dp"
+        android:text=" Drinks: "
+        android:textColor="@color/Black"
         app:layout_constraintLeft_toLeftOf="@+id/tvNameContact1"
         app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain1"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameContact1"
-        tools:layout_editor_absoluteX="82dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameContact1" />
+
+    <TextView
+        android:id="@+id/tvDrinkCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="0"
+        app:layout_constraintLeft_toRightOf="@+id/tvInfo"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameContact1" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" BAC: "
+        android:textColor="@color/Black"
+        app:layout_constraintLeft_toRightOf="@+id/tvDrinkCount"
+        app:layout_constraintTop_toBottomOf="@+id/tvContactName1"
+        app:layout_constraintTop_toTopOf="@+id/tvDrinkCount"
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="47dp" />
+
+    <TextView
+        android:id="@+id/tvBACcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        app:layout_constraintLeft_toRightOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6"
+        tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="47dp" />
 
 
