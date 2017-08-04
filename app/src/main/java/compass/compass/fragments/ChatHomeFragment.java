@@ -12,8 +12,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
-import android.location.Criteria;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -307,22 +305,22 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             //LatLng sydney = new LatLng(47.628911, -122.342969);
 //        Marker something = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 
-            if(myLocation != null) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
-
-
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(myLocation)      // Sets the center of the map to location user
-                        .zoom(15)                   // Sets the zoom
-                        .bearing(0)                // Sets the orientation of the camera to east
-                        .tilt(40)                   // Sets the tilt of the camera to 40 degrees
-                        .build();                   // Creates a CameraPosition from the builder
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
+//            if(myLocation != null) {
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+//
+//
+//                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//                Criteria criteria = new Criteria();
+//
+//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
+//                CameraPosition cameraPosition = new CameraPosition.Builder()
+//                        .target(myLocation)      // Sets the center of the map to location user
+//                        .zoom(15)                   // Sets the zoom
+//                        .bearing(0)                // Sets the orientation of the camera to east
+//                        .tilt(40)                   // Sets the tilt of the camera to 40 degrees
+//                        .build();                   // Creates a CameraPosition from the builder
+//                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//            }
 
     }
 
@@ -346,12 +344,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 //                        .position(pos)
 //                        .title(user)
 //                );
-                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(flagIcon))
-                        .position(pos)
-                        .title(user);
-                Marker flag = mMap.addMarker(markerOptions);
-                flagMap.put(title, flag);
-                startDropMarkerAnimation(flag);
+
             }
 
             @Override
