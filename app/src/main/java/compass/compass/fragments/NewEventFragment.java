@@ -259,7 +259,7 @@ public class NewEventFragment extends android.support.v4.app.Fragment {
         newEventContactsFragment.setArguments(b);
 
         //make changes
-        ft.replace(R.id.frameNewEvent_1, newEventContactsFragment);
+        ft.replace(R.id.frameNewEvent, newEventContactsFragment);
 
         //commit transaction
         ft.commit();

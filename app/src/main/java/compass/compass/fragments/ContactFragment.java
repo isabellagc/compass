@@ -52,6 +52,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     TextView tvNameContact;
     CircleImageView ivProfileImageMain;
     TextView tvCallContact;
+    TextView tvDrinkCount;
+    TextView tvBACcount;
     User user;
     TextView tvMessageContact;
     private GoogleMap mMap;
@@ -111,17 +113,22 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         tvNameContact = view.findViewById(R.id.tvNameContact1);
         tvCallContact = view.findViewById(R.id.tvCallContact1);
         ivProfileImageMain = view.findViewById(R.id.ivProfileImageMain1);
-        tvInfo = view.findViewById(R.id.tvInfo);
+
         DecimalFormat df = new DecimalFormat("#.####");
         df.setRoundingMode(RoundingMode.CEILING);
         Double BAC = user.currentBAC;
         String formatted = df.format(BAC);
-        tvInfo.setText("Drinks: " + user.drinkCounter + " BAC: " + formatted);
+
+
+        tvBACcount = view.findViewById(R.id.tvBACcount);
+        tvBACcount.setText(formatted);
+        tvDrinkCount = view.findViewById(R.id.tvDrinkCount);
+        tvDrinkCount.setText(String.valueOf(user.drinkCounter));
+
 
         final int drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
         ivProfileImageMain.setImageResource(drawableResourceId);
-        ivProfileImageMain.setBorderColor(R.color.colorPrimary);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.friendMap);
@@ -169,7 +176,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                         .position(new LatLng(latitude, longitude))
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
                         .title(user.userId)
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
             }
@@ -197,7 +204,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                         .position(new LatLng(latitude, longitude))
                         .title(user.userId)
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
 

@@ -40,9 +40,6 @@
         android:largeHeap="true">
 
         <!-- <receiver android:process=":remote" android:name=".Alarm"></receiver> -->
-        <receiver
-            android:name=".Alarm"
-            android:enabled="true" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -109,11 +106,6 @@
         <!-- android:name="com.google.android.gms.version" -->
         <!-- android:value="7571000"/> -->
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".testing_layouts" />
-
         <service
             android:name=".LocationService"
             android:enabled="true"
@@ -140,11 +132,6 @@
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".FirebaseIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
