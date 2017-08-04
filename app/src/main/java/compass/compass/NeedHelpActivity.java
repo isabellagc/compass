@@ -1,6 +1,7 @@
 package compass.compass;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -97,13 +98,13 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     Double longitude;
     public String closestFriendName;
     private GoogleMap mMap;
-    public boolean inHelpMode;
+    public boolean goBackHomeScreen;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        inHelpMode = false;
+        goBackHomeScreen = false;
 
         //Snackbar.make(findViewById(android.R.id.content), "YOU HAVE ENTERED GET HELP MODE", Snackbar.LENGTH_INDEFINITE).show();
         if(currentProfile.status){
@@ -123,6 +124,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 message.setTime((new Date().getTime()));
                 sendNotificationToUser(members, eventIds, message);
             }else if(getIntent().getBooleanExtra("fromNeedHelpButton", false)){
+                goBackHomeScreen = true;
                 getIntent().removeExtra("fromNeedHelpButton");
                 showAlertEnterHelpMode();
             }
@@ -602,5 +604,17 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         currentProfile.status = true;
 //        Intent i = new Intent(this, NeedHelpActivity.class);
 //        startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(goBackHomeScreen){
+            Intent i = new Intent(this, MainActivity.class);
+            ActivityOptions options =
+                    ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+            startActivity(i, options.toBundle());
+        }else{
+            super.onBackPressed();
+        }
     }
 }

@@ -2,6 +2,7 @@ package compass.compass;
 
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
@@ -29,7 +30,7 @@ import compass.compass.models.Event;
 
 import static compass.compass.MainActivity.currentProfile;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements Message911MenuItemFragment.Message911FragmentListener, Call911MenuItemFragment.Call911FragmentListener {
     public static RecyclerView rvEvents;
     ArrayList<Event> eventList;
     EventsAdapter eventAdapter;
@@ -159,13 +160,13 @@ public class EventActivity extends AppCompatActivity {
 
     public void message911(final MenuItem menuItem){
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
 
@@ -205,6 +206,26 @@ public class EventActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
+        startActivity(i);
+    }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
     }
 
 
