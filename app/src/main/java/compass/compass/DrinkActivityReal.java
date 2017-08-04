@@ -117,6 +117,8 @@ public class DrinkActivityReal extends AppCompatActivity implements Call911MenuI
                 sendDbDrinkMessage();
             }
         });
+
+        EventActivity.showFabWithAnimation(fabAddDrink, 50);
     }
 
     private void sendDbDrinkMessage(){

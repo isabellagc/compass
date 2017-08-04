@@ -12,7 +12,7 @@
         android:layout_height="35dp"
         android:layout_below="@+id/view"
         android:layout_centerHorizontal="true"
-        app:border_color="@color/Red"
+        app:border_color="@color/colorSecondary"
         app:border_width="2dp" />
 
 </FrameLayout>
