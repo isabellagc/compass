@@ -87,6 +87,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
+                android:tint="@color/colorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -106,7 +107,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintLeft_toRightOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.571" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -124,13 +125,13 @@
         android:id="@+id/tvSendSpecificMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="Send friends specific message:"
         android:textAppearance="@android:style/TextAppearance.Material.Notification.Info"
-        app:layout_constraintLeft_toLeftOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        android:layout_marginLeft="8dp" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvSexualAssault"

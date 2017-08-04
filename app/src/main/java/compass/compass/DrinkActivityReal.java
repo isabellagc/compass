@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -111,7 +110,19 @@ public class DrinkActivityReal extends AppCompatActivity implements Call911MenuI
                 tvDrinkNumber.setText(String.valueOf(drinks));
                 setProgress();
                 if(BAC >= 0.08){
-                    Toast.makeText(DrinkActivityReal.this, "BAC level: " + Double.toString(BAC) + " SLOW DOWN!", Toast.LENGTH_SHORT).show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(DrinkActivityReal.this, R.style.Theme_AppCompat_Light_Dialog).create();
+                    alertDialog.setTitle("BLOOD ALCOHOL CONTENT TOO HIGH");
+                    alertDialog.setMessage("Your BAC is now over .08! Please slow down.");
+                    alertDialog.setIcon(R.drawable.ic_need_help);
+                    DialogInterface.OnClickListener okay = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            alertDialog.dismiss();
+                        }
+                    };
+
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OKAY", okay);
+                    alertDialog.show();
                 }
                 currentProfile.currentBAC = BAC;
                 sendDbDrinkMessage();
