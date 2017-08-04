@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ResourcePagerAdapter extends FragmentPagerAdapter{
 
-    private String tabTitles [] = new String[] {"School Help", "Near You"};
+    private String tabTitles [] = new String[] {"Near You", "School Help"};
     private Context context;
     public ResourceSchoolFragment resourceSchoolFragment;
     public  ResourceLocationFragment resourceLocationFragment;
@@ -28,9 +28,9 @@ public class ResourcePagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
         if(position == 0){
-            return resourceSchoolFragment;
-        }else if (position == 1){
             return resourceLocationFragment;
+        }else if (position == 1){
+            return resourceSchoolFragment;
         }else {
             return null;
         }
