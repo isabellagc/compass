@@ -43,7 +43,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.Call911MenuItemFragment;
+
+import compass.compass.fragments.ImagePopupFragment;
 import compass.compass.fragments.ContactFragment;
+
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -165,13 +168,20 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     protected void onStart() {
         super.onStart();
         //setContentView(R.layout.activity_main_pretty);
-
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(fabDrinks != null) {
+            fabDrinks.animate();
+        }
     }
 
     private void loadUsers() {
@@ -227,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 //    }
 
 
+
+
     private void setHomeScreenButtons() {
 //        location = (ImageButton) findViewById(R.id.location);
 //        drink = (ImageButton) findViewById(R.id.drink);
@@ -235,8 +247,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         tvNameBox = (TextView) findViewById(R.id.tvNameBox);
         String name = WordUtils.capitalize(currentProfile.userId);
         tvNameBox.setText(name);
-
         fabDrinks = (FloatingActionButton) findViewById(R.id.fabDrinkActivity);
+        //fabDrinks.show();
         fabDrinks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -590,6 +602,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         currentProfile.status = true;
         //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 

@@ -110,17 +110,16 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             setContentView(R.layout.activity_need_help);
             if(getIntent().getBooleanExtra("launchHelp", false)){
                 showAlertEnterHelpMode();
-
-
-                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                sendNotificationToUser(peopleInEvents, message, mDatabase);
+//
+//                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
+//                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+//                currentProfile.status = true;
+//                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+//                ChatMessage message = new ChatMessage();
+//                message.setText(Alert_message);
+//                message.setSender("BOT");
+//                message.setTime((new Date().getTime()));
+//                sendNotificationToUser(members, eventIds, message);
             }else if(getIntent().getBooleanExtra("fromNeedHelpButton", false)){
                 goBackHomeScreen = true;
                 getIntent().removeExtra("fromNeedHelpButton");

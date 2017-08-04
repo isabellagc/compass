@@ -51,62 +51,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         //MAKE SURE THAT DB IS SET UP SO ID FOR A CHILD OF USERS IS ALWAYS IDENTICAL TO NAME
         getEvents(currentProfile.userId);
     }
-//    public void getEvents(String name) {
-//        mDatabase.child("Users").child(name).child("events").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                final String eventKey = dataSnapshot.getKey();
-//                keys.add(eventKey);
-//                if(eventKey != null) {
-//                    mDatabase.child("Events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            Map temp = (Map) dataSnapshot.getValue();
-//                            Event event = new Event();
-//                            event.setEndTime((Long) temp.get("End"));
-//                            event.setStartTime((Long) temp.get("Start"));
-//                            event.id = eventKey;
-//                            event.setName((String) temp.get("EventName"));
-//
-//                            mEvents.add(event);
-//                            notifyDataSetChanged();
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                Log.d("wow", "here");
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                final String eventKey = dataSnapshot.getKey();
-//                int index = keys.indexOf(eventKey);
-//                keys.remove(index);
-//                mEvents.remove(index);
-//                notifyDataSetChanged();
-//                Log.d("wow", "here");
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                Log.d("wow", "here");
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d("wow", "here");
-//            }
-//        });
-//
-//    }
 
     public void getEvents(final String name) {
         mDatabase.child("Events").addChildEventListener(new ChildEventListener() {
@@ -193,14 +137,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         Calendar calStart = Calendar.getInstance();
         calStart.setTimeInMillis(mEvents.get(position).getStartTime());
-        DateFormat formatterStart = DateFormat.getDateTimeInstance();
+        DateFormat formatterStart = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         String dateFormattedStart = formatterStart.format(calStart.getTime());
 
         holder.tvStart.setText(dateFormattedStart);
 
         Calendar calEnd = Calendar.getInstance();
         calEnd.setTimeInMillis(mEvents.get(position).getEndTime());
-        DateFormat formatterEnd = DateFormat.getDateTimeInstance();
+        DateFormat formatterEnd = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         String dateFormattedEnd = formatterEnd.format(calEnd.getTime());
 
         holder.tvEnd.setText(dateFormattedEnd);
