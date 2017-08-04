@@ -43,6 +43,7 @@ public class EventActivity extends AppCompatActivity implements Message911MenuIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Circles");
 
         if(currentProfile.status){
             getTheme().applyStyle(R.style.AppThemeInverted, true);
@@ -225,6 +226,7 @@ public class EventActivity extends AppCompatActivity implements Message911MenuIt
         currentProfile.status = true;
         //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 

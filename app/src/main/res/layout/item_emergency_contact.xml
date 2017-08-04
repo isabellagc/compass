@@ -36,7 +36,8 @@
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:foreground="?android:attr/selectableItemBackground" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImageMain1"

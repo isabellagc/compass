@@ -184,6 +184,7 @@ public class ProfileActivity extends AppCompatActivity implements Call911MenuIte
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 
@@ -193,6 +194,7 @@ public class ProfileActivity extends AppCompatActivity implements Call911MenuIte
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 

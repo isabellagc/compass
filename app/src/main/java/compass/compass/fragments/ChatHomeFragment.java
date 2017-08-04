@@ -804,6 +804,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(getContext(), NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 
@@ -813,6 +814,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(getContext(), NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 }
