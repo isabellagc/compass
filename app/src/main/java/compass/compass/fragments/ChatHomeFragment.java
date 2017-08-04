@@ -170,7 +170,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
 
         mapExpanded = false;
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fMap);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.friendMap);
         mapFragment.getMapAsync(this);
         final View view = mapFragment.getView();
 
@@ -797,6 +797,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(getContext(), NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 
@@ -806,6 +807,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(getContext(), NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 }

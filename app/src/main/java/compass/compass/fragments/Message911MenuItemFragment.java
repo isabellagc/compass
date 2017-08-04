@@ -21,12 +21,31 @@ public class Message911MenuItemFragment extends DialogFragment {
     //private NotifyFriendsMessageListener mListener;
     public static String message = "";
     public EditText etMessage911;
+    public static String number;
+    public static String friendName;
+    public TextView tvMessage911;
     TextView tvContinueMessage911, tvCancelMessage911;
 
     static Message911FragmentListener myListener;
 
     public Message911MenuItemFragment() {
         // Required empty public constructor
+    }
+
+    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber, String contactName) {
+        message = messageInfo;
+        number = contactNumber;
+        friendName = contactName;
+        return new Message911MenuItemFragment();
+    }
+
+    public static Message911MenuItemFragment newInstance() {
+        return new Message911MenuItemFragment();
+    }
+
+    public static Message911MenuItemFragment newInstance(String messageInfo) {
+        message = messageInfo;
+        return new Message911MenuItemFragment();
     }
 
     public static Message911MenuItemFragment newInstance(String messageInfo, Message911FragmentListener listener) {
@@ -51,9 +70,18 @@ public class Message911MenuItemFragment extends DialogFragment {
         etMessage911 = (EditText) view.findViewById(R.id.etMessage911);
         tvContinueMessage911 = (TextView) view.findViewById(R.id.tvContinueMessage911);
         tvCancelMessage911 = (TextView) view.findViewById(R.id.tvCancelMessage911);
+        tvMessage911 = (TextView) view.findViewById(R.id.tvMessage911);
 
-        if(message.length() == 0){
+        if(message.length() == 0 && number == null){
             message = "Hello my name is " + changeStringCase(MainActivity.currentProfile.name) + " I am in need of help!! My current location is (" + MainActivity.currentProfile.latitude + ", " + MainActivity.currentProfile.longitude + "). ";
+            tvMessage911.setText("MESSAGE 911");
+        }
+        else{
+            tvMessage911.setText("MESSAGE " + friendName.toUpperCase());
+        }
+
+        if (number == null){
+            number = "4258924209";
         }
 
         etMessage911.setText(message);
@@ -71,7 +99,7 @@ public class Message911MenuItemFragment extends DialogFragment {
             public void onClick(View view) {
                 String newMessage = etMessage911.getText().toString();
                 try {
-                    SmsManager.getDefault().sendTextMessage("4258924209", null, newMessage, null, null);
+                    SmsManager.getDefault().sendTextMessage(number, null, newMessage, null, null);
                 } catch (Exception e) {
                     AlertDialog.Builder alertDialogBuilder = new
                             AlertDialog.Builder(getContext());
@@ -86,6 +114,8 @@ public class Message911MenuItemFragment extends DialogFragment {
 
         tvContinueMessage911.setOnClickListener(sendMessage);
         tvCancelMessage911.setOnClickListener(dismissAlert);
+
+        number = null;
     }
 
     @NonNull

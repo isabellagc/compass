@@ -310,6 +310,7 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 
@@ -319,6 +320,7 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 }

@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.core.auth.Scope;
@@ -44,7 +45,6 @@ import java.util.Map;
 import compass.compass.fragments.Call911MenuItemFragment;
 
 import compass.compass.fragments.ImagePopupFragment;
-
 import compass.compass.fragments.ContactFragment;
 
 import compass.compass.fragments.Message911MenuItemFragment;
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabDrinks;
     public HashMap<String, User> needHelpFriends;
+    public static HashMap<String, String> peopleInEvents;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             setContentView(R.layout.activity_main_android_style);
             setHomeScreenButtons();
             setOnClickListeners();
+            loadPeopleInEvents();
 
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
@@ -166,13 +168,20 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     protected void onStart() {
         super.onStart();
         //setContentView(R.layout.activity_main_pretty);
-
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         recreate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(fabDrinks != null) {
+            fabDrinks.animate();
+        }
     }
 
     private void loadUsers() {
@@ -228,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 //    }
 
 
+
+
     private void setHomeScreenButtons() {
 //        location = (ImageButton) findViewById(R.id.location);
 //        drink = (ImageButton) findViewById(R.id.drink);
@@ -236,8 +247,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         tvNameBox = (TextView) findViewById(R.id.tvNameBox);
         String name = WordUtils.capitalize(currentProfile.userId);
         tvNameBox.setText(name);
-
         fabDrinks = (FloatingActionButton) findViewById(R.id.fabDrinkActivity);
+        //fabDrinks.show();
         fabDrinks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,8 +291,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        tvContext = (TextView) findViewById(R.id.tvContext);
-
         mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -300,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
                 long numberNeedHelp =  needHelpFriends.size();
                 if (numberNeedHelp > 0){
-                    tvContext.setTextColor(Color.RED);
+                    tvPeopleNeedHelp.setTextColor(Color.RED);
                 }
             }
 
@@ -539,8 +548,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 @Override
                 public void onClick(View view) {
                     FragmentManager fm = getSupportFragmentManager();
-                    ImagePopupFragment imagePopupFragment = ImagePopupFragment.newInstance(user.name);
-                    imagePopupFragment.show(fm, "name");
+                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
+                    contactFragment.show(fm, "name");
 
                 }
             });
@@ -593,7 +602,46 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         currentProfile.status = true;
         //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
+    }
+
+    public void loadPeopleInEvents(){
+        peopleInEvents= new HashMap<String, String>();
+
+        mDatabase.child("Users").child(currentProfile.userId).child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map events = (Map) dataSnapshot.getValue();
+                for (Object e : events.keySet()){
+                    final String tempEvent = e.toString();
+                    mDatabase.child("Events").child(tempEvent).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map otherPeople = (Map) dataSnapshot.getValue();
+                            for(Object s : otherPeople.keySet()) {
+                                String temp = s.toString().replaceAll(" ", "");
+                                if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
+                                    peopleInEvents.put(temp, tempEvent);
+                                }
+                            }
+                            peopleInEvents.remove(currentProfile.name.replaceAll(" ", ""));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

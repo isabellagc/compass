@@ -285,7 +285,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         mapExpanded = false;
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fMap);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.friendMap);
         mapFragment.getMapAsync(this);
         final View view = mapFragment.getView();
 
@@ -680,6 +680,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 
@@ -689,6 +690,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
         currentProfile.status = true;
         Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
         startActivity(i);
     }
 

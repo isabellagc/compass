@@ -50,10 +50,8 @@ import com.uber.sdk.android.rides.RequestDeeplink;
 import com.uber.sdk.android.rides.RideParameters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,7 +62,9 @@ import compass.compass.models.ChatMessage;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static compass.compass.MainActivity.allContacts;
 import static compass.compass.MainActivity.currentProfile;
+import static compass.compass.MainActivity.peopleInEvents;
 import static compass.compass.R.id.friendMap;
 
 /**
@@ -79,8 +79,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     public DatabaseReference mDatabase;
     ChatAdapter mAdapter;
     String [] event_n0;
-    String[] members;
-    String[] eventIds;
     TextView tvCallContact;
     TextView tvNameContact;
     CircleImageView ivProfileImage;
@@ -112,17 +110,16 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             setContentView(R.layout.activity_need_help);
             if(getIntent().getBooleanExtra("launchHelp", false)){
                 showAlertEnterHelpMode();
-
-
-                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
-                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
-                currentProfile.status = true;
-                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
-                ChatMessage message = new ChatMessage();
-                message.setText(Alert_message);
-                message.setSender("BOT");
-                message.setTime((new Date().getTime()));
-                sendNotificationToUser(members, eventIds, message);
+//
+//                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
+//                mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+//                currentProfile.status = true;
+//                mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+//                ChatMessage message = new ChatMessage();
+//                message.setText(Alert_message);
+//                message.setSender("BOT");
+//                message.setTime((new Date().getTime()));
+//                sendNotificationToUser(members, eventIds, message);
             }else if(getIntent().getBooleanExtra("fromNeedHelpButton", false)){
                 goBackHomeScreen = true;
                 getIntent().removeExtra("fromNeedHelpButton");
@@ -225,94 +222,51 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
-        final Map<String, String> people= new HashMap<String, String>();
 
-        mDatabase.child("Events").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map Events = (Map) dataSnapshot.getValue();
-                Set<String> events = new HashSet<String>();
-                for (Object e : Events.keySet()){
-                    final String tempEvent = e.toString();
-                    mDatabase.child("Events").child(tempEvent).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map otherPeople = (Map) dataSnapshot.getValue();
-                            for(Object s : otherPeople.keySet()) {
-                                String temp = s.toString().replaceAll(" ", "");
-                                if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
-                                    people.put(temp, tempEvent);
-                                }
-                            }
-                            people.remove(currentProfile.name.replaceAll(" ", ""));
-                            members = (String[]) people.keySet().toArray(new String[people.size()]);
-                            eventIds = (String[]) people.values().toArray(new String[people.size()]);
-
-                            for(String s: members){
-                                if(s.equals("testperson")){
-                                    s = "test person";
-                                }
-                                final String finalS = s;
-                                mDatabase.child("Users").child(s).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        location = (Map) dataSnapshot.getValue();
-                                        latitude = (Double) location.get("latitude");
-                                        longitude = (Double) location.get("longitude");
-                                        LatLng latLng = new LatLng(latitude, longitude);
-                                        int drawableResourceId = getResources().getIdentifier(finalS.replaceAll(" ",""), "drawable", getPackageName());
+        for(final String name : allContacts.keySet()){
+            mDatabase.child("Users").child(name).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    location = (Map) dataSnapshot.getValue();
+                    latitude = (Double) location.get("latitude");
+                    longitude = (Double) location.get("longitude");
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    int drawableResourceId = getResources().getIdentifier(name.replaceAll(" ",""), "drawable", getPackageName());
 
 
-                                        tempLocation.setLatitude(latitude);
-                                        tempLocation.setLongitude(longitude);
-                                        Float distance = myLocation.distanceTo(tempLocation);
+                    tempLocation.setLatitude(latitude);
+                    tempLocation.setLongitude(longitude);
+                    Float distance = myLocation.distanceTo(tempLocation);
 
-                                        if(distanceToClosest == null || distance < distanceToClosest){
-                                            distanceToClosest = distance;
-                                            closestLatitude = latitude;
-                                            closestLongitude = longitude;
-                                            if(closestFriend != null){
-                                                closestFriend.remove();
-                                            }
-                                            closestFriendName = finalS;
-                                            tvNameContact.setText(closestFriendName);
-                                            //mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", getPackageName()
-
-                                            int drawableResource_Id = getResources().getIdentifier(closestFriendName, "drawable", getPackageName());
-                                            ivProfileImage.setImageResource(drawableResource_Id);
-                                            closestFriend = mMap.addMarker(new MarkerOptions()
-                                                    .position(latLng)
-                                                    .title(finalS)
-                                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-
+                    if(distanceToClosest == null || distance < distanceToClosest){
+                        distanceToClosest = distance;
+                        closestLatitude = latitude;
+                        closestLongitude = longitude;
+                        if(closestFriend != null){
+                            closestFriend.remove();
                         }
+                        closestFriendName = name;
+                        tvNameContact.setText(closestFriendName);
+                        //mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", getPackageName()
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        int drawableResource_Id = getResources().getIdentifier(closestFriendName, "drawable", getPackageName());
+                        ivProfileImage.setImageResource(drawableResource_Id);
+                        closestFriend = mMap.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(name)
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
-                        }
-                    });
+                    }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
 
         //Send the message to the event
         cvGoHome.setOnClickListener(new View.OnClickListener() {
@@ -332,7 +286,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                     mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
                     mAdapter.notifyDataSetChanged();
                 }
-                sendNotificationToUser(members, eventIds, message);
+                sendNotificationToUser(peopleInEvents, message, mDatabase);
                 Toast.makeText(NeedHelpActivity.this, Alert_message, Toast.LENGTH_SHORT).show();
                 callUber();
 
@@ -394,7 +348,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 FirebaseDatabase.getInstance().getReference().child("Users").child(currentProfile.userId).child("need help").setValue(false);
-                FirebaseDatabase.getInstance().getReference().child("User Status").child(currentProfile.userId).setValue("safe");
                 currentProfile.status = false;
                 alertDialog.dismiss();
                 recreate();
@@ -426,19 +379,16 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
-    public void sendNotificationToUser(String[] user, String[] events, final ChatMessage message) {
+    public static void sendNotificationToUser(HashMap<String, String> peopleInEvents, final ChatMessage message, DatabaseReference mDatabase) {
 
-        ArrayList<String> recipients= new ArrayList<String>(Arrays.asList(user));
-        ArrayList<String> eventIds= new ArrayList<>(Arrays.asList(events));
-
-        Map notification = new HashMap<>();
-        for(int i = 0; i < recipients.size(); i++)
+        for(String name : peopleInEvents.keySet())
         {
-            ArrayList<String> tempRecipient = new ArrayList<String>();
-            tempRecipient.add(recipients.get(i));
+            ArrayList tempName = new ArrayList();
+            tempName.add(name);
 
-            notification.put("recipients", tempRecipient);
-            notification.put("message", message.getSender().replaceAll(" ", "") + ":" + eventIds.get(i) + ":" + message.getText());
+            Map notification = new HashMap<>();
+            notification.put("recipients", tempName);
+            notification.put("message", message.getSender().replaceAll(" ", "") + ":" + currentProfile.name + ":" + peopleInEvents.get(name) + ":" + message.getText());
             mDatabase.child("notifications").push().setValue(notification);
         }
 
@@ -474,17 +424,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
         View customMarkerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
-
-
-//        Glide.with(getApplicationContext())
-//                .load(linkToPic)
-//                .placeholder(R.color.c50)
-//                .dontAnimate()
-//                .into(markerImageView);
-//
-//        Glide.with(this)
-//                .load(R.color.Black)
-//                .into(markerImageView);
 
         markerImageView.setImageResource(resId);
         customMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
@@ -564,6 +503,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             sendMessageThing(messageInfo);
         }else{
             mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+            mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
             currentProfile.status = true;
             sendMessageThing(messageInfo);
             Intent i = new Intent(this, NeedHelpActivity.class);
@@ -585,7 +525,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             mAdapter = new ChatAdapter(ChatActivity.class, event_n0[i]);
             mAdapter.notifyDataSetChanged();
         }
-        sendNotificationToUser(members, eventIds, message);
+        sendNotificationToUser(peopleInEvents, message, mDatabase);
     }
 
     @Override
