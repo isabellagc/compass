@@ -121,7 +121,6 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         final int drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
         ivProfileImageMain.setImageResource(drawableResourceId);
-        ivProfileImageMain.setBorderColor(R.color.colorPrimary);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.friendMap);
@@ -169,7 +168,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                         .position(new LatLng(latitude, longitude))
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
                         .title(user.userId)
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+                        .snippet("<html><strong>Drink :</strong></html>" + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
             }
@@ -197,7 +196,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                         .position(new LatLng(latitude, longitude))
                         .title(user.userId)
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+                        .snippet("<html><strong>Drink :</strong></html>" + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
 
