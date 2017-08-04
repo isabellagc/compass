@@ -32,10 +32,11 @@ public class Message911MenuItemFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber, String contactName) {
+    public static Message911MenuItemFragment newInstance(String messageInfo, String contactNumber, String contactName, Message911FragmentListener listener) {
         message = messageInfo;
         number = contactNumber;
         friendName = contactName;
+        myListener = listener;
         return new Message911MenuItemFragment();
     }
 
@@ -90,6 +91,7 @@ public class Message911MenuItemFragment extends DialogFragment {
         View.OnClickListener dismissAlert = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                number = null;
                 dismiss();
             }
         };
@@ -108,14 +110,13 @@ public class Message911MenuItemFragment extends DialogFragment {
                     dialog.show();
                 }
                 myListener.launchNeedHelpFromMessage();
+                number = null;
                 dismiss();
             }
         };
 
         tvContinueMessage911.setOnClickListener(sendMessage);
         tvCancelMessage911.setOnClickListener(dismissAlert);
-
-        number = null;
     }
 
     @NonNull
