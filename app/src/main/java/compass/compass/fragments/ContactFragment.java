@@ -44,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static compass.compass.MainActivity.allContacts;
 
 
-public class ContactFragment extends DialogFragment implements OnMapReadyCallback{
+public class ContactFragment extends DialogFragment implements OnMapReadyCallback, Message911MenuItemFragment.Message911FragmentListener{
 
     TextView tvNameContact;
     CircleImageView ivProfileImageMain;
@@ -219,5 +219,10 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
             drawable.draw(canvas);
         customMarkerView.draw(canvas);
         return returnedBitmap;
+    }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+
     }
 }
