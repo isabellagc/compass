@@ -24,6 +24,8 @@ public class Message911MenuItemFragment extends DialogFragment {
     public static String number;
     TextView tvContinueMessage911, tvCancelMessage911;
 
+    static Message911FragmentListener myListener;
+
     public Message911MenuItemFragment() {
         // Required empty public constructor
     }
@@ -34,12 +36,23 @@ public class Message911MenuItemFragment extends DialogFragment {
         return new Message911MenuItemFragment();
     }
 
+    public static Message911MenuItemFragment newInstance() {
+        return new Message911MenuItemFragment();
+    }
+
     public static Message911MenuItemFragment newInstance(String messageInfo) {
         message = messageInfo;
         return new Message911MenuItemFragment();
     }
 
-    public static Message911MenuItemFragment newInstance() {
+    public static Message911MenuItemFragment newInstance(String messageInfo, Message911FragmentListener listener) {
+        message = messageInfo;
+        myListener = listener;
+        return new Message911MenuItemFragment();
+    }
+
+    public static Message911MenuItemFragment newInstance(Message911FragmentListener listener) {
+        myListener = listener;
         return new Message911MenuItemFragment();
     }
 
@@ -86,7 +99,7 @@ public class Message911MenuItemFragment extends DialogFragment {
                     dialog.setMessage(e.getMessage());
                     dialog.show();
                 }
-
+                myListener.launchNeedHelpFromMessage();
                 dismiss();
             }
         };
@@ -149,4 +162,8 @@ public class Message911MenuItemFragment extends DialogFragment {
 //    public interface NotifyFriendsMessageListener {
 //        void writeMessageToUsers(String messageInfo);
 //    }
+
+    public interface Message911FragmentListener{
+        void launchNeedHelpFromMessage();
+    }
 }

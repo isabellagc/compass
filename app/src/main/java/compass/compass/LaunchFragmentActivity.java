@@ -14,9 +14,10 @@ public class LaunchFragmentActivity extends Activity {
         //setContentView(R.layout.activity_launch_fragment);
         String message = getIntent().getStringExtra("message");
         final String eventId = getIntent().getStringExtra("eventId");
+        String sender = getIntent().getStringExtra("sender");
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
-        alertDialog.setTitle("Need Help");
+        alertDialog.setTitle(sender.toUpperCase() + " NEEDS HELP");
         alertDialog.setMessage(message);
         alertDialog.setIcon(R.drawable.ic_need_help);
 

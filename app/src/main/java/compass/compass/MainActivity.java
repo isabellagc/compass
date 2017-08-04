@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.core.auth.Scope;
@@ -39,7 +40,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import compass.compass.fragments.Call911MenuItemFragment;
 import compass.compass.fragments.ContactFragment;
@@ -48,11 +51,9 @@ import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static compass.compass.fragments.Call911MenuItemFragment.CALL_ACTIVITY_CODE;
-
 
 @RequiresApi(api = Build.VERSION_CODES.N_MR1)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener{
 //    public ImageButton location;
 //    public ImageButton drink;
 //    public ImageButton needhelp;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabResources;
     public HashMap<String, User> needHelpFriends;
+    public static HashMap<String, String> peopleInEvents;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main_android_style);
             setHomeScreenButtons();
             setOnClickListeners();
+            loadPeopleInEvents();
 
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
@@ -216,14 +219,14 @@ public class MainActivity extends AppCompatActivity {
 //            setCurrentUser(name);
 //        }
 //    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == CALL_ACTIVITY_CODE){
-            Intent i = new Intent(this, NeedHelpActivity.class);
-            startActivity(i);
-        }
-    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == CALL_ACTIVITY_CODE){
+//            Intent i = new Intent(this, NeedHelpActivity.class);
+//            startActivity(i);
+//        }
+//    }
 
 
     private void setHomeScreenButtons() {
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
 
                 long numberNeedHelp =  needHelpFriends.size();
                 if (numberNeedHelp > 0){
-                    tvContext.setTextColor(Color.RED);
+                    tvPeopleNeedHelp.setTextColor(Color.RED);
                 }
             }
 
@@ -466,13 +469,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void message911(final MenuItem menuItem){
         FragmentManager fm = getSupportFragmentManager();
-        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance();
+        Message911MenuItemFragment message911MenuItemFragment = Message911MenuItemFragment.newInstance(this);
         message911MenuItemFragment.show(fm, "tag");
     }
 
     public void call911(final MenuItem menuItem) {
         FragmentManager fm = getSupportFragmentManager();
-        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance();
+        Call911MenuItemFragment call911MenuItemFragment = Call911MenuItemFragment.newInstance(this);
         call911MenuItemFragment.show(fm, "TAG");
     }
 
@@ -586,6 +589,63 @@ public class MainActivity extends AppCompatActivity {
         return pixels;
     }
 
+    @Override
+    public void launchNeedHelpFragment() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        i.putExtra("launchHelp", true);
+        startActivity(i);
+    }
+
+    @Override
+    public void launchNeedHelpFromMessage() {
+        mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
+        mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+        currentProfile.status = true;
+        //TODO:THIS IS WHERE WE COULD THEORETICALLY ASK IF THEY ACTUALLY WANT TO
+        Intent i = new Intent(this, NeedHelpActivity.class);
+        startActivity(i);
+    }
+
+    public void loadPeopleInEvents(){
+        peopleInEvents= new HashMap<String, String>();
+
+        mDatabase.child("Users").child(currentProfile.userId).child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map events = (Map) dataSnapshot.getValue();
+                for (Object e : events.keySet()){
+                    final String tempEvent = e.toString();
+                    mDatabase.child("Events").child(tempEvent).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map otherPeople = (Map) dataSnapshot.getValue();
+                            for(Object s : otherPeople.keySet()) {
+                                String temp = s.toString().replaceAll(" ", "");
+                                if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
+                                    peopleInEvents.put(temp, tempEvent);
+                                }
+                            }
+                            peopleInEvents.remove(currentProfile.name.replaceAll(" ", ""));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
 
 
