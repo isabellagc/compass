@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.database.DatabaseReference;
@@ -126,6 +127,9 @@ public class EventActivity extends AppCompatActivity implements Message911MenuIt
 //                }
 //            });
 //        }
+
+        showFabWithAnimation(fab, 50);
+
 
 
     }
@@ -254,4 +258,24 @@ public class EventActivity extends AppCompatActivity implements Message911MenuIt
 //        // Add a tile overlay to the map, using the heat map tile provider.
 //        TileOverlay mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
 //    }
+
+    public static void showFabWithAnimation(final FloatingActionButton fab, final int delay) {
+        fab.setVisibility(View.INVISIBLE);
+        fab.setScaleX(0.0F);
+        fab.setScaleY(0.0F);
+        fab.setAlpha(0.0F);
+        fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                fab.getViewTreeObserver().removeOnPreDrawListener(this);
+                fab.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fab.show();
+                    }
+                }, delay);
+                return true;
+            }
+        });
+    }
 }
