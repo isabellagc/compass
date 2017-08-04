@@ -38,8 +38,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         total = remoteMessage.getData().toString();
 
         sender = total.substring(total.indexOf("=")+1,total.indexOf(":"));
-        eventName = total.substring(total.indexOf(":")+1,total.lastIndexOf(":"));
-        message = total.substring(total.lastIndexOf(":")+1, total.length()-1);
 
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
@@ -52,9 +50,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if(sender.contentEquals("BOT")){
+            String temp = total.substring(total.indexOf(":")+1);
+            String personInNeed = temp.substring(0, temp.indexOf(":"));
+            eventName = temp.substring(temp.indexOf(":")+1,temp.lastIndexOf(":"));
+            message = temp.substring(temp.lastIndexOf(":")+1, temp.length()-1);
+
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_need_help)
-//                    .setContentTitle("New Message from " + sender + " to " + eventName)
+                    .setContentTitle(personInNeed + " needs help!")
                     .setContentTitle(message)
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setSound(notificationSound)
@@ -66,9 +69,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(0, mBuilder.build());
 
-            openFragment();
+            openFragment(personInNeed);
         }
         else{
+            eventName = total.substring(total.indexOf(":")+1,total.lastIndexOf(":"));
+            message = total.substring(total.lastIndexOf(":")+1, total.length()-1);
+
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.ic_need_help)
                     .setContentTitle("New Message from " + sender + " to " + eventName)
@@ -86,12 +92,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    public void openFragment(){
+    public void openFragment(String personInNeed){
+
         Intent i = new Intent(this, LaunchFragmentActivity.class);
         i.putExtra("message", message);
         i.putExtra("eventId", eventName);
+        i.putExtra("sender", personInNeed);
         startActivity(i);
-
 
     }
 

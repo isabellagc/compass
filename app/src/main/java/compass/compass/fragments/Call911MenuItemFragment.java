@@ -92,6 +92,10 @@ public class Call911MenuItemFragment extends DialogFragment {
         }
     }
 
+    public static Call911MenuItemFragment newInstance() {
+        return new Call911MenuItemFragment();
+    }
+
     public interface Call911FragmentListener{
         void launchNeedHelpFragment();
     }

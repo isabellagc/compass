@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.core.auth.Scope;
@@ -42,7 +43,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import compass.compass.fragments.Call911MenuItemFragment;
+
 import compass.compass.fragments.ImagePopupFragment;
+import compass.compass.fragments.ContactFragment;
+
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public static HashMap<String, User> allContacts;
     public FloatingActionButton fabDrinks;
     public HashMap<String, User> needHelpFriends;
+    public static HashMap<String, String> peopleInEvents;
 
     public static final int OPEN_LOGIN_ACTIVITY = 11111;
     public ArrayList<User> contacts;
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             setContentView(R.layout.activity_main_android_style);
             setHomeScreenButtons();
             setOnClickListeners();
+            loadPeopleInEvents();
 
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.hide();
@@ -285,8 +291,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             ivProfileImage.setBorderColorResource(R.color.colorSecondaryLight);
         }
 
-        tvContext = (TextView) findViewById(R.id.tvContext);
-
         mDatabase.child("User Status").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -305,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
                 long numberNeedHelp =  needHelpFriends.size();
                 if (numberNeedHelp > 0){
-                    tvContext.setTextColor(Color.RED);
+                    tvPeopleNeedHelp.setTextColor(Color.RED);
                 }
             }
 
@@ -544,8 +548,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 @Override
                 public void onClick(View view) {
                     FragmentManager fm = getSupportFragmentManager();
-                    ImagePopupFragment imagePopupFragment = ImagePopupFragment.newInstance(user.name);
-                    imagePopupFragment.show(fm, "name");
+                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
+                    contactFragment.show(fm, "name");
 
                 }
             });
@@ -600,6 +604,44 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         Intent i = new Intent(this, NeedHelpActivity.class);
         i.putExtra("launchHelp", true);
         startActivity(i);
+    }
+
+    public void loadPeopleInEvents(){
+        peopleInEvents= new HashMap<String, String>();
+
+        mDatabase.child("Users").child(currentProfile.userId).child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map events = (Map) dataSnapshot.getValue();
+                for (Object e : events.keySet()){
+                    final String tempEvent = e.toString();
+                    mDatabase.child("Events").child(tempEvent).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map otherPeople = (Map) dataSnapshot.getValue();
+                            for(Object s : otherPeople.keySet()) {
+                                String temp = s.toString().replaceAll(" ", "");
+                                if((otherPeople.get(s).toString().contentEquals("out")) || (otherPeople.get(s).toString().contentEquals("on call"))){
+                                    peopleInEvents.put(temp, tempEvent);
+                                }
+                            }
+                            peopleInEvents.remove(currentProfile.name.replaceAll(" ", ""));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

@@ -172,7 +172,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
 
         mapExpanded = false;
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fMap);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.friendMap);
         mapFragment.getMapAsync(this);
         final View view = mapFragment.getView();
 
