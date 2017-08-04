@@ -45,7 +45,11 @@ import java.util.Map;
 import java.util.Set;
 
 import compass.compass.fragments.Call911MenuItemFragment;
+
+import compass.compass.fragments.ImagePopupFragment;
+
 import compass.compass.fragments.ContactFragment;
+
 import compass.compass.fragments.Message911MenuItemFragment;
 import compass.compass.fragments.NeedHelpSwipe;
 import compass.compass.models.User;
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 //    public ImageButton needhelp;
     public CardView cvFindFriends;
     public CardView cvGetHelp;
-    public CardView cvDrinkCounter;
+    public CardView cvResources;
     public TextView tvNameBox;
     public ImageView ivProfileBox;
     public CircleImageView ivProfileImage;
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public HorizontalScrollView horizontalScrollView;
     public static User currentProfile;
     public static HashMap<String, User> allContacts;
-    public FloatingActionButton fabResources;
+    public FloatingActionButton fabDrinks;
     public HashMap<String, User> needHelpFriends;
     public static HashMap<String, String> peopleInEvents;
 
@@ -238,18 +242,18 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         String name = WordUtils.capitalize(currentProfile.userId);
         tvNameBox.setText(name);
 
-        fabResources = (FloatingActionButton) findViewById(R.id.fabResources);
-        fabResources.setOnClickListener(new View.OnClickListener() {
+        fabDrinks = (FloatingActionButton) findViewById(R.id.fabDrinkActivity);
+        fabDrinks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchResources();
+                launchDrinkActivity();
             }
         });
         cvFindFriends = (CardView) findViewById(R.id.cvFindFriends);
         cvGetHelp = (CardView) findViewById(R.id.cvGetHelp);
-        cvDrinkCounter = (CardView) findViewById(R.id.cvDrinkCounter);
+        cvResources = (CardView) findViewById(R.id.cvResources);
         ivProfileBox = (ImageView) findViewById(R.id.ivProfileBox);
-        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain);
+        ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain1);
         ivProfileImage.setImageResource(getResources().getIdentifier(currentProfile.userId.replaceAll(" ",""), "drawable", getPackageName()));
         linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
@@ -345,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     private void setOnClickListeners() {
         launchLocation();
-        launchDrinkActivity();
+        launchResources();
         launchNeedHelp();
 
     }
@@ -397,14 +401,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     //Launch the location activity
     public void launchLocation() {
-//        location.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, EventActivity.class);
-//                startActivity(i);
-//
-//            }
-//        });
         cvFindFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -417,20 +413,8 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     //Launch the drink activity
     public void launchDrinkActivity() {
-//        drink.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
-//                startActivity(i);
-//            }
-//        });
-        cvDrinkCounter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
-                startActivity(i);
-            }
-        });
+        Intent i = new Intent(MainActivity.this, DrinkActivityReal.class);
+        startActivity(i);
     }
 
     //launch the needhelp button
@@ -454,8 +438,13 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
     //launch the resources activity
     public void launchResources() {
-        Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
-        startActivity(i);
+        cvResources.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, ResourcesActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -506,9 +495,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             params.height = px;
             cvGetHelp.setLayoutParams(params);
 
-            params = (ConstraintLayout.LayoutParams) cvDrinkCounter.getLayoutParams();
+            params = (ConstraintLayout.LayoutParams) cvResources.getLayoutParams();
             params.height = px;
-            cvDrinkCounter.setLayoutParams(params);
+            cvResources.setLayoutParams(params);
         }
         else{
             horizontalScrollView.setVisibility(View.VISIBLE);
@@ -527,9 +516,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             params.height = px;
             cvGetHelp.setLayoutParams(params);
 
-            params = (ConstraintLayout.LayoutParams) cvDrinkCounter.getLayoutParams();
+            params = (ConstraintLayout.LayoutParams) cvResources.getLayoutParams();
             params.height = px;
-            cvDrinkCounter.setLayoutParams(params);
+            cvResources.setLayoutParams(params);
         }
 
         for(final User user : needHelpFriends.values()) {
@@ -553,8 +542,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 @Override
                 public void onClick(View view) {
                     FragmentManager fm = getSupportFragmentManager();
-                    ContactFragment contactFragment = ContactFragment.newInstance(user.name);
-                    contactFragment.show(fm, "idk_what_goes_here");
+                    ImagePopupFragment imagePopupFragment = ImagePopupFragment.newInstance(user.name);
+                    imagePopupFragment.show(fm, "name");
+
                 }
             });
             /*--------------end of image view----------------------------*/

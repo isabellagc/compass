@@ -139,7 +139,6 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         chatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager(), this);
         vpPager.setAdapter(chatPagerAdapter);
-
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {

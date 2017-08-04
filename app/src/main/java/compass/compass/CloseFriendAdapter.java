@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -172,7 +174,7 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
     public void onBindViewHolder(CloseFriendAdapter.ViewHolder holder, int position) {
         String name = mCloseFriendsNames.get(position);
 
-        holder.tvNameContact.setText(name);
+        holder.tvNameContact.setText(WordUtils.capitalize(name));
         int drawableResourceId = mContext.getResources().getIdentifier(name.replaceAll(" ",""), "drawable", mContext.getPackageName());
         holder.ivProfileImage.setImageResource(drawableResourceId);
         if(mCloseFriends.get(name + " status").contentEquals("null")){
@@ -224,9 +226,9 @@ public class CloseFriendAdapter extends RecyclerView.Adapter<CloseFriendAdapter.
                     listenerSpecial.mapZoomIn(allContacts.get(mCloseFriendsNames.get(getAdapterPosition())));
                 }
             });
-            tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact);
-            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain);
-            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact);
+            tvNameContact = (TextView) itemView.findViewById(R.id.tvNameContact1);
+            ivProfileImage = (CircleImageView) itemView.findViewById(R.id.ivProfileImageMain1);
+            tvCallContact = (TextView) itemView.findViewById(R.id.tvCallContact1);
             clContact = (ConstraintLayout) itemView.findViewById(R.id.clContact);
 
 

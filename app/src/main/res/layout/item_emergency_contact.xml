@@ -10,7 +10,7 @@
     tools:context="compass.compass.ProfileActivity">
 
     <TextView
-        android:id="@+id/tvNameContact"
+        android:id="@+id/tvNameContact1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -19,12 +19,12 @@
         android:layout_marginTop="8dp"
         android:text="Contact Name"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
-        app:layout_constraintBottom_toBottomOf="@+id/ivProfileImageMain"
-        app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain"
-        app:layout_constraintTop_toTopOf="@+id/ivProfileImageMain" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileImageMain1"
+        app:layout_constraintLeft_toRightOf="@+id/ivProfileImageMain1"
+        app:layout_constraintTop_toTopOf="@+id/ivProfileImageMain1" />
 
     <TextView
-        android:id="@+id/tvCallContact"
+        android:id="@+id/tvCallContact1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfileImageMain"
+        android:id="@+id/ivProfileImageMain1"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
