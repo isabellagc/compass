@@ -175,8 +175,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                 friendLocation = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .title(user.userId)
-                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
+                        .title(WordUtils.capitalize(user.userId))
+                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
             }
@@ -202,9 +202,9 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
 
                 friendLocation = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
-                        .title(user.userId)
+                        .title(WordUtils.capitalize(user.userId))
                         .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
+                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
 

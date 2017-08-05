@@ -51,7 +51,7 @@ import static compass.compass.MainActivity.peopleInEvents;
  */
 
 public class MessagesFragment extends Fragment implements Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener{
-    RecyclerView rvChat;
+    public static RecyclerView rvChat;
     ChatAdapter mAdapter;
     EditText etMessage;
     Button btSend;
@@ -148,7 +148,6 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
                     etMessage.getText().clear();
                     mDatabase.child("messages").child(eventId).push().setValue(message);
                     mAdapter.notifyDataSetChanged();
-
                     rvChat.post( new Runnable() {
                         @Override
                         public void run() {
@@ -158,6 +157,8 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
 
                     //send notification to the user
                     sendNotificationToUser(members, message);
+                    etMessage.clearComposingText();
+                    etMessage.setText("");
                 }
 
             }
