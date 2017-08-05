@@ -32,7 +32,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.core.auth.Scope;
 import com.uber.sdk.rides.client.SessionConfiguration;
@@ -466,10 +465,6 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     @Override
     public void onBackPressed() {
         closeListeners();
-        for(String name : allContacts.keySet()){
-            FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + name.replaceAll(" ", ""));
-        }
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("user_"+ currentProfile.name.replaceAll(" ", ""));
         super.onBackPressed();
     }
 

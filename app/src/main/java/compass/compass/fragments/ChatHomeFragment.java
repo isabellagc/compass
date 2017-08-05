@@ -640,8 +640,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                             else{
                                 BAC =  (double) dataSnapshot.getValue();
                             }
-                            int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
-                            markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help, BAC)));
+
+                            if(isAdded()){
+                                int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+                                markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help, BAC)));
+                            }
+
                         }
 
                         @Override

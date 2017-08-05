@@ -280,6 +280,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                mDatabase.child("Users").child(currentProfile.userId).child("need help time").setValue(new Date().getTime());
                 currentProfile.status = true;
                 mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
                 ChatMessage message = new ChatMessage();
