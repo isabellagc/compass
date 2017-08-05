@@ -1,7 +1,6 @@
 package compass.compass.fragments;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,10 +35,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+
 import compass.compass.R;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -224,7 +225,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
-        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
+        View customMarkerView = (getActivity().getLayoutInflater()).inflate(R.layout.view_custom_marker_red, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
 
 
