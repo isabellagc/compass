@@ -241,7 +241,9 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        myLocation = new Location(LocationManager.GPS_PROVIDER);
+        myLocation.setLongitude(currentProfile.longitude);
+        myLocation.setLatitude(currentProfile.latitude);
         temp = new Location(LocationManager.GPS_PROVIDER);
 
         mDatabase.child("resources").child(currentProfile.school).child("counseling").addListenerForSingleValueEvent(new ValueEventListener() {

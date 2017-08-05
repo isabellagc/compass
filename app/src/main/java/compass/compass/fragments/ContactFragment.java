@@ -1,6 +1,7 @@
 package compass.compass.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,10 +32,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -159,63 +156,15 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         });
 
         tvNameContact.setText(WordUtils.capitalize(user.name));
+        latitude = user.latitude;
+        longitude = user.longitude;
+        friendLocation = mMap.addMarker(new MarkerOptions()
+        .position(new LatLng(latitude, longitude))
+        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
+        .title(WordUtils.capitalize(user.userId))
+        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
 
-        FirebaseDatabase.getInstance().getReference().child("Users").child(user.userId).child("latitude").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                latitude = (double) dataSnapshot.getValue();
-
-                if(friendLocation != null){
-                    friendLocation.remove();
-                }
-                DecimalFormat df = new DecimalFormat("#.####");
-                df.setRoundingMode(RoundingMode.CEILING);
-                Double BAC = user.currentBAC;
-                String formatted = df.format(BAC);
-
-                friendLocation = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .title(WordUtils.capitalize(user.userId))
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(user.userId).child("longitude").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                longitude = (double) dataSnapshot.getValue();
-
-                if(friendLocation != null){
-                    friendLocation.remove();
-                }
-                DecimalFormat df = new DecimalFormat("#.####");
-                df.setRoundingMode(RoundingMode.CEILING);
-                Double BAC = user.currentBAC;
-                String formatted = df.format(BAC);
-
-                friendLocation = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(WordUtils.capitalize(user.userId))
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
     }
 
     @Override
@@ -225,9 +174,11 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
 
-        View customMarkerView = (getActivity().getLayoutInflater()).inflate(R.layout.view_custom_marker_red, null);
+        Activity activity = getActivity();
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
+        View customMarkerView = layoutInflater.inflate(R.layout.view_custom_marker_red, null);
+        //View customMarkerView = getActivity().getLayoutInflater().inflate(R.layout.view_custom_marker_red, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
-
 
 //        Glide.with(getApplicationContext())
 //                .load(linkToPic)
