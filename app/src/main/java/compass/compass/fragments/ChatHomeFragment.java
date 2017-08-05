@@ -808,15 +808,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         call911MenuItemFragment.show(fm, "TAG");
     }
 
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if(resultCode == CALL_ACTIVITY_CODE){
-//            Intent i = new Intent(getContext(), NeedHelpActivity.class);
-//            startActivity(i);
-//        }
-//    }
-
     @Override
     public void launchNeedHelpFragment() {
         mDatabase.child("User Status").child(currentProfile.userId).setValue("help");

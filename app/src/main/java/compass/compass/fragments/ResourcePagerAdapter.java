@@ -21,7 +21,6 @@ public class ResourcePagerAdapter extends FragmentPagerAdapter{
         this.context = context;
         resourceSchoolFragment = new ResourceSchoolFragment();
         resourceLocationFragment= new ResourceLocationFragment();
-
     }
 
 
