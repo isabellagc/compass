@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -69,6 +71,8 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
     Location myLocation;
     Location temp;
     String policePhone, counselPhone, hospitalPhone;
+    LatLng hospitalLatLng, policeLatLng, counselingLatLng;
+    CardView cvPolice1, cvCounseling1, cvHospital1;
 
     @Nullable
     @Override
@@ -82,7 +86,9 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
             getActivity().getTheme().applyStyle(R.style.AppTheme, true);
         }
 
-
+        counselingLatLng = new LatLng(1,1);
+        policeLatLng = new LatLng(1,1);
+        hospitalLatLng = new LatLng(1,1);
         //set up layout
         tvPolice = (TextView) v.findViewById(R.id.tvPolice1);
         tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance1);
@@ -92,6 +98,29 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
 
         tvHospital = (TextView) v.findViewById(R.id.tvHospital1);
         tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance1);
+
+        cvHospital1 = (CardView) v.findViewById(R.id.cvHospital1);
+        cvPolice1 = (CardView) v.findViewById(R.id.cvPolice1);
+        cvCounseling1 = (CardView) v.findViewById(R.id.cvCounseling1);
+
+        cvHospital1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(hospitalLatLng);
+            }
+        });
+        cvCounseling1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(counselingLatLng);
+            }
+        });
+        cvPolice1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(policeLatLng);
+            }
+        });
 
         //set up database
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -222,7 +251,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 location = (Map) dataSnapshot.getValue();
                 latitude = (Double) location.get("latitude");
                 longitude = (Double) location.get("longitude");
-                LatLng counselingLatLng = new LatLng(latitude, longitude);
+                counselingLatLng = new LatLng(latitude, longitude);
                 Marker counseling = mMap.addMarker(new MarkerOptions()
                         .position(counselingLatLng)
                         .title(currentProfile.school + " Counseling Services")
@@ -252,7 +281,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 location = (Map) dataSnapshot.getValue();
                 latitude = (Double) location.get("latitude");
                 longitude = (Double) location.get("longitude");
-                LatLng hospitalLatLng = new LatLng(latitude, longitude);
+                hospitalLatLng = new LatLng(latitude, longitude);
                 Marker health = mMap.addMarker(new MarkerOptions()
                         .position(hospitalLatLng)
                         .title(currentProfile.school + " Health Services")
@@ -278,7 +307,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 location = (Map) dataSnapshot.getValue();
                 latitude = (Double) location.get("latitude");
                 longitude = (Double) location.get("longitude");
-                LatLng policeLatLng = new LatLng(latitude, longitude);
+                policeLatLng = new LatLng(latitude, longitude);
                 Marker police = mMap.addMarker(new MarkerOptions()
                         .position(policeLatLng)
                         .title(currentProfile.school + " Police")
@@ -297,5 +326,16 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
 
             }
         });
+    }
+
+    public void mapZoomIn(LatLng location){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(location)
+                .zoom(15)
+                .bearing(0)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }

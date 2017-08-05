@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,13 +75,14 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     Double longitude;
     Map location;
     LocationManager locationManager;
-    Location my_location_1;
     LatLng myLocation;
-    Location temp;
     boolean mapExpanded;
     int originalHeight;
     SupportMapFragment mapFragment;
-    String policePhone, counselPhone, hospitalPhone;
+    CardView cvPolice, cvCounseling, cvHospital;
+    public LatLng policeLocation = new LatLng(47.620775, -122.336276);
+    public LatLng hospitalLocation = new LatLng(47.625313, -122.334535);
+    public LatLng counselingLocation = new LatLng(47.626496, -122.344402);
 
     @Nullable
     @Override
@@ -110,11 +111,37 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance);
         tvHospitalDistance.setText("0.5 mi · (206) 448-4141");
         counsel = getBitmap(getActivity(), R.drawable.ic_heart);
-        counsel = resizeIcon(counsel, 72, 72);
+        counsel = resizeIcon(counsel, 80, 80);
         hospitalIcon = getBitmap(getActivity(), R.drawable.ic_local_hospital_secondary_24px);
-        hospitalIcon = resizeIcon(hospitalIcon, 72, 72);
+        hospitalIcon = resizeIcon(hospitalIcon, 80, 80);
         policeIcon = getBitmap(getActivity(), R.drawable.ic_taxi);
-        policeIcon = resizeIcon(policeIcon, 72, 72);
+        policeIcon = resizeIcon(policeIcon, 80, 80);
+
+
+        cvPolice = (CardView) v.findViewById(R.id.cvPolice);
+        cvPolice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(policeLocation);
+            }
+        });
+        cvCounseling = (CardView) v.findViewById(R.id.cvCounseling);
+        cvCounseling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(counselingLocation);
+            }
+        });
+        cvHospital = (CardView) v.findViewById(R.id.cvHospital);
+        cvHospital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapZoomIn(hospitalLocation);
+            }
+        });
+
+
+
         //set up database
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getSupportMap();
@@ -301,10 +328,6 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     }
 
     public void populateMap (){
-        LatLng policeLocation = new LatLng(47.620775, -122.336276);
-        LatLng hospitalLocation = new LatLng(47.625313, -122.334535);
-        LatLng counselingLocation = new LatLng(47.626496, -122.344402);
-
         MarkerOptions markerOptions_1 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(hospitalIcon))
                 .position(hospitalLocation)
                 .title("Kaiser Permanente Hospital");
@@ -345,25 +368,38 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         return bitmap;
     }
     private void startDropMarkerAnimation(final Marker marker) {
-    final Handler handler = new Handler();
-    final long startTime = SystemClock.uptimeMillis();
-    final long duration = 2000;
-    final Interpolator interpolator = new BounceInterpolator();
+        final Handler handler = new Handler();
+        final long startTime = SystemClock.uptimeMillis();
+        final long duration = 2000;
+        final Interpolator interpolator = new BounceInterpolator();
 
         handler.post(new Runnable() {
-        @Override
-        public void run() {
-            long elapsed = SystemClock.uptimeMillis() - startTime;
-            float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/(duration)), 0);
-            marker.setAnchor(0.2f, 1.0f +  t);
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - startTime;
+                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/(duration)), 0);
+                marker.setAnchor(0.2f, 1.0f +  t);
 
-            if (t > 0.0) {
-                handler.postDelayed(this, 16);
+                if (t > 0.0) {
+                    handler.postDelayed(this, 16);
+                }
+                else{
+                    return;
+                }
             }
-            else{
-                return;
-            }
-        }
-    });
-}
+        });
+
+
+    }
+
+    public void mapZoomIn(LatLng location){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(location)
+                .zoom(15)
+                .bearing(0)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
 }
