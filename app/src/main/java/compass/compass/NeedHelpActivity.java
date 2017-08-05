@@ -197,10 +197,10 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         };
 
-        swipeButtonSettings.setGradientColor1(0xFFB22222);
-        swipeButtonSettings.setGradientColor2(0xFFB22222);
-        swipeButtonSettings.setGradientColor3(0xFFFF0000);
-        swipeButtonSettings.setPostConfirmationColor(0xFFFF0000);
+//        swipeButtonSettings.setGradientColor1(0xFFB22222);
+//        swipeButtonSettings.setGradientColor2(0xFFB22222);
+//        swipeButtonSettings.setGradientColor3(0xFFFF0000);
+//        swipeButtonSettings.setPostConfirmationColor(0xFFFF0000);
 
 
         if (callPolice != null) {

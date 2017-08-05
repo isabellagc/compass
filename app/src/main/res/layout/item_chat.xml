@@ -17,9 +17,10 @@
         android:layout_marginEnd="12dp"
         android:layout_marginStart="70dp"
         android:background="@drawable/selector"
-        android:backgroundTint="@color/c50"
+        android:backgroundTint="@color/colorPrimaryLight"
         android:text="TextView"
-        android:textColor="@color/Black" />
+        android:textColor="@color/Black"
+        android:textSize="16sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileOther"
@@ -53,7 +54,8 @@
         android:backgroundTint="#ECF0F1"
         android:baselineAligned="false"
         android:text="TextView"
-        android:textColor="@color/Black" />
+        android:textColor="@color/Black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvBot"

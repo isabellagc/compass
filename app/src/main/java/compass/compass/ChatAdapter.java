@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -112,6 +114,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
+        String text = message.getText();
+        message.setText(" " + text + " ");
         final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
         final boolean isJOIN = message.getSender() != null && message.getSender().equals("JOINED");
@@ -154,13 +158,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if(position == 0){
                 holder.tvUserName.setVisibility(View.VISIBLE);
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-                holder.tvUserName.setText(message.getSender());
-
+                holder.tvUserName.setText(WordUtils.capitalize(message.getSender()));
             }
             else if(!(mMessages.get(position-1).getSender().contentEquals(message.getSender()))){
                 holder.tvUserName.setVisibility(View.VISIBLE);
                 holder.tvUserName.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-                holder.tvUserName.setText(message.getSender());
+                holder.tvUserName.setText(WordUtils.capitalize(message.getSender()));
 
             }
             else{

@@ -588,6 +588,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 latitude = (Double) dataSnapshot.getValue();
+                allContacts.get(memberName).latitude = latitude;
                 longitude = markerMap.get(memberName).getPosition().longitude;
                 markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
             }
@@ -602,6 +603,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 longitude = (Double) dataSnapshot.getValue();
+                allContacts.get(memberName).longitude = longitude;
                 latitude = markerMap.get(memberName).getPosition().latitude;
                 markerMap.get(memberName).setPosition(new LatLng(latitude, longitude));
             }
@@ -783,7 +785,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 
     @Override
     public void mapZoomIn(User user) {
-       LatLng userLocation = new LatLng(user.latitude, user.longitude);
+        LatLng userLocation = new LatLng(user.latitude, user.longitude);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(userLocation)
