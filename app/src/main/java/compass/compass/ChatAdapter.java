@@ -30,7 +30,7 @@ import java.util.Map;
 import compass.compass.models.ChatMessage;
 
 import static compass.compass.MainActivity.currentProfile;
-
+import static compass.compass.fragments.MessagesFragment.rvChat;
 
 
 /**
@@ -97,8 +97,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     private void scrollView(){
-        RecyclerView rvChat = (RecyclerView) ((ChatActivity) this.mContext).findViewById(R.id.rvContacts);
-        rvChat.smoothScrollToPosition(mMessages.size());
+//        rvChat.smoothScrollToPosition(mMessages.size());
+        rvChat.post( new Runnable() {
+            @Override
+            public void run() {
+                rvChat.smoothScrollToPosition(mMessages.size());
+            }
+        });
     }
 
     @Override
@@ -115,7 +120,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         ChatMessage message = mMessages.get(position);
         String text = message.getText();
-        message.setText(" " + text + " ");
+        message.setText(text);
         final boolean isMe = message.getSender() != null && message.getSender().equals(currentProfile.userId);
         final boolean isBOT =  message.getSender() != null && message.getSender().equals("BOT");
         final boolean isJOIN = message.getSender() != null && message.getSender().equals("JOINED");
