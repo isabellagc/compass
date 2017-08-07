@@ -466,7 +466,11 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     @Override
     public void onBackPressed() {
         closeListeners();
-        super.onBackPressed();
+        startActivity(new Intent(this, LoginActivity.class));
+        overridePendingTransition(
+                0,
+                R.anim.play_panel_close_background
+        );
     }
 
     public void message911(final MenuItem menuItem){
