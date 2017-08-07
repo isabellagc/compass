@@ -71,6 +71,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
@@ -314,6 +315,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        flMap.setBackgroundResource(R.mipmap.ic_launcher);
         mMap = googleMap;
         mMap.setMinZoomPreference(13);
         mMap.setMaxZoomPreference(15);
@@ -369,6 +371,13 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 //                        .build();                   // Creates a CameraPosition from the builder
 //                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 //            }
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        flMap.setBackgroundResource(0);
 
     }
 

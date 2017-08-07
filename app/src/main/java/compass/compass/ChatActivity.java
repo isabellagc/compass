@@ -472,6 +472,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setTitle(eventId);
 
+
         return super.onCreateOptionsMenu(menu);
     }
 
