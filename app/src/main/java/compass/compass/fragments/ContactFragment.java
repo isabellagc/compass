@@ -119,12 +119,10 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         Double BAC = user.currentBAC;
         formatted = df.format(BAC);
 
-
         tvBACcount = view.findViewById(R.id.tvBACcount);
         tvBACcount.setText(formatted);
         tvDrinkCount = view.findViewById(R.id.tvDrinkCount);
         tvDrinkCount.setText(String.valueOf(user.drinkCounter));
-
 
         drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
@@ -156,13 +154,12 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                 messageFriendFragment.show(fm, "TAG");
             }
         });
-
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         tvNameContact.setText(WordUtils.capitalize(user.name));
         latitude = user.latitude;
         longitude = user.longitude;

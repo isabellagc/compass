@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -205,7 +207,7 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

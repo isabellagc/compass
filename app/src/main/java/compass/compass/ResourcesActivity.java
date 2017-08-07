@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -289,7 +291,7 @@ public class ResourcesActivity extends AppCompatActivity implements OnMapReadyCa
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

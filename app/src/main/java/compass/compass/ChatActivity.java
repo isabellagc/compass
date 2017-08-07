@@ -54,6 +54,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -422,7 +424,6 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-
     }
 
     private void updateUserInfo(DataSnapshot dataSnapshot, String memberName, User user){
@@ -500,7 +501,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

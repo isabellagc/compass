@@ -115,7 +115,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     public void openFragment(String personInNeed, boolean help){
-
         Intent i = new Intent(this, LaunchFragmentActivity.class);
         i.putExtra("message", message);
         i.putExtra("eventId", eventName);

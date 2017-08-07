@@ -244,6 +244,8 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMinZoomPreference(13);
+        mMap.setMaxZoomPreference(15);
         populateMap();
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
