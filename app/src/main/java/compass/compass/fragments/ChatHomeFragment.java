@@ -28,6 +28,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +40,6 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -105,8 +105,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     static final int POLL_INTERVAL = 1000; // milliseconds
     String eventId;
     FloatingActionButton fabMarkLocation;
-    public int flid;
-
 
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
@@ -123,8 +121,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     String fromHere;
     boolean alarmSet = false;
 
-    public FrameLayout flMap;
 
+    float zIndex;
     String myStatus;
 
     String[] members;
@@ -168,7 +166,11 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
-        flMap = v.findViewById(R.id.flMap);
+
+
+
+        zIndex = 0.0f;
+
 
 //        FrameLayout fl = new FrameLayout(getContext());
 //        fl.setBackgroundColor(Color.WHITE); //change to whatever color your activity/fragment has set as its background color
@@ -375,12 +377,14 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Double lat, longi;
                 String title, user;
+                Long time;
 
                 title = dataSnapshot.getKey();
                 Map<String, Object> info = (Map<String, Object>) dataSnapshot.getValue();
                 lat = (Double) info.get("latitude");
                 longi = (Double) info.get("longitude");
                 user = (String) info.get("user");
+                time = (Long) info.get("time flagged");
 
                 LatLng pos = new LatLng(lat, longi);
                 Marker flag = mMap.addMarker(new MarkerOptions()
@@ -388,6 +392,13 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                         .position(pos)
                         .title(WordUtils.capitalize(user))
                 );
+
+                if(time != null){
+                    String relativeDate = DateUtils.getRelativeTimeSpanString(time,
+                            System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+                    flag.setSnippet(relativeDate);
+                }
+
 
             }
 
@@ -612,6 +623,10 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                     .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
             markerMap.put(memberName, temp2);
         }
+        else{
+            zIndex = zIndex + 1;
+            markerMap.get(memberName).setZIndex(zIndex);
+        }
 
         mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {
             @Override
@@ -827,7 +842,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 .tilt(40)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        flMap.removeViewInLayout(getView().findViewById(flid));
     }
 
     public void message911(final MenuItem menuItem){

@@ -4,24 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/flMap"
+    <fragment
+        android:id="@+id/friendMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true">
-
-        <fragment
-            android:id="@+id/friendMap"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="335dp"
-            android:layout_above="@+id/rvContacts"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
-    </FrameLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/rvContacts"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <!--<FrameLayout-->
         <!--android:layout_width="match_parent"-->
@@ -37,8 +30,7 @@
             android:paddingTop="10dp"
             android:transcriptMode="alwaysScroll"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/flMap"/>
+            android:layout_alignParentStart="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabMarkLocation"

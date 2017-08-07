@@ -257,7 +257,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 Marker counseling = mMap.addMarker(new MarkerOptions()
                         .position(counselingLatLng)
                         .title(currentProfile.school + " Counseling Services")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_green, null))));
+                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_heart, null))));
                 tvCounseling.setText(currentProfile.school + " Counseling Services");
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(counselingLatLng, 15));
@@ -287,7 +287,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 Marker health = mMap.addMarker(new MarkerOptions()
                         .position(hospitalLatLng)
                         .title(currentProfile.school + " Health Services")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_red, null))));
+                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_local_hospital_secondary_24px, null))));
                 tvHospital.setText(currentProfile.school + " Health Services");
 
                 temp.setLatitude(latitude);
@@ -313,7 +313,7 @@ public class ResourceSchoolFragment extends Fragment implements OnMapReadyCallba
                 Marker police = mMap.addMarker(new MarkerOptions()
                         .position(policeLatLng)
                         .title(currentProfile.school + " Police")
-                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_location_pin_blue, null))));
+                        .icon(getMarkerIconFromDrawable(getResources().getDrawable(R.drawable.ic_taxi, null))));
                 tvPolice.setText(currentProfile.school + " Police");
 
                 temp.setLatitude(latitude);

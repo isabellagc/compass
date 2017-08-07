@@ -660,6 +660,7 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
         infoToPush.put("latitude", currentProfile.latitude);
         infoToPush.put("longitude", currentProfile.longitude);
         infoToPush.put("user", currentProfile.userId);
+        infoToPush.put("time flagged", new Date().getTime());
         mDatabase.child("Flagged Locations").push().setValue(infoToPush);
     }
 
