@@ -424,7 +424,6 @@ public class ChatActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-
     }
 
     private void updateUserInfo(DataSnapshot dataSnapshot, String memberName, User user){
