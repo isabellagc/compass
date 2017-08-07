@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 
 public class ChatPagerAdapter extends FragmentPagerAdapter {
-    private String tabTitles [] = new String[] {"Chat Home", "Messages"};
+    private String tabTitles [] = new String[] {"Finder", "Messages"};
     private Context context;
     public ChatHomeFragment chatHomeFragment;
     public  MessagesFragment messagesFragment;

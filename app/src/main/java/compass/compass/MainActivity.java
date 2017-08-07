@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

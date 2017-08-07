@@ -48,10 +48,11 @@ public class LaunchFragmentActivity extends Activity {
             }
         };
 
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", okListener);
-
         if(help){
+            alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", okListener);
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Go to a common event", goToEvent);
+        }else{
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", okListener);
         }
 
         alertDialog.show();
