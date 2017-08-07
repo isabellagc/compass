@@ -60,6 +60,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     Marker friendLocation;
     private static View view;
     public TextView tvInfo;
+    public int drawableResourceId;
+    public String formatted;
 
 
     public ContactFragment() {
@@ -115,7 +117,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         DecimalFormat df = new DecimalFormat("#.####");
         df.setRoundingMode(RoundingMode.CEILING);
         Double BAC = user.currentBAC;
-        String formatted = df.format(BAC);
+        formatted = df.format(BAC);
 
 
         tvBACcount = view.findViewById(R.id.tvBACcount);
@@ -124,7 +126,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         tvDrinkCount.setText(String.valueOf(user.drinkCounter));
 
 
-        final int drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+        drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
         ivProfileImageMain.setImageResource(drawableResourceId);
 
@@ -155,21 +157,22 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
             }
         });
 
-        tvNameContact.setText(WordUtils.capitalize(user.name));
-        latitude = user.latitude;
-        longitude = user.longitude;
-        friendLocation = mMap.addMarker(new MarkerOptions()
-        .position(new LatLng(latitude, longitude))
-        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-        .title(WordUtils.capitalize(user.userId))
-        .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        tvNameContact.setText(WordUtils.capitalize(user.name));
+        latitude = user.latitude;
+        longitude = user.longitude;
+        friendLocation = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
+                .title(WordUtils.capitalize(user.userId))
+                .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
