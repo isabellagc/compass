@@ -11,6 +11,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +23,8 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -163,13 +167,42 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         tvNameContact.setText(WordUtils.capitalize(user.name));
         latitude = user.latitude;
         longitude = user.longitude;
-        friendLocation = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude))
-                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                .title(WordUtils.capitalize(user.userId))
-                .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
+        if(friendLocation == null){
+            friendLocation = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
+                    .title(WordUtils.capitalize(user.userId))
+                    .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
+            setMarkerBounce(friendLocation);
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
+    }
+
+    public void setMarkerBounce(final Marker marker){
+        final Handler handler = new Handler();
+        final long startTime = SystemClock.uptimeMillis();
+        final long duration = 2000;
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - startTime;
+                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/(duration)), 0);
+                marker.setAnchor(0.2f, 1.0f +  t);
+
+                if (t > 0.0) {
+                    handler.postDelayed(this, 16);
+                }
+                else {
+                    setMarkerBounce(marker);
+                }
+            }
+        });
+
+
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
