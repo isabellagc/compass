@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity{
                         FirebaseMessaging.getInstance().unsubscribeFromTopic("user_" + contactName.replaceAll(" ", ""));
                     }
 
-//                    setDrinksToZero();
+                    setDrinksToZero();
                     setDrinkListeners();
                     Intent i  = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra("userToCheck", name);
@@ -289,11 +289,12 @@ public class LoginActivity extends AppCompatActivity{
 //        });
 //    }
 
-//    private void setDrinksToZero(){
-//        HashMap<String, Object> drinkMap = new HashMap<>();
-//        drinkMap.put("drinkCounter", 0);
-//        mDatabase.child("Users").child(user.userId).updateChildren(drinkMap);
-//    }
+    private void setDrinksToZero(){
+        HashMap<String, Object> drinkMap = new HashMap<>();
+        drinkMap.put("drink count", 0);
+        drinkMap.put("BAC", 0.0);
+        mDatabase.child("Drinks").child(user.userId).updateChildren(drinkMap);
+    }
 
     private void loadUsers(){
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {

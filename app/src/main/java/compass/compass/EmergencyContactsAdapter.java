@@ -132,9 +132,9 @@ public class EmergencyContactsAdapter extends RecyclerView.Adapter<EmergencyCont
         double miles = distance * 0.000621371 ;
         if (miles < 0.5){
             double feet = miles * 5280;
-//            if(feet < 10.1){
-//                return "0.0 ft";
-//            }
+            if(feet < 10.1){
+                return "0.0 ft";
+            }
             return String.format("%.2f", feet) + " ft";
         }
         return String.format("%.2f", miles) + " mi";
