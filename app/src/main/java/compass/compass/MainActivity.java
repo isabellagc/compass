@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
     public FloatingActionButton fabDrinks;
     public HashMap<String, User> needHelpFriends;
     public static HashMap<String, String> peopleInEvents;
+    public ConstraintLayout clFriendsInNeed;
 
     ChildEventListener loadedUsers;
     ChildEventListener friendsInNeed;
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
         linearLayout = (LinearLayout) findViewById(R.id.linlayoutfriends);
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScroll);
         tvPeopleNeedHelp = (TextView) findViewById(R.id.tvContext);
-        ConstraintLayout clFriendsInNeed = (ConstraintLayout) findViewById(R.id.clFriendsInNeed);
+        clFriendsInNeed = (ConstraintLayout) findViewById(R.id.clFriendsInNeed);
 
 //        ImageView img1 = new ImageView(this);
 //        img1.setImageResource(R.drawable.ic_person);
@@ -493,8 +494,9 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
 
         if(needHelpFriends.size() == 0){
             horizontalScrollView.setVisibility(View.GONE);
-            tvPeopleNeedHelp.setText("No friends need help");
+            tvPeopleNeedHelp.setText("No friends in need of help.");
             tvPeopleNeedHelp.setTextColor(getResources().getColor(R.color.Black, null));
+            clFriendsInNeed.setBackgroundColor(Color.LTGRAY);
 
             Resources r = getResources();
             int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, r.getDisplayMetrics());
@@ -512,6 +514,12 @@ public class MainActivity extends AppCompatActivity implements Call911MenuItemFr
             cvResources.setLayoutParams(params);
         }
         else{
+            if(currentProfile.status){
+                clFriendsInNeed.setBackgroundColor(getColor(R.color.colorPrimaryLight));
+            }else{
+                clFriendsInNeed.setBackgroundColor(getColor(R.color.colorSecondaryLight));
+            }
+
             horizontalScrollView.setVisibility(View.VISIBLE);
             tvPeopleNeedHelp.setText("FRIENDS IN NEED:");
             Animation animation = AnimationUtils.loadAnimation(getBaseContext(), android.R.anim.fade_in);
