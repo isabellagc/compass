@@ -279,7 +279,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         cvGoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
+                String Alert_message = ("Please check in on " + WordUtils.capitalize(currentProfile.name) + "! They have swiped for help and may need your help getting home.");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
                 mDatabase.child("Users").child(currentProfile.userId).child("need help time").setValue(new Date().getTime());
                 currentProfile.status = true;
