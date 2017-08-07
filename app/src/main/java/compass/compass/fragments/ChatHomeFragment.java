@@ -44,6 +44,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -189,6 +190,20 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             }
         });
         EventActivity.showFabWithAnimation(fabMarkLocation, 1000);
+        // Fixing Later Map loading Delay
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MapView mv = new MapView(getContext());
+                    mv.onCreate(null);
+                    mv.onPause();
+                    mv.onDestroy();
+                }catch (Exception ignored){
+
+                }
+            }
+        }).start();
 
         return v;
     }
@@ -283,7 +298,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMinZoomPreference(13);
+        mMap.setMaxZoomPreference(15);
         populateMap();
         populateMapFlags();
 
@@ -827,4 +843,5 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         i.putExtra("launchHelp", true);
         startActivity(i);
     }
+
 }
