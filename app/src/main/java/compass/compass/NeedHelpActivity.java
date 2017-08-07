@@ -1,7 +1,6 @@
 package compass.compass;
 
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -126,6 +125,8 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 goBackHomeScreen = true;
                 getIntent().removeExtra("fromNeedHelpButton");
                 showAlertEnterHelpMode();
+            }else{
+                goBackHomeScreen = true;
             }
         }
         else{
@@ -577,10 +578,15 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onBackPressed() {
         if(goBackHomeScreen){
-            Intent i = new Intent(this, MainActivity.class);
-            ActivityOptions options =
-                    ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.slide_out_right, android.R.anim.slide_in_left);
-            startActivity(i, options.toBundle());
+            //Intent i = new Intent(this, MainActivity.class);
+            startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(
+                    0,
+                    R.anim.play_panel_close_background
+            );
+//            ActivityOptions options =
+//                    ActivityOptions.makeCustomAnimation(getApplicationContext(), android.R.anim.slide_out_right, android.R.anim.slide_in_left);
+//            startActivity(i, options.toBundle());
         }else{
             super.onBackPressed();
         }

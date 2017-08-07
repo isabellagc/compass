@@ -293,6 +293,8 @@ public class LoginActivity extends AppCompatActivity{
         HashMap<String, Object> drinkMap = new HashMap<>();
         drinkMap.put("drink count", 0);
         drinkMap.put("BAC", 0.0);
+        currentProfile.drinkCounter = 0;
+        currentProfile.currentBAC = 0.0;
         mDatabase.child("Drinks").child(user.userId).updateChildren(drinkMap);
     }
 
