@@ -1,7 +1,7 @@
 package compass.compass.fragments;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,14 +32,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+
 import compass.compass.R;
 import compass.compass.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,6 +60,8 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     Marker friendLocation;
     private static View view;
     public TextView tvInfo;
+    public int drawableResourceId;
+    public String formatted;
 
 
     public ContactFragment() {
@@ -117,16 +117,14 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         DecimalFormat df = new DecimalFormat("#.####");
         df.setRoundingMode(RoundingMode.CEILING);
         Double BAC = user.currentBAC;
-        String formatted = df.format(BAC);
-
+        formatted = df.format(BAC);
 
         tvBACcount = view.findViewById(R.id.tvBACcount);
         tvBACcount.setText(formatted);
         tvDrinkCount = view.findViewById(R.id.tvDrinkCount);
         tvDrinkCount.setText(String.valueOf(user.drinkCounter));
 
-
-        final int drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+        drawableResourceId = getResources().getIdentifier(user.userId.replaceAll(" ",""), "drawable", getActivity().getPackageName());
 
         ivProfileImageMain.setImageResource(drawableResourceId);
 
@@ -156,77 +154,30 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
                 messageFriendFragment.show(fm, "TAG");
             }
         });
-
-        tvNameContact.setText(WordUtils.capitalize(user.name));
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(user.userId).child("latitude").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                latitude = (double) dataSnapshot.getValue();
-
-                if(friendLocation != null){
-                    friendLocation.remove();
-                }
-                DecimalFormat df = new DecimalFormat("#.####");
-                df.setRoundingMode(RoundingMode.CEILING);
-                Double BAC = user.currentBAC;
-                String formatted = df.format(BAC);
-
-                friendLocation = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .title(user.userId)
-                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(user.userId).child("longitude").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                longitude = (double) dataSnapshot.getValue();
-
-                if(friendLocation != null){
-                    friendLocation.remove();
-                }
-                DecimalFormat df = new DecimalFormat("#.####");
-                df.setRoundingMode(RoundingMode.CEILING);
-                Double BAC = user.currentBAC;
-                String formatted = df.format(BAC);
-
-                friendLocation = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(user.userId)
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
-                        .snippet("Drinks :" + user.drinkCounter + " BAC: " + formatted));
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        tvNameContact.setText(WordUtils.capitalize(user.name));
+        latitude = user.latitude;
+        longitude = user.longitude;
+        friendLocation = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude))
+                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId)))
+                .title(WordUtils.capitalize(user.userId))
+                .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(friendLocation.getPosition(), 15));
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
-
-        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
+//        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
+        Activity activity = getActivity();
+        LayoutInflater layoutInflater = activity.getLayoutInflater();
+        View customMarkerView = layoutInflater.inflate(R.layout.view_custom_marker_red, null);
+        //View customMarkerView = getActivity().getLayoutInflater().inflate(R.layout.view_custom_marker_red, null);
         ImageView markerImageView = (CircleImageView) customMarkerView.findViewById(R.id.profile_image);
-
 
 //        Glide.with(getApplicationContext())
 //                .load(linkToPic)

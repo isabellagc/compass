@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.john.waveview.WaveView;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -209,7 +211,7 @@ public class DrinkActivityReal extends AppCompatActivity implements Call911MenuI
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

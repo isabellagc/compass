@@ -48,6 +48,8 @@ import com.uber.sdk.android.core.UberSdk;
 import com.uber.sdk.android.rides.RequestDeeplink;
 import com.uber.sdk.android.rides.RideParameters;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,6 +95,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
     Map location;
     Double latitude;
     Double longitude;
+    TextView tvDistance;
     public String closestFriendName;
     private GoogleMap mMap;
     public boolean goBackHomeScreen;
@@ -140,6 +143,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         tvNameContact = (TextView) findViewById(R.id.tvNameContact1);
         ivProfileImage = (CircleImageView) findViewById(R.id.ivProfileImageMain1);
         tvCallContact = (TextView) findViewById(R.id.tvCallContact1);
+        tvDistance = (TextView) findViewById(R.id.tvDistance);
 
         tvCallContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +187,6 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
         myLocation = new Location(LocationManager.GPS_PROVIDER);
         myLocation.setLatitude(currentProfile.latitude);
         myLocation.setLongitude(currentProfile.longitude);
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -239,20 +242,24 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
 
                     if(distanceToClosest == null || distance < distanceToClosest){
                         distanceToClosest = distance;
+                        String inMiles = metersToMiles(distance);
+                        tvDistance.setText("(" + inMiles + ")");
                         closestLatitude = latitude;
                         closestLongitude = longitude;
                         if(closestFriend != null){
                             closestFriend.remove();
                         }
                         closestFriendName = name;
-                        tvNameContact.setText(closestFriendName);
+                        tvNameContact.setText(WordUtils.capitalize(closestFriendName));
                         //mCloseFriendsNames.get(position).replaceAll(" ",""), "drawable", getPackageName()
 
                         int drawableResource_Id = getResources().getIdentifier(closestFriendName, "drawable", getPackageName());
                         ivProfileImage.setImageResource(drawableResource_Id);
+                        ivProfileImage.setBorderColor(R.color.colorPrimary);
+                        ivProfileImage.setBorderWidth(4);
                         closestFriend = mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .title(name)
+                                .title(WordUtils.capitalize(name))
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId))));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
@@ -273,6 +280,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View view) {
                 String Alert_message = ("Please check in on " + currentProfile.name + "! They have swiped for help and may need your help getting home.");
                 mDatabase.child("Users").child(currentProfile.userId).child("need help").setValue(true);
+                mDatabase.child("Users").child(currentProfile.userId).child("need help time").setValue(new Date().getTime());
                 currentProfile.status = true;
                 mDatabase.child("User Status").child(currentProfile.userId).setValue("help");
                 ChatMessage message = new ChatMessage();
@@ -292,6 +300,18 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
             }
         });
     }
+    public String metersToMiles(Float distance){
+        double miles = distance * 0.000621371 ;
+        if (miles < 0.5){
+            double feet = miles * 5280;
+//            if(feet < 10.1){
+//                return "0.0 ft";
+//            }
+            return String.format("%.2f", feet) + " ft";
+        }
+        return String.format("%.2f", miles) + " mi";
+    }
+
 
     private void showAlertEnterHelpMode() {
         final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog).create();
@@ -350,7 +370,7 @@ public class NeedHelpActivity extends AppCompatActivity implements OnMapReadyCal
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);

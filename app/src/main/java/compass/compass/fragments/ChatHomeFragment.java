@@ -39,6 +39,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -104,6 +105,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     static final int POLL_INTERVAL = 1000; // milliseconds
     String eventId;
     FloatingActionButton fabMarkLocation;
+    public int flid;
+
 
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
@@ -120,6 +123,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     String fromHere;
     boolean alarmSet = false;
 
+    public FrameLayout flMap;
 
     String myStatus;
 
@@ -164,6 +168,15 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
+        flMap = v.findViewById(R.id.flMap);
+
+//        FrameLayout fl = new FrameLayout(getContext());
+//        fl.setBackgroundColor(Color.WHITE); //change to whatever color your activity/fragment has set as its background color
+//        fl.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); //cover the whole frame
+//        flid = View.generateViewId(); //generate a new View ID. This requires API 17, so if you're supporting lower than that use just a static integer instead
+//        fl.setId(flid);
+//        //((FrameLayout) v.findViewById(R.id.flMap)).addView(fl);
+        //flMap.setBackgroundColor(Color.WHITE);
 
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,7 +249,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
@@ -656,8 +669,12 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                             else{
                                 BAC =  (double) dataSnapshot.getValue();
                             }
-                            int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
-                            markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help, BAC)));
+
+                            if(isAdded()){
+                                int drawableResourceId = getResources().getIdentifier(memberName.replaceAll(" ",""), "drawable", getActivity().getPackageName());
+                                markerMap.get(memberName).setIcon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(drawableResourceId, help, BAC)));
+                            }
+
                         }
 
                         @Override
@@ -810,6 +827,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 .tilt(40)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        flMap.removeViewInLayout(getView().findViewById(flid));
     }
 
     public void message911(final MenuItem menuItem){

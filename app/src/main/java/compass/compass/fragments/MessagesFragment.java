@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -51,7 +53,7 @@ import static compass.compass.MainActivity.peopleInEvents;
  */
 
 public class MessagesFragment extends Fragment implements Call911MenuItemFragment.Call911FragmentListener, Message911MenuItemFragment.Message911FragmentListener{
-    RecyclerView rvChat;
+    public static RecyclerView rvChat;
     ChatAdapter mAdapter;
     EditText etMessage;
     Button btSend;
@@ -148,7 +150,6 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
                     etMessage.getText().clear();
                     mDatabase.child("messages").child(eventId).push().setValue(message);
                     mAdapter.notifyDataSetChanged();
-
                     rvChat.post( new Runnable() {
                         @Override
                         public void run() {
@@ -158,6 +159,8 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
 
                     //send notification to the user
                     sendNotificationToUser(members, message);
+                    etMessage.clearComposingText();
+                    etMessage.setText("");
                 }
 
             }
@@ -204,7 +207,7 @@ public class MessagesFragment extends Fragment implements Call911MenuItemFragmen
                 currentProfile.status = false;
 
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setText(currentProfile.userId + " has marked themselves as safe");
+                chatMessage.setText(WordUtils.capitalize(currentProfile.userId) + " has marked themselves as safe");
                 chatMessage.setSender("SAFE");
                 chatMessage.setTime((new Date().getTime()));
                 NeedHelpActivity.sendNotificationToUser(peopleInEvents, chatMessage, mDatabase);
