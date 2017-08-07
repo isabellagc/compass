@@ -28,6 +28,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -121,6 +122,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     boolean alarmSet = false;
 
 
+    float zIndex;
     String myStatus;
 
     String[] members;
@@ -164,6 +166,19 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         });
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
+
+
+
+        zIndex = 0.0f;
+
+
+//        FrameLayout fl = new FrameLayout(getContext());
+//        fl.setBackgroundColor(Color.WHITE); //change to whatever color your activity/fragment has set as its background color
+//        fl.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)); //cover the whole frame
+//        flid = View.generateViewId(); //generate a new View ID. This requires API 17, so if you're supporting lower than that use just a static integer instead
+//        fl.setId(flid);
+//        //((FrameLayout) v.findViewById(R.id.flMap)).addView(fl);
+        //flMap.setBackgroundColor(Color.WHITE);
 
         fabMarkLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -362,12 +377,14 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Double lat, longi;
                 String title, user;
+                Long time;
 
                 title = dataSnapshot.getKey();
                 Map<String, Object> info = (Map<String, Object>) dataSnapshot.getValue();
                 lat = (Double) info.get("latitude");
                 longi = (Double) info.get("longitude");
                 user = (String) info.get("user");
+                time = (Long) info.get("time flagged");
 
                 LatLng pos = new LatLng(lat, longi);
                 Marker flag = mMap.addMarker(new MarkerOptions()
@@ -375,6 +392,13 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                         .position(pos)
                         .title(WordUtils.capitalize(user))
                 );
+
+                if(time != null){
+                    String relativeDate = DateUtils.getRelativeTimeSpanString(time,
+                            System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+                    flag.setSnippet(relativeDate);
+                }
+
 
             }
 
@@ -598,6 +622,10 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                     .title(WordUtils.capitalize(memberName))
                     .snippet("Drinks: " + user.drinkCounter + " BAC: " + formatted));
             markerMap.put(memberName, temp2);
+        }
+        else{
+            zIndex = zIndex + 1;
+            markerMap.get(memberName).setZIndex(zIndex);
         }
 
         mDatabase.child("Users").child(memberName).child("latitude").addValueEventListener(new ValueEventListener() {

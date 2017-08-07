@@ -156,6 +156,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
         });
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -172,7 +173,7 @@ public class ContactFragment extends DialogFragment implements OnMapReadyCallbac
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
-//        View customMarkerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.view_custom_marker_red, null);
+
         Activity activity = getActivity();
         LayoutInflater layoutInflater = activity.getLayoutInflater();
         View customMarkerView = layoutInflater.inflate(R.layout.view_custom_marker_red, null);
