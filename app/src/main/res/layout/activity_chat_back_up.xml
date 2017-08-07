@@ -6,10 +6,11 @@
 
     <FrameLayout
         android:id="@+id/flMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rvContacts"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true" >
 
         <fragment
             android:id="@+id/friendMap"
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </FrameLayout>
+
 
     <!--<FrameLayout-->
         <!--android:layout_width="match_parent"-->

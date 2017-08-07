@@ -71,7 +71,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import compass.compass.ChatAdapter;
 import compass.compass.CloseFriendAdapter;
@@ -107,8 +106,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     static final int POLL_INTERVAL = 1000; // milliseconds
     String eventId;
     FloatingActionButton fabMarkLocation;
-    public int flid;
-
 
     public DatabaseReference mDatabase;
     private LinearLayoutManager layoutManager;
@@ -119,15 +116,16 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
     public int NOTIFICATION_ID = 12;
     Bitmap flagIcon;
 
+    FrameLayout flMap;
+
     Double myLatitude;
     Double myLongitude;
     LatLng myLocation;
     String fromHere;
     boolean alarmSet = false;
 
-    float zIndex;
-    public FrameLayout flMap;
 
+    float zIndex;
     String myStatus;
 
     String[] members;
@@ -154,6 +152,8 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         flagIcon = getBitmap(getContext(), R.drawable.ic_flag_location_unsafe);
         flagIcon = resizeFlagIcon(flagIcon, 72 , 72);
 
+        flMap = v.findViewById(R.id.flMap);
+
         markerMap = new HashMap<String, Marker>();
         flagMap = new HashMap<>();
         rvContacts = v.findViewById(R.id.rvContacts);
@@ -172,8 +172,10 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         mDatabase = FirebaseDatabase.getInstance().getReference();
         fabMarkLocation = v.findViewById(R.id.fabMarkLocation);
 
+
+
         zIndex = 0.0f;
-        flMap = v.findViewById(R.id.flMap);
+
 
 //        FrameLayout fl = new FrameLayout(getContext());
 //        fl.setBackgroundColor(Color.WHITE); //change to whatever color your activity/fragment has set as its background color
@@ -318,7 +320,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
         flMap.setBackgroundResource(R.mipmap.ic_launcher);
         mMap = googleMap;
         mMap.setMinZoomPreference(13);
-        mMap.setMaxZoomPreference(15);
+        //mMap.setMaxZoomPreference(15);
         populateMap();
         populateMapFlags();
 
@@ -372,11 +374,7 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
 //                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 //            }
 
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         flMap.setBackgroundResource(0);
 
     }
@@ -853,7 +851,6 @@ public class ChatHomeFragment extends Fragment implements OnMapReadyCallback, Cl
                 .tilt(40)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        flMap.removeViewInLayout(getView().findViewById(flid));
     }
 
     public void message911(final MenuItem menuItem){
