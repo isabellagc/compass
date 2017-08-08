@@ -150,19 +150,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.tvEnd.setText(dateFormattedEnd);
 
-        switch (position % 3){
-            case 0:
-                holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
-                break;
-            case 1:
-                holder.ivCircleImage.setImageResource(R.drawable.rowing);
-                break;
-            case 2:
-                holder.ivCircleImage.setImageResource(R.drawable.robotics);
-                break;
-            default:
-                holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
-                break;
+
+        if(mEvents.get(position).getName().contentEquals("Crew Team")){
+            holder.ivCircleImage.setImageResource(R.drawable.rowing);
+        }
+        else if(mEvents.get(position).getName().contentEquals("Dorm Friends")){
+            holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
+        }
+        else if(mEvents.get(position).getName().contentEquals("Study Group")){
+            holder.ivCircleImage.setImageResource(R.drawable.robotics);
+        }
+        else{
+            holder.ivCircleImage.setImageResource(R.drawable.dorm_friends);
         }
 
         if(mEvents.get(position).getMyStatus().equals("null")){

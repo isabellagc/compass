@@ -100,7 +100,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         //set up layout
         tvPolice = (TextView) v.findViewById(R.id.tvPolice);
         tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance);
-        tvPolice.setText("West Presinct, SEA PD");
+        tvPolice.setText("West Precinct, SEA PD");
         tvPoliceDistance.setText("0.9 mi · (206) 625-5011 ");
         tvCounseling = (TextView) v.findViewById(R.id.tvCounseling);
         tvCounseling.setText("Seattle Christian Counseling");
@@ -338,7 +338,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
 
         MarkerOptions markerOptions_2 = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(policeIcon))
                 .position(policeLocation)
-                .title("West Prescinct, SEA Police Dept");
+                .title("West Precinct, SEA Police Dept");
         Marker flag_2 = mMap.addMarker(markerOptions_2);
         startDropMarkerAnimation(flag_2);
 
