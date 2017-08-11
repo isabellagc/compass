@@ -37,7 +37,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:largeHeap="true">l
 
         <!-- <receiver android:process=":remote" android:name=".Alarm"></receiver> -->
 
