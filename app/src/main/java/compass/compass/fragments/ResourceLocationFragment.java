@@ -80,9 +80,9 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     int originalHeight;
     SupportMapFragment mapFragment;
     CardView cvPolice, cvCounseling, cvHospital;
-    public LatLng policeLocation = new LatLng(47.620775, -122.336276);
-    public LatLng hospitalLocation = new LatLng(47.625313, -122.334535);
-    public LatLng counselingLocation = new LatLng(47.626496, -122.344402);
+    public LatLng policeLocation = new LatLng(37.474355, -122.134638);
+    public LatLng hospitalLocation = new LatLng(37.466656, -122.160559);
+    public LatLng counselingLocation = new LatLng(37.448233, -122.156993);
 
     @Nullable
     @Override
@@ -100,16 +100,16 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
         //set up layout
         tvPolice = (TextView) v.findViewById(R.id.tvPolice);
         tvPoliceDistance = (TextView) v.findViewById(R.id.tvPoliceDistance);
-        tvPolice.setText("West Precinct, SEA PD");
-        tvPoliceDistance.setText("0.9 mi · (206) 625-5011 ");
+        tvPolice.setText("East Palo Alto Police Department");
+        tvPoliceDistance.setText("2.3 mi · (650) 853-3160 ");
         tvCounseling = (TextView) v.findViewById(R.id.tvCounseling);
-        tvCounseling.setText("Seattle Christian Counseling");
+        tvCounseling.setText("Biggart Elizabeth PHD");
         tvCounselingDistance = (TextView) v.findViewById(R.id.tvCounselingDistance);
-        tvCounselingDistance.setText("0.2 mi · (206) 388-3929");
+        tvCounselingDistance.setText("3.2 mi · (650) 322-1975");
         tvHospital = (TextView) v.findViewById(R.id.tvHospital);
-        tvHospital.setText("Kaiser Permanente");
+        tvHospital.setText("VA Palo Alto Health Care System");
         tvHospitalDistance = (TextView) v.findViewById(R.id.tvHospitalDistance);
-        tvHospitalDistance.setText("0.5 mi · (206) 448-4141");
+        tvHospitalDistance.setText("2.0 mi · (650) 614-9997");
         counsel = getBitmap(getActivity(), R.drawable.ic_heart);
         counsel = resizeIcon(counsel, 80, 80);
         hospitalIcon = getBitmap(getActivity(), R.drawable.ic_local_hospital_secondary_24px);
