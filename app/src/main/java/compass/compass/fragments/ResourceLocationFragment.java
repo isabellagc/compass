@@ -245,7 +245,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMinZoomPreference(13);
-        mMap.setMaxZoomPreference(15);
+        mMap.setMaxZoomPreference(17);
         populateMap();
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -285,7 +285,7 @@ public class ResourceLocationFragment extends Fragment implements OnMapReadyCall
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 20));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 25));
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(myLocation)      // Sets the center of the map to location user
                     .zoom(14)                   // Sets the zoom
